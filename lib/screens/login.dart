@@ -138,24 +138,35 @@ class _LoginState extends State<Login> {
   }
 
   Widget _extraText() {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      GestureDetector(
+        onTap: () {
+          // Handle navigation here, e.g., go to the sign-up page
+          // Replace 'YourSignUpRoute' with the actual route for sign-up
+          Navigator.of(context).pushNamed('/your_sign_up_route');
+        },
+        child: const SelectableText(
           "Don't have an account?",
           textAlign: TextAlign.left,
-          style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        Text(
-          "Forget Details?",
-          textAlign: TextAlign.right,
           style: TextStyle(
             fontSize: 16,
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
         ),
-      ],
-    );
-  }
+      ),
+      const Text(
+        "Forget Details?",
+        textAlign: TextAlign.right,
+        style: TextStyle(
+          fontSize: 16,
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ],
+  );
+}
 }
