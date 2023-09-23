@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/screens/appartment_list.dart';
-import '../roomie_detail.dart';
 
 class InformationCard extends StatelessWidget {
   const InformationCard({super.key, required this.path, required this.stars, required this.text});

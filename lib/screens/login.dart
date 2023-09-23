@@ -57,7 +57,8 @@ class _LoginState extends State<Login> {
     return const Text(
       "Senehouse",
       textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 50, color: Colors.black, fontWeight: FontWeight.bold),
+      style: TextStyle(
+          fontSize: 50, color: Colors.black, fontWeight: FontWeight.bold),
     );
   }
 
@@ -100,9 +101,9 @@ class _LoginState extends State<Login> {
     return ElevatedButton(
       onPressed: () {
         Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => UserList(title: 'Senehouse')),
-                  );
+          context,
+          MaterialPageRoute(builder: (context) => UserList(title: 'Senehouse')),
+        );
         debugPrint("Username: ${usernameController.text}");
         debugPrint("Password: ${passwordController.text}");
       },
@@ -131,7 +132,8 @@ class _LoginState extends State<Login> {
     return const Text(
       "Join us",
       textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 40, color: Color(0xFF1E1E1E), fontWeight: FontWeight.bold),
+      style: TextStyle(
+          fontSize: 40, color: Color(0xFF1E1E1E), fontWeight: FontWeight.bold),
     );
   }
 
@@ -139,7 +141,8 @@ class _LoginState extends State<Login> {
     return const Text(
       "Size your life",
       textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 20, color: Color(0xFF1E1E1E), fontWeight: FontWeight.bold),
+      style: TextStyle(
+          fontSize: 20, color: Color(0xFF1E1E1E), fontWeight: FontWeight.bold),
     );
   }
 
@@ -147,16 +150,22 @@ class _LoginState extends State<Login> {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      GestureDetector(
-        onTap: () {
+      ElevatedButton(
+        onPressed: () {
           // Handle navigation here, e.g., go to the sign-up page
           // Replace 'YourSignUpRoute' with the actual route for sign-up
           Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SignUp(title: "Sign Up")),
-                  );
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SignUp(title: "Sign Up"),
+            ),
+          );
         },
-        child: const SelectableText(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          elevation: 0, // Remove button elevation
+        ),
+        child: const Text(
           "Don't have an account?",
           textAlign: TextAlign.left,
           style: TextStyle(
