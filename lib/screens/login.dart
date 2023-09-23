@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import "package:giusseppe_flut/screens/sign_up.dart";
+import "package:giusseppe_flut/screens/user_list.dart";
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -97,6 +99,10 @@ class _LoginState extends State<Login> {
   Widget _loginButton() {
     return ElevatedButton(
       onPressed: () {
+        Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserList(title: 'Senehouse')),
+                  );
         debugPrint("Username: ${usernameController.text}");
         debugPrint("Password: ${passwordController.text}");
       },
@@ -145,7 +151,10 @@ class _LoginState extends State<Login> {
         onTap: () {
           // Handle navigation here, e.g., go to the sign-up page
           // Replace 'YourSignUpRoute' with the actual route for sign-up
-          Navigator.of(context).pushNamed('/your_sign_up_route');
+          Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SignUp(title: "Sign Up")),
+                  );
         },
         child: const SelectableText(
           "Don't have an account?",

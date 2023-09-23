@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:giusseppe_flut/screens/roomie_detail.dart";
 import "package:giusseppe_flut/widgets/drawer.dart";
 
 class SignUp extends StatefulWidget {
@@ -135,6 +136,10 @@ class _SignUpState extends State<SignUp> {
   Widget _loginButton() {
     return ElevatedButton(
       onPressed: () {
+        Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyScrollView()),
+                  );
         debugPrint("Name: ${nameController.text}");
         debugPrint("Password: ${passwordController.text}");
         debugPrint("Lastname: ${lastnameController.text}");

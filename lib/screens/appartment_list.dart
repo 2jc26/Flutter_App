@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/widgets/search_field.dart';
 import '../models/appartment_model.dart';
 import '../widgets/card.dart';
-import '../drawer.dart';
+import '../widgets/drawer.dart';
 
 class AppartmentList extends StatefulWidget {
   AppartmentList({super.key, required this.title});
