@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/User_model.dart';
+import '../roomie_detail.dart';
+import '../models/user_model.dart';
 import '../widgets/card.dart';
 import '../widgets/drawer.dart';
 
@@ -46,6 +47,10 @@ class _UserListState extends State<UserList> {
               padding: const EdgeInsets.only(top: 15.0, bottom: 15.0,),
               child: ElevatedButton(
                 onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyScrollView()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
