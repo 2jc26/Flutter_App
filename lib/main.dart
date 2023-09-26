@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:giusseppe_flut/screens/Register.dart';
 import 'package:giusseppe_flut/screens/aaaa.dart';
 import 'package:giusseppe_flut/screens/roomie_detail.dart';
 import 'package:giusseppe_flut/screens/sign_up.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: const RoommateDetail(),
+      home: Register(),
     );
   }
 }
