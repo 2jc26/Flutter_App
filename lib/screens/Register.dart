@@ -99,7 +99,7 @@ class Register extends StatelessWidget {
                 // Lógica para registrar al usuario
               },
               style: ElevatedButton.styleFrom(
-                primary: const Color(0xFF2196F3),
+                primary: const Color(0xFF2e5eaa),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
