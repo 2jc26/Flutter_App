@@ -2,16 +2,16 @@ import "package:flutter/material.dart";
 import "package:giusseppe_flut/screens/roomie_detail.dart";
 import "package:giusseppe_flut/widgets/drawer.dart";
 
-class SignUp extends StatefulWidget {
-  const SignUp({super.key, required this.title});
+class BBBB extends StatefulWidget {
+  const BBBB({super.key, required this.title});
 
   final String title;
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  State<BBBB> createState() => _BBBBState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _BBBBState extends State<BBBB> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();

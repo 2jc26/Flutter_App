@@ -49,7 +49,7 @@ class _UserListState extends State<UserList> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MyScrollView()),
+                    MaterialPageRoute(builder: (context) => const RoommateDetail()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
