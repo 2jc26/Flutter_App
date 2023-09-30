@@ -79,7 +79,7 @@ class Register extends StatelessWidget {
                 ),
               ),
               padding: const EdgeInsets.all(16.0),
-              child: Column(
+              child: const Column(
                 children: [
                   CustomTextField(hintText: 'Name',),
                   SizedBox(height: 16),
@@ -104,7 +104,7 @@ class Register extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 'Register',
                 style: TextStyle(
                   color: Colors.white,
