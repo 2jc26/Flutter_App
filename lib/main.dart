@@ -1,17 +1,6 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
-import 'package:giusseppe_flut/screens/appartment_list.dart';
-=======
-import 'package:giusseppe_flut/screens/filter_users/filter_users_other.dart';
-import 'package:giusseppe_flut/screens/pruebas_mapa.dart';
-import 'package:giusseppe_flut/screens/register.dart';
-import 'package:giusseppe_flut/screens/filter_users/filter_users_location.dart';
-import 'package:giusseppe_flut/screens/login.dart';
->>>>>>> GP
-import 'package:giusseppe_flut/screens/roomie_detail.dart';
-import 'package:giusseppe_flut/screens/sign_up.dart';
-import 'package:giusseppe_flut/screens/user_list.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -41,11 +30,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-<<<<<<< HEAD
       home: const AppartmentFilter(),
-=======
-      home: const FilterUsersOthers(),
->>>>>>> GP
     );
   }
 }

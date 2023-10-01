@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:giusseppe_flut/screens/roomie_detail.dart";
 import "package:giusseppe_flut/widgets/drawer.dart";
 import "package:giusseppe_flut/widgets/search_field.dart";
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import "package:flutter_rating_bar/flutter_rating_bar.dart";
 
 
 class AppartmentFilter extends StatefulWidget {
