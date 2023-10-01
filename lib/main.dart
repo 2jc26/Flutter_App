@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
 
+// Firebase
+import 'package:firebase_core/firebase_core.dart';
+import 'package:giusseppe_flut/screens/appartment_list.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -30,7 +38,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: const AppartmentFilter(),
+      home: AppartmentList(title: 's',),
     );
   }
 }
