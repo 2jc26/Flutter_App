@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:giusseppe_flut/screens/appartment_filter.dart';
-
+import 'package:giusseppe_flut/screens/Register.dart';
+import 'package:giusseppe_flut/screens/roomie_detail.dart';
+import 'package:giusseppe_flut/screens/sign_up.dart';
+import 'package:giusseppe_flut/screens/appartment_detail.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,9 +30,10 @@ class MyApp extends StatelessWidget {
           onBackground: Color(0xFF2c595b),
           onError: Colors.red,
           brightness: Brightness.light,
+          tertiary: Color(0xFFEDF9B9)
         ),
       ),
-      home: const AppartmentFilter(),
+      home: AppartmentDetail(title: 'Hola'),
     );
   }
 }

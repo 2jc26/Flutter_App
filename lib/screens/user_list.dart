@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import './roomie_detail.dart';
 import '../models/user_model.dart';
-import '../widgets/card.dart';
+import '../widgets/information_card.dart';
 import '../widgets/drawer.dart';
 
 class UserList extends StatefulWidget {
