@@ -52,7 +52,7 @@ class BodyLocation extends StatelessWidget {
         const CustomTextField(hintText: 'Neighborhood',),
         const SizedBox(height: 16),
         ClipRRect(
-          borderRadius: BorderRadius.circular(16.0), // Ajusta el radio según tu preferencia
+          borderRadius: BorderRadius.circular(16.0),
           child: const SizedBox(
             height: 400,
             width: 350,

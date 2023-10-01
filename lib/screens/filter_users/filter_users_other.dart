@@ -292,9 +292,9 @@ class _SleepHourFrequencySlider extends State<SleepHourFrequencySlider> {
   Widget build(BuildContext context) {
     return SliderTheme(
       data: SliderTheme.of(context).copyWith(
-        overlayColor: Colors.white.withOpacity(0.4), // Color del overlay al tocar el slider
+        overlayColor: Colors.white.withOpacity(0.4),
         valueIndicatorTextStyle: const TextStyle(
-          color: Colors.white, // Cambia el color del texto del label aquí
+          color: Colors.white,
         ),
       ),
       child: Slider(
