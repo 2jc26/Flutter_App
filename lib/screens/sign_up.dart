@@ -3,9 +3,9 @@ import "package:giusseppe_flut/screens/roomie_detail.dart";
 import "package:giusseppe_flut/widgets/drawer.dart";
 
 class SignUp extends StatefulWidget {
-  const SignUp({super.key, required this.title});
+  const SignUp({super.key});
 
-  final String title;
+  final String title = 'Sign Up';
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -29,7 +29,7 @@ class _SignUpState extends State<SignUp> {
           widget.title,
           textAlign: TextAlign.center,
           style: const TextStyle(
-            fontSize: 20,
+            fontSize: 24,
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
@@ -44,26 +44,112 @@ class _SignUpState extends State<SignUp> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // First Component: Container with Blue Margin and Buttons
-            // Container(margin: const EdgeInsets.all(
-            //       20.0),
-            //   decoration: BoxDecoration(
-            //     border: Border.all(
-            //       color: Colors.blue,
-            //       width: 2.0,
-            //     ),
-            //   ),
-            //   child: Ink.image(
-            //     image: const AssetImage("assets/images/Renter.svg"),
-            //     height: 200,
-            //     width: 200,
-            //     fit: BoxFit.cover,
-            //   ),
-            // ),
             Container(
-              margin: const EdgeInsets.all(
-                  20.0),
+              margin: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Colors.blue,
+                  width: 2.0,
+                ),
+              ),
+              child: Column(
+                children: [
+                  const Text(
+                    "I'm a",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF2c595b),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 3,
+                        height: MediaQuery.of(context).size.width / 4,
+                        child: TextButton(
+                          onPressed: () {},
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            padding: EdgeInsets.zero,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                              side: const BorderSide(
+                                color: Colors.white,
+                                width: 2.0,
+                              ),
+                            ),
+                          ),
+                          child: const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Icon(
+                                  Icons.person,
+                                  color: Color(0xFF2c595b),
+                                  size: 60,
+                                ),
+                              ),
+                              Text(
+                                "Renter",
+                                style: TextStyle(
+                                  color: Color(0xFF2c595b),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 3,
+                        height: MediaQuery.of(context).size.width / 4,
+                        child: TextButton(
+                          onPressed: () {},
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            padding: EdgeInsets.zero,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                              side: const BorderSide(
+                                color: Colors.white,
+                                width: 2.0,
+                              ),
+                            ),
+                          ),
+                          child: const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Icon(
+                                  Icons.home,
+                                  color: Color(0xFF2c595b),
+                                  size: 60,
+                                ),
+                              ),
+                              Text(
+                                "Landlord",
+                                style: TextStyle(
+                                  color: Color(0xFF2c595b),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: Colors.blue,
                   width: 2.0,
@@ -89,14 +175,13 @@ class _SignUpState extends State<SignUp> {
                     const SizedBox(height: 20),
                     _inputField("Password", passwordController,
                         isPassword: true),
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
             ),
             Container(
-              margin: const EdgeInsets.all(
-                  20.0),
+              margin: const EdgeInsets.all(20.0),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -137,9 +222,9 @@ class _SignUpState extends State<SignUp> {
     return ElevatedButton(
       onPressed: () {
         Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RoommateDetail()),
-                  );
+          context,
+          MaterialPageRoute(builder: (context) => RoommateDetail()),
+        );
         debugPrint("Name: ${nameController.text}");
         debugPrint("Password: ${passwordController.text}");
         debugPrint("Lastname: ${lastnameController.text}");
@@ -160,7 +245,7 @@ class _SignUpState extends State<SignUp> {
       child: const SizedBox(
         width: double.infinity,
         child: Text(
-          "Sign In",
+          "Register",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),
