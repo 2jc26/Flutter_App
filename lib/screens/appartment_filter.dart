@@ -2,17 +2,21 @@ import "package:flutter/material.dart";
 import "package:giusseppe_flut/screens/roomie_detail.dart";
 import "package:giusseppe_flut/widgets/drawer.dart";
 import "package:giusseppe_flut/widgets/search_field.dart";
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+
 
 class AppartmentFilter extends StatefulWidget {
   const AppartmentFilter({super.key});
 
   final String title = 'Senehouse';
 
+
   @override
   State<AppartmentFilter> createState() => _AppartmentFilterState();
 }
 
 class _AppartmentFilterState extends State<AppartmentFilter> {
+  double ratingVal = 0;
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
@@ -114,45 +118,31 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                           borderRadius:
                               BorderRadius.circular(8.0), // Border radius
                         ),
-                        child: TextButton(
-                          onPressed: () {},
-                          child: const Column(
-                            children: [
-                              Text(
+                        child: 
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const Text(
                                 "Rating Score",
                                 style: TextStyle(
                                   color: Color(0xFF2E5EAA),
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .center, // Center the icons horizontally
-                                children: [
-                                  Icon(
-                                    Icons.star,
-                                    color: Color(0xFF2E5EAA),
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    color: Color(0xFF2E5EAA),
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    color: Color(0xFF2E5EAA),
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    color: Color(0xFF2E5EAA),
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    color: Color(0xFF2E5EAA),
-                                  ),
-                                ],
+                            RatingBar.builder(
+                              minRating: 1,
+                              itemSize: 30,
+                              itemBuilder: (context, _) => const Icon(
+                                Icons.star,
+                                color: Color(0xFFEDF9B9),
                               ),
-                            ],
-                          ),
-                        ),
+                              unratedColor: const Color(0xFF2E5EAA),
+                              onRatingUpdate: (rating) => setState(() {
+                                ratingVal = rating;
+                              }),
+                            ),
+                          ],
+                        )
                       ),
                       TextButton(
                         onPressed: () {},
