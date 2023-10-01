@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:giusseppe_flut/screens/pruebas_mapa.dart';
 import 'package:giusseppe_flut/widgets/search_field.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/appartment_model.dart';
 import '../widgets/rating_rectangle.dart';
 import '../widgets/drawer.dart';
 
 class AppartmentDetail extends StatefulWidget {
-  AppartmentDetail({super.key, required this.title});
-
-  final String title;
+  AppartmentDetail({super.key});
 
   @override
   State<AppartmentDetail> createState() => _AppartmentDetailState();
@@ -22,7 +22,7 @@ class _AppartmentDetailState extends State<AppartmentDetail> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF2E5EAA),
         title: Text(
-          widget.title,
+          'Appartmet',
           style: const TextStyle(
             color: Colors.white,
             fontSize: 20,
@@ -139,7 +139,86 @@ class _AppartmentDetailState extends State<AppartmentDetail> {
                       ),
                     ),
                   ), // Add spacing between images
-
+                  SizedBox(width: 20), // Add spacing between images
+                  // Smaller Images
+                  Container(
+                    width: 100, // Adjust the width as needed
+                    height: 100, // Adjust the height as needed
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.onPrimary, // Color of the border
+                        width: 3.0,
+                      ),
+                      borderRadius: BorderRadius.circular(12.0), // Radius of the border corners
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(6.0),
+                      child: Image.asset(
+                        'assets/images/house1.jpg', // Replace with your image asset path
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 20), // Add spacing between images
+                  // Smaller Images
+                  Container(
+                    width: 100, // Adjust the width as needed
+                    height: 100, // Adjust the height as needed
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.onPrimary, // Color of the border
+                        width: 3.0,
+                      ),
+                      borderRadius: BorderRadius.circular(12.0), // Radius of the border corners
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(6.0),
+                      child: Image.asset(
+                        'assets/images/house1.jpg', // Replace with your image asset path
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 20), // Add spacing between images
+                  // Smaller Images
+                  Container(
+                    width: 100, // Adjust the width as needed
+                    height: 100, // Adjust the height as needed
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.onPrimary, // Color of the border
+                        width: 3.0,
+                      ),
+                      borderRadius: BorderRadius.circular(12.0), // Radius of the border corners
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(6.0),
+                      child: Image.asset(
+                        'assets/images/house1.jpg', // Replace with your image asset path
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 20), // Add spacing between images
+                  // Smaller Images
+                  Container(
+                    width: 100, // Adjust the width as needed
+                    height: 100, // Adjust the height as needed
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.onPrimary, // Color of the border
+                        width: 3.0,
+                      ),
+                      borderRadius: BorderRadius.circular(12.0), // Radius of the border corners
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(6.0),
+                      child: Image.asset(
+                        'assets/images/house1.jpg', // Replace with your image asset path
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
                   // Add more smaller images as needed
                 ],
               ),
@@ -172,7 +251,14 @@ class _AppartmentDetailState extends State<AppartmentDetail> {
                         ),
                       ),
                       children: <Widget>[
-
+                        Container(
+                            width: 250,
+                            height: 250,
+                            child: GoogleMap(mapType: MapType.hybrid,
+                                initialCameraPosition: CameraPosition(
+                                  target: LatLng(37.422131, -122.084801), // Cambia esto a las coordenadas deseadas
+                                  zoom: 3,))
+                        )
                       ],
                     ),
                   );
