@@ -188,7 +188,7 @@ class RoommateDetail extends StatelessWidget {
               const RatingsSection(),
               const RatingsSection(),
               const RatingsSection(),
-
+              const NavigatorS(),
             ],
           ),
         ),
@@ -338,6 +338,65 @@ class Attribute extends StatelessWidget {
         textAlign: TextAlign.center,
         style: const TextStyle(
           color: Colors.white,
+        ),
+      ),
+    );
+  }
+}
+class NavigatorS extends StatelessWidget {
+  const NavigatorS({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Container(
+        width: 600,
+        height: 70,
+        decoration: BoxDecoration(
+          color: const Color(0xFF2c595b),
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: Container(
+                width: 50,
+                height: 50,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: const Text(
+                  '5',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.purple,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    child: const Text(
+                      "DIOS",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    )
+                  )
+              )
+            ),
+          ],
         ),
       ),
     );
