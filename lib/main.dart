@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:giusseppe_flut/screens/filter_users/filter_users_other.dart';
 import 'package:giusseppe_flut/screens/pruebas_mapa.dart';
 import 'package:giusseppe_flut/screens/register.dart';
 import 'package:giusseppe_flut/screens/filter_users/filter_users_location.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: const FilterUsersLocations(),
+      home: const FilterUsersOthers(),
     );
   }
 }

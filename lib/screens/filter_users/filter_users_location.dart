@@ -68,7 +68,7 @@ class BodyLocation extends StatelessWidget {
         const SizedBox(height: 16),
         ElevatedButton(
           onPressed: () {
-            // Agrega la lógica para continuar aquí
+
           },
           child: Text('Continuar'),
         ),
@@ -85,7 +85,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30.0), // Agrega el padding aquí
+      padding: const EdgeInsets.symmetric(horizontal: 30.0),
       child: TextFormField(
         decoration: InputDecoration(
           hintText: hintText,
@@ -110,7 +110,7 @@ class RoundedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 70, // Establece el ancho deseado
+      width: 70,
       height: 30,
       child: ElevatedButton(
         onPressed: onPressed,
