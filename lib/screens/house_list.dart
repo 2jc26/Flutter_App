@@ -1,40 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
+import 'package:giusseppe_flut/presenter/house_presenter.dart';
 import 'package:giusseppe_flut/repository/house_repository.dart';
 import 'package:giusseppe_flut/widgets/search_field.dart';
 import 'package:giusseppe_flut/widgets/information_card.dart';
 import '../widgets/drawer.dart';
 
+
+class HouseListView {
+  void refreshHouseListView(List<HouseModelUpdate> houseList) {}
+}
+
 class HouseList extends StatefulWidget {
   HouseList({super.key});
-  
-  final HouseRepository houseRepository = HouseRepository();
 
   @override
   State<HouseList> createState() => _HouseListState();
 }
 
-class _HouseListState extends State<HouseList> {
-  List<HouseModelUpdate>? houses;
+class _HouseListState extends State<HouseList> implements HouseListView{
+  final HouseListPresenter userListPresenter = HouseListPresenter();
+  List<HouseModelUpdate>? _housesList;
 
-  void _getHouses() async {
-    final data = await widget.houseRepository.getAllHouses();
-
+  @override
+  void refreshHouseListView(List<HouseModelUpdate> housesList) {
     setState(() {
-      houses = data;
+      _housesList = housesList;
     });
-    
   }
 
   @override
   void initState() {
-    _getHouses();
     super.initState();
+    userListPresenter.backView = this;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (houses != null) {
+    if (_housesList!.isNotEmpty) {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xFF2E5EAA),
@@ -57,12 +60,12 @@ class _HouseListState extends State<HouseList> {
             const SearchField(),
             Expanded(
               child: ListView.builder(
-                itemCount: houses?.length,
+                itemCount: _housesList?.length,
                 itemBuilder: ((context, index) {
                   return InformationCard(
                     path: 'assets/images/house1.jpg',
                     stars: 5,
-                    text: houses![index].name,
+                    text: _housesList![index].name,
                   );
                 }),
               ),
