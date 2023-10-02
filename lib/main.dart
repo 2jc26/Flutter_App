@@ -4,6 +4,7 @@ import 'package:giusseppe_flut/screens/appartment_filter.dart';
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
 import 'package:giusseppe_flut/screens/appartment_list.dart';
+import 'package:giusseppe_flut/screens/pruebas_mapa.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: AppartmentList(title: 's',),
+      home: const MapScreen(),
     );
   }
 }
