@@ -1,23 +1,25 @@
 import "package:flutter/material.dart";
+import "package:giusseppe_flut/screens/advance_search.dart";
 import "package:giusseppe_flut/screens/roomie_detail.dart";
 import "package:giusseppe_flut/widgets/drawer.dart";
 import "package:giusseppe_flut/widgets/search_field.dart";
 import "package:flutter_rating_bar/flutter_rating_bar.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 
-
 class AppartmentFilter extends StatefulWidget {
   const AppartmentFilter({super.key});
 
   final String title = 'Senehouse';
 
-
   @override
   State<AppartmentFilter> createState() => _AppartmentFilterState();
 }
 
+enum PropertyType { apartment, house }
+
 class _AppartmentFilterState extends State<AppartmentFilter> {
   double ratingVal = 0;
+  PropertyType? selectedPropertyType;
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
@@ -87,7 +89,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                     const SizedBox(height: 5.0),
                     _inputField("500.000 a 5.000.000", nameController),
                     const SizedBox(height: 5.0),
-                    const Text (
+                    const Text(
                       "Enter your location",
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -98,11 +100,13 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                     ),
                     const SizedBox(
                       height: 300,
-                      width: 300,// Ajusta el tamaño del mapa según tus necesidades
+                      width:
+                          300, // Ajusta el tamaño del mapa según tus necesidades
                       child: GoogleMap(
                         mapType: MapType.hybrid,
                         initialCameraPosition: CameraPosition(
-                          target: LatLng(37.422131, -122.084801), // Cambia esto a las coordenadas deseadas
+                          target: LatLng(37.422131,
+                              -122.084801), // Cambia esto a las coordenadas deseadas
                           zoom: 3,
                         ),
                       ),
@@ -132,42 +136,45 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: const Color(0xFF2E5EAA), // Border color
-                            width: 2.0, // Border width
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: const Color(0xFF2E5EAA), // Border color
+                              width: 2.0, // Border width
+                            ),
+                            borderRadius:
+                                BorderRadius.circular(8.0), // Border radius
                           ),
-                          borderRadius:
-                              BorderRadius.circular(8.0), // Border radius
-                        ),
-                        child: 
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            const Text(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              const Text(
                                 "Rating Score",
                                 style: TextStyle(
                                   color: Color(0xFF2E5EAA),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            RatingBar.builder(
-                              minRating: 1,
-                              itemSize: 30,
-                              itemBuilder: (context, _) => const Icon(
-                                Icons.star,
-                                color: Color(0xFFEDF9B9),
+                              RatingBar.builder(
+                                minRating: 1,
+                                itemSize: 30,
+                                itemBuilder: (context, _) => const Icon(
+                                  Icons.star,
+                                  color: Color(0xFFEDF9B9),
+                                ),
+                                unratedColor: const Color(0xFF2E5EAA),
+                                onRatingUpdate: (rating) => setState(() {
+                                  ratingVal = rating;
+                                }),
                               ),
-                              unratedColor: const Color(0xFF2E5EAA),
-                              onRatingUpdate: (rating) => setState(() {
-                                ratingVal = rating;
-                              }),
-                            ),
-                          ],
-                        )
-                      ),
+                            ],
+                          )),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          // Navigator.push(
+                            // context,
+                            // MaterialPageRoute(builder: (context) => const AdvanceSearch()),
+                          // );
+                        },
                         child: const Column(
                           children: [
                             Text(
@@ -231,7 +238,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => RoommateDetail()),
+          MaterialPageRoute(builder: (context) => const RoommateDetail()),
         );
         debugPrint("Name: ${nameController.text}");
         debugPrint("Password: ${passwordController.text}");
@@ -260,4 +267,6 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
       ),
     );
   }
+
+  
 }
