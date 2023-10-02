@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: HouseList(),
+      home: BackTest(title: '',),
     );
   }
 }

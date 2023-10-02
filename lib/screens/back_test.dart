@@ -1,50 +1,49 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:giusseppe_flut/presenter/user_presenter.dart';
 import '../models/user/user_model_update.dart';
 import '../services/firestore_service.dart.dart';
 import '../widgets/drawer.dart';
-import '../repository/user_repository.dart';
+import '../repository/user_repository_prueba.dart';
 
-
+class UserListView {
+  void refreshUserListView(List<UserModelUpdate> usersList) {}
+}
 class BackTest extends StatefulWidget {
-
-  final FirestoreService firestoreService = FirestoreService();
+  
   BackTest({super.key, required this.title});
-
-  final UserRepository userRepository= UserRepository();
   final String title;
 
   @override
   State<BackTest> createState() => _BackTestState();
 }
 
-class _BackTestState extends State<BackTest> {
+class _BackTestState extends State<BackTest> implements UserListView{
+  final UserListPresenter userListPresenter = UserListPresenter();
   Map<String, dynamic>? appartments;
-  List<UserModelUpdate>? usersList;
-  void _getAllUsers() async {
-    try {
-      final users = await widget.userRepository.getAllUsers();
-      if (users!=null){
-        setState(() {
-          usersList=users;
-        });
-      }
-    } catch (error) {
-      rethrow;
-    }
+  List<UserModelUpdate>? _usersList;
+
+  @override
+  void refreshUserListView(List<UserModelUpdate> usersList) {
+    setState(() {
+      _usersList = usersList;
+    });
   }
 
   @override
   void initState() {
-    _getAllUsers();
+    super.initState();
+    userListPresenter.backView = this;
+
   }
 
   @override
   Widget build(BuildContext context) {
 
-    if (usersList != null) {
-      return Text(usersList?[0].name ?? 'Nombre no disponible');
+    if (_usersList!.isNotEmpty) {
+      return Text(_usersList?[0].name ?? 'Nombre no disponible');
     }
-    return Text('dasda');
+    return Text('Nombre no disponible');
   }
+
 }

@@ -36,45 +36,52 @@ class BodyLocation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            RoundedButton(text: 'Location', onPressed: () {  },),
-            const SizedBox(width: 10),
-            RoundedButton(text: 'Information', onPressed: () {  },),
-          ],
-        ),
-        const SizedBox(height: 16),
-        const CustomTextField(hintText: 'City/Municipality',),
-        const SizedBox(height: 20),
-        const CustomTextField(hintText: 'Neighborhood',),
-        const SizedBox(height: 16),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(16.0),
-          child: const SizedBox(
-            height: 400,
-            width: 350,
-            child: GoogleMap(
-              mapType: MapType.terrain,
-              initialCameraPosition: CameraPosition(
-                target: LatLng(4.6097, -74.0817),
-                zoom: 11,
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RoundedButton(text: 'Location', onPressed: () {  },),
+              const SizedBox(width: 10),
+              RoundedButton(text: 'Information', onPressed: () {  },),
+            ],
+          ),
+          const SizedBox(height: 16),
+          const CustomTextField(hintText: 'City/Municipality',),
+          const SizedBox(height: 20),
+          const CustomTextField(hintText: 'Neighborhood',),
+          const SizedBox(height: 16),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(16.0),
+            child: const SizedBox(
+              height: 400,
+              width: 350,
+              child: GoogleMap(
+                mapType: MapType.terrain,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(4.6097, -74.0817),
+                  zoom: 11,
+                ),
               ),
             ),
           ),
-        ),
-        const SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: () {
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
 
-          },
-          child: Text('Continuar'),
-        ),
-      ],
+            },
+            child: Text('Continuar'),
+          ),
+          Container(
+            width: 400,
+            height: 400,
+            child: BackTest(title: 'a',),
+          )
+        ],
+      ),
     );
   }
 }
@@ -124,7 +131,12 @@ class RoundedButton extends StatelessWidget {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
         ),
-        child: BackTest(title: 'aaaaa',),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(fontSize: 10),
+          ),
+        ),
       ),
     );
   }
