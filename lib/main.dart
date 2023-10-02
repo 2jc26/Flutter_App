@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:giusseppe_flut/screens/advance_search.dart';
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
 
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: const AppartmentFilter(),
+      home: const AdvanceSearch(),
     );
   }
 }
