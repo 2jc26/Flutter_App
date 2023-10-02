@@ -1,5 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
 
+part 'likes_model.g.dart';
 
+@JsonSerializable()
 class LikesModel{
 
   int id;
@@ -19,4 +22,9 @@ class LikesModel{
     required this.clean,
     required this.smoke,
   });
+
+  factory LikesModel.fromJson(Map<String, dynamic> json) =>
+      _$LikesModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LikesModelToJson(this);
 }

@@ -9,16 +9,16 @@ class UserModelUpdate {
   String name;
   int id;
   int age;
-  bool bring_people;
+  String bring_people;
   int sleep;
   int phone;
-  String role;
+  //String role;
   bool vape;
   String personality;
-  String likes_pet;
+  bool likes_pets;
   String clean;
-  String week;
-  String smoke;
+  //String week;
+  bool smoke;
   String gender;
   // Image
   UserModelUpdate({
@@ -30,12 +30,12 @@ class UserModelUpdate {
     required this.bring_people,
     required this.sleep,
     required this.phone,
-    required this.role,
+    //required this.role,
     required this.vape,
     required this.personality,
-    required this.likes_pet,
+    required this.likes_pets,
     required this.clean,
-    required this.week,
+    //required this.week,
     required this.smoke,
     required this.gender,
   });

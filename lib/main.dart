@@ -5,6 +5,7 @@ import 'package:giusseppe_flut/screens/appartment_filter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:giusseppe_flut/screens/appartment_list.dart';
 import 'package:giusseppe_flut/screens/back_test.dart';
+import 'package:giusseppe_flut/screens/filter_users/filter_users_location.dart';
 import 'package:giusseppe_flut/screens/pruebas_mapa.dart';
 import 'firebase_options.dart';
 
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: BackTest(title: 'Backend',),
+      home: const FilterUsersLocations(),
     );
   }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import "package:giusseppe_flut/widgets/drawer.dart";
 
+import '../back_test.dart';
+
 class FilterUsersLocations extends StatelessWidget {
   const FilterUsersLocations({super.key});
 
@@ -122,12 +124,7 @@ class RoundedButton extends StatelessWidget {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
         ),
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(fontSize: 10),
-          ),
-        ),
+        child: BackTest(title: 'aaaaa',),
       ),
     );
   }

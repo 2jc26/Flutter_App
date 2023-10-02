@@ -1,12 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../models/user/user_model_update.dart';
 import '../services/firestore_service.dart.dart';
 import '../widgets/drawer.dart';
+import '../repository/user_repository.dart';
+
 
 class BackTest extends StatefulWidget {
+
   final FirestoreService firestoreService = FirestoreService();
-  
   BackTest({super.key, required this.title});
 
+  final UserRepository userRepository= UserRepository();
   final String title;
 
   @override
@@ -15,46 +20,30 @@ class BackTest extends StatefulWidget {
 
 class _BackTestState extends State<BackTest> {
   Map<String, dynamic>? appartments;
-
-  void _getAppartments() async {
-    final data = await widget.firestoreService.getDocument(FirestoreCollections.Houses, 'Test0');
-    if (data != null) {
-      setState(() {
-        appartments = data;
-        print(data);
-      });
-    } else {
-      // Handle the case where the document doesn't exist
+  List<UserModelUpdate>? usersList;
+  void _getAllUsers() async {
+    try {
+      final users = await widget.userRepository.getAllUsers();
+      if (users!=null){
+        setState(() {
+          usersList=users;
+        });
+      }
+    } catch (error) {
+      rethrow;
     }
   }
 
   @override
   void initState() {
-    _getAppartments();
+    _getAllUsers();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (appartments != null && appartments!.containsKey('Testjahd')) {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF2E5EAA),
-          title: Text(
-            widget.title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          centerTitle: true,
-        ),
-        drawer: const CustomDrawer(),
-        body: Text(appartments!['Testjahd'].toString()),
-      );
+
+    if (usersList != null) {
+      return Text(usersList?[0].name ?? 'Nombre no disponible');
     }
     return Text('dasda');
   }
