@@ -3,6 +3,7 @@ import "package:giusseppe_flut/screens/roomie_detail.dart";
 import "package:giusseppe_flut/widgets/drawer.dart";
 import "package:giusseppe_flut/widgets/search_field.dart";
 import "package:flutter_rating_bar/flutter_rating_bar.dart";
+import "package:google_maps_flutter/google_maps_flutter.dart";
 
 
 class AppartmentFilter extends StatefulWidget {
@@ -85,7 +86,28 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                     ),
                     const SizedBox(height: 5.0),
                     _inputField("500.000 a 5.000.000", nameController),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 5.0),
+                    const Text (
+                      "Enter your location",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF2E5EAA),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 300,
+                      width: 300,// Ajusta el tamaño del mapa según tus necesidades
+                      child: GoogleMap(
+                        mapType: MapType.hybrid,
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(37.422131, -122.084801), // Cambia esto a las coordenadas deseadas
+                          zoom: 3,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
                     const Text(
                       "Maximum radius in meters from your selected location",
                       textAlign: TextAlign.left,

@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/widgets/search_field.dart';
 import '../models/appartment_model.dart';
+import '../services/firestore_service.dart.dart';
 import '../widgets/card.dart';
 import '../widgets/drawer.dart';
 
 class AppartmentList extends StatefulWidget {
+  final FirestoreService firestoreService = FirestoreService();
+  
   AppartmentList({super.key, required this.title});
 
   final String title;
@@ -14,10 +18,17 @@ class AppartmentList extends StatefulWidget {
 }
 
 class _AppartmentListState extends State<AppartmentList> {
-  List<AppartmentModel> appartments = [];
+  List<DocumentSnapshot> appartments = [];
 
-  void _getAppartments() {
-    appartments = AppartmentModel.getAppartments();
+  void _getAppartments() async {
+    final apartments = await widget.firestoreService.getAllDocuments(FirestoreCollections.Houses);
+
+    setState(() {
+      appartments = apartments;
+
+      print(apartments);
+    });
+    
   }
 
   @override
@@ -48,11 +59,11 @@ class _AppartmentListState extends State<AppartmentList> {
             child: ListView.builder(
               itemCount: appartments.length,
               itemBuilder: ((context, index) {
-                return InformationCard(
-                  path: appartments[index].path,
-                  stars: appartments[index].stars,
-                  text: appartments[index].text,
-                );
+                // return InformationCard(
+                //   path: appartments[index].path,
+                //   stars: appartments[index].stars,
+                //   text: appartments[index].text,
+                // );
               }),
             ),
           ),
