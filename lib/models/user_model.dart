@@ -1,3 +1,4 @@
+import 'package:json_annotation/json_annotation.dart';
 class UserModel {
   String name;
   String path;
@@ -34,6 +35,7 @@ class UserModel {
     ];
   }
 }
+
 class UserModelUpdate {
   String username;
   String password;
@@ -70,6 +72,7 @@ class UserModelUpdate {
     required this.smoke,
     required this.gender,
   });
+
 }
 class LikesModel{
 
