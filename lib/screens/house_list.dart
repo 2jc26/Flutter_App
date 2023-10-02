@@ -64,7 +64,7 @@ class _HouseListState extends State<HouseList> implements HouseListView{
                 itemBuilder: ((context, index) {
                   return InformationCard(
                     path: 'assets/images/house1.jpg',
-                    stars: 5,
+                    stars: _housesList![index].rating,
                     text: _housesList![index].name,
                   );
                 }),

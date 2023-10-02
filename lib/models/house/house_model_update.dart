@@ -8,7 +8,7 @@ class HouseModelUpdate {
   String city;
   String neighborhood;
   String address;
-  String HousingType;
+  String housingType;
   String rentPrice;
   int stratum;
   double area;
@@ -25,13 +25,14 @@ class HouseModelUpdate {
   bool reception;
   bool supermarkets;
   String description;
+  int rating;
   // Image
   HouseModelUpdate({
     required this.name,
     required this.city,
     required this.neighborhood,
     required this.address,
-    required this.HousingType,
+    required this.housingType,
     required this.rentPrice,
     required this.stratum,
     required this.area,
@@ -48,6 +49,7 @@ class HouseModelUpdate {
     required this.reception,
     required this.supermarkets,
     required this.description,
+    required this.rating,
   });
 
   factory HouseModelUpdate.fromJson(Map<String, dynamic> json) =>

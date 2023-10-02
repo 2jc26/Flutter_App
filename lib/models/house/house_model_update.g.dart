@@ -12,7 +12,7 @@ HouseModelUpdate _$HouseModelUpdateFromJson(Map<String, dynamic> json) =>
       city: json['city'] as String,
       neighborhood: json['neighborhood'] as String,
       address: json['address'] as String,
-      HousingType: json['HousingType'] as String,
+      housingType: json['housingType'] as String,
       rentPrice: json['rentPrice'] as String,
       stratum: json['stratum'] as int,
       area: (json['area'] as num).toDouble(),
@@ -29,6 +29,7 @@ HouseModelUpdate _$HouseModelUpdateFromJson(Map<String, dynamic> json) =>
       reception: json['reception'] as bool,
       supermarkets: json['supermarkets'] as bool,
       description: json['description'] as String,
+      rating: json['rating'] as int,
     );
 
 Map<String, dynamic> _$HouseModelUpdateToJson(HouseModelUpdate instance) =>
@@ -37,7 +38,7 @@ Map<String, dynamic> _$HouseModelUpdateToJson(HouseModelUpdate instance) =>
       'city': instance.city,
       'neighborhood': instance.neighborhood,
       'address': instance.address,
-      'HousingType': instance.HousingType,
+      'housingType': instance.housingType,
       'rentPrice': instance.rentPrice,
       'stratum': instance.stratum,
       'area': instance.area,
@@ -54,4 +55,5 @@ Map<String, dynamic> _$HouseModelUpdateToJson(HouseModelUpdate instance) =>
       'reception': instance.reception,
       'supermarkets': instance.supermarkets,
       'description': instance.description,
+      'rating': instance.rating,
     };
