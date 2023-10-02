@@ -3,7 +3,7 @@ import 'package:giusseppe_flut/screens/appartment_filter.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
-import 'package:giusseppe_flut/screens/appartment_list.dart';
+import 'package:giusseppe_flut/screens/house_list.dart';
 import 'package:giusseppe_flut/screens/back_test.dart';
 import 'package:giusseppe_flut/screens/filter_users/filter_users_location.dart';
 import 'package:giusseppe_flut/screens/pruebas_mapa.dart';
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: const FilterUsersLocations(),
+      home: HouseList(),
     );
   }
 }

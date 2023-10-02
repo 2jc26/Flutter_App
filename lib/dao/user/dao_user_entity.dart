@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../models/user/user_model_update.dart';
-import '../../models/user_model.dart';
 
 abstract class UserDao {
 
