@@ -3,7 +3,19 @@ import '../../models/user/query_likes_user.dart';
 import '../../widgets/drawer.dart';
 import '../user_list.dart';
 
-class FilterUsersOthers extends StatelessWidget {
+class FilterUsersOthers extends StatefulWidget {
+  final UserPreferencesDTO userPreferences;
+
+  FilterUsersOthers({
+    Key? key,
+    required this.userPreferences,
+  }) : super(key: key);
+
+  @override
+  _FilterUsersOthersState createState() => _FilterUsersOthersState();
+}
+
+class _FilterUsersOthersState extends State<FilterUsersOthers> {
   final TextEditingController petController = TextEditingController();
   final TextEditingController introvertedController = TextEditingController();
   final TextEditingController cleaningController = TextEditingController();
@@ -12,9 +24,6 @@ class FilterUsersOthers extends StatelessWidget {
   final TextEditingController workFromHomeController = TextEditingController();
   final TextEditingController sleepTimeController = TextEditingController();
   final TextEditingController externalPeopleController = TextEditingController();
-
-
-  FilterUsersOthers({Key? key, required UserPreferencesDTO userPreferences}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -173,14 +182,7 @@ class FilterUsersOthers extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  UserPreferencesDTO userPrefs = UserPreferencesDTO(
-
-                  );
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => UserList(userPreferences: userPrefs, title: '',),
-                    ),
-                  );
+                  Navigator.pop(context);
                 },
                 child: Text('Continuar'),
               ),
