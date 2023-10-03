@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:giusseppe_flut/screens/house_detail.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
-import 'package:giusseppe_flut/screens/house_list.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -15,6 +15,9 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  @override
+
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,7 @@ class MyApp extends StatelessWidget {
           tertiary: Color(0xFFEDF9B9)
         ),
       ),
-      home: HouseList(),
+      home: HouseDetail(),
     );
   }
 }

@@ -2,28 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/screens/pruebas_mapa.dart';
 import 'package:giusseppe_flut/widgets/search_field.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../models/appartment_model.dart';
 import '../widgets/rating_rectangle.dart';
 import '../widgets/drawer.dart';
 
-class AppartmentDetail extends StatefulWidget {
-  AppartmentDetail({super.key});
+class HouseDetail extends StatefulWidget {
+  HouseDetail({super.key});
 
   @override
-  State<AppartmentDetail> createState() => _AppartmentDetailState();
+  State<HouseDetail> createState() => _HouseDetailState();
 }
 
-class _AppartmentDetailState extends State<AppartmentDetail> {
-  List<AppartmentModel> appartments = [];
+class _HouseDetailState extends State<HouseDetail> {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF2E5EAA),
-        title: Text(
-          'Appartmet',
-          style: const TextStyle(
+        title: const Text(
+          'House Detail',
+          style: TextStyle(
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
