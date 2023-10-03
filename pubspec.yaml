@@ -47,6 +47,8 @@ dependencies:
   localization: ^2.1.0
   geolocator: ^10.1.0
 
+  flutter_bloc: ^7.0.0
+  firebase_auth: ^4.10.0
 
 dev_dependencies:
   flutter_test:
