@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import './roomie_detail.dart';
-import '../models/user_model.dart';
-import '../widgets/information_card.dart';
 import '../widgets/drawer.dart';
 
 class UserList extends StatefulWidget {
@@ -14,15 +12,9 @@ class UserList extends StatefulWidget {
 }
 
 class _UserListState extends State<UserList> {
-  List<UserModel> Users = [];
-
-  void _getUsers() {
-    Users = UserModel.getUsers();
-  }
 
   @override
   Widget build(BuildContext context) {
-    _getUsers();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF2E5EAA),
@@ -68,18 +60,18 @@ class _UserListState extends State<UserList> {
               ),
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: Users.length,
-              itemBuilder: ((context, index) {
-                return InformationCard(
-                  path: Users[index].path,
-                  stars: Users[index].stars,
-                  text: Users[index].name,
-                );
-              }),
-            ),
-          ),
+          // Expanded(
+          //   child: ListView.builder(
+          //     itemCount: Users.length,
+          //     itemBuilder: ((context, index) {
+          //       return InformationCard(
+          //         path: Users[index].path,
+          //         stars: Users[index].stars,
+          //         text: Users[index].name,
+          //       );
+          //     }),
+          //   ),
+          // ),
         ],
       ),
     );
