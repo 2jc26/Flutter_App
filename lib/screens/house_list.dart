@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
-import 'package:giusseppe_flut/presenter/house_presenter.dart';
+import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
 import 'package:giusseppe_flut/repository/house_repository.dart';
+import 'package:giusseppe_flut/screens/house_detail.dart';
 import 'package:giusseppe_flut/widgets/search_field.dart';
 import 'package:giusseppe_flut/widgets/information_card.dart';
 import '../widgets/drawer.dart';
@@ -19,7 +20,7 @@ class HouseList extends StatefulWidget {
 }
 
 class _HouseListState extends State<HouseList> implements HouseListView{
-  final HouseListPresenter userListPresenter = HouseListPresenter();
+  final HouseListPresenter houseListPresenter = HouseListPresenter();
   List<HouseModelUpdate>? _housesList;
 
   @override
@@ -32,7 +33,7 @@ class _HouseListState extends State<HouseList> implements HouseListView{
   @override
   void initState() {
     super.initState();
-    userListPresenter.backView = this;
+    houseListPresenter.backView = this;
   }
 
   @override
@@ -62,10 +63,18 @@ class _HouseListState extends State<HouseList> implements HouseListView{
               child: ListView.builder(
                 itemCount: _housesList?.length,
                 itemBuilder: ((context, index) {
-                  return InformationCard(
-                    path: 'assets/images/house1.jpg',
-                    stars: _housesList![index].rating,
-                    text: _housesList![index].name,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HouseDetail(id: _housesList![index].id)),
+                      );
+                    },
+                    child: InformationCard(
+                      path: 'assets/images/house1.jpg',
+                      stars: _housesList![index].rating,
+                      text: _housesList![index].name,
+                    ),
                   );
                 }),
               ),
