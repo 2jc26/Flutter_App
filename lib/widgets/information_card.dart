@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:giusseppe_flut/screens/appartment_list.dart';
+import 'package:giusseppe_flut/screens/house_list.dart';
 
 class InformationCard extends StatelessWidget {
   const InformationCard({super.key, required this.path, required this.stars, required this.text});
@@ -16,7 +16,7 @@ class InformationCard extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AppartmentList(title: 'Senehouse',)),
+            MaterialPageRoute(builder: (context) => HouseList()),
           );
         },
         child: Card(
