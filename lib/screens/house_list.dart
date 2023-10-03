@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_presenter.dart';
-import 'package:giusseppe_flut/repository/house_repository.dart';
 import 'package:giusseppe_flut/widgets/search_field.dart';
 import 'package:giusseppe_flut/widgets/information_card.dart';
 import '../widgets/drawer.dart';
