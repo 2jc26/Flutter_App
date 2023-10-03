@@ -1,13 +1,40 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
+import 'package:light_sensor/light_sensor.dart';
 
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late final StreamSubscription<int> listen;
+  int animationValue = 0;
+
+  @override
+  void initState() {
+    listen = LightSensor.lightSensorStream.listen((lux) {
+      setState(() {
+        animationValue = lux;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    listen.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +57,8 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: const AppartmentFilter(),
+      home: Center(child: 
+      Text("Valor del sensor: $animationValue")),
     );
   }
 }
