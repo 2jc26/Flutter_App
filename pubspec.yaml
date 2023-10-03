@@ -40,6 +40,10 @@ dependencies:
   flutter_inset_box_shadow: ^1.0.8
   flutter_rating_bar: ^4.0.1
   google_maps_flutter: ^2.5.0
+  firebase_core: ^2.16.0
+  cloud_firestore: ^4.9.2
+  json_annotation: ^4.8.1
+
 
 dev_dependencies:
   flutter_test:
@@ -51,6 +55,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  json_serializable: ^6.7.1
+  build_runner: ^2.4.6
+  build_test: ^2.2.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

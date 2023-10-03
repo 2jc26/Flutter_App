@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "156075975335",
+    "project_id": "senehouse-835fd",
+    "storage_bucket": "senehouse-835fd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156075975335:android:dc6d33aa6a2970878ab182",
+        "android_client_info": {
+          "package_name": "com.example.giusseppe_flut"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNd1y3ws9r8EckuyhRQ7uS0_DqPgPlmn8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

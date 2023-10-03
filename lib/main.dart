@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:giusseppe_flut/screens/Register.dart';
-import 'package:giusseppe_flut/screens/roomie_detail.dart';
-import 'package:giusseppe_flut/screens/sign_up.dart';
-import 'package:giusseppe_flut/screens/appartment_detail.dart';
 
-void main() {
+// Firebase
+import 'package:firebase_core/firebase_core.dart';
+import 'package:giusseppe_flut/screens/house_list.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -33,7 +38,7 @@ class MyApp extends StatelessWidget {
           tertiary: Color(0xFFEDF9B9)
         ),
       ),
-      home: AppartmentDetail(title: 'Hola'),
+      home: HouseList(),
     );
   }
 }

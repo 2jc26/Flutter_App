@@ -1,3 +1,5 @@
+import 'package:json_annotation/json_annotation.dart';
+
 class UserModel {
   String name;
   String path;
@@ -34,3 +36,4 @@ class UserModel {
     ];
   }
 }
+
