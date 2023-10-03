@@ -14,10 +14,10 @@ class InformationCard extends StatelessWidget {
       padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
       child: GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HouseList()),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => HouseList()),
+          // );
         },
         child: Card(
           color: const Color(0xFF2C595B),

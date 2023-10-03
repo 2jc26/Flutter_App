@@ -2,7 +2,6 @@ import 'package:giusseppe_flut/models/user/query_likes_user.dart';
 
 import '../dao/user/dao_user_entity.dart';
 import '../models/user/user_model_update.dart';
-import '../screens/back_test.dart';
 
 class UserRepository {
 
@@ -16,6 +15,21 @@ class UserRepository {
     }
   }
 
+  Future<UserModelUpdate?> validateUsernameAndPassword(String username, String password) async {
+    try {
+      return await userDao.validateUsernameAndPassword(username, password);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<UserModelUpdate?> getUserById(String id) async {
+    try {
+      return await userDao.getUserById(id);
+    } catch (error) {
+      rethrow;
+    }
+  }
   Future<List<UserModelUpdate>> getAllUsersByPreferences(UserPreferencesDTO userPreferences) async {
     try {
       return await userDao.getHousesByLikings(userPreferences);
@@ -23,5 +37,4 @@ class UserRepository {
       rethrow;
     }
   }
-
 }
