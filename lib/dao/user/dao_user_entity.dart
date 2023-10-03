@@ -86,5 +86,32 @@ class UserDaoFireStore extends UserDao{
       rethrow;
     }
   }
+  Future<List<UserModelUpdate>> getDocumentsWithinRadius(double latitude, double longitude) async {
+    List<UserModelUpdate> users=[];
+
+    final double radiusInDegrees = 0.09;
+
+
+    final double minLat = latitude - radiusInDegrees;
+    final double maxLat = latitude + radiusInDegrees;
+    final double minLon = longitude - radiusInDegrees;
+    final double maxLon = longitude + radiusInDegrees;
+
+    final QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('tu_coleccion')
+        .where('lat', isGreaterThanOrEqualTo: minLat)
+        .where('lat', isLessThanOrEqualTo: maxLat)
+        .where('lon', isGreaterThanOrEqualTo: minLon)
+        .where('lon', isLessThanOrEqualTo: maxLon)
+        .get();
+
+    // Iterar a través de los documentos dentro del radio.
+    for (var user in snapshot.docs) {
+      final userData = user.data() as Map<String, dynamic>;
+      users.add(UserModelUpdate.fromJson(userData));
+    }
+    return users;
+
+  }
 
 }
