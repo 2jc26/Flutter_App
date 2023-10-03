@@ -27,7 +27,9 @@ class HouseDetailPresenter {
 
   set backView(HouseDetailView value) {
     _backView = value;
-    _backView.refreshHouseDetailView(house!);
+    if (house != null) { // Check if house is not null before refreshing the view
+      _backView.refreshHouseDetailView(house!);
+    }
   }
 
 }

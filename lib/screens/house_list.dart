@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
+import 'package:giusseppe_flut/screens/house_detail.dart';
 import 'package:giusseppe_flut/widgets/search_field.dart';
 import 'package:giusseppe_flut/widgets/information_card.dart';
 import '../widgets/drawer.dart';
@@ -121,10 +122,17 @@ class _HouseListState extends State<HouseList> implements HouseListView {
                 child: ListView.builder(
                   itemCount: _filteredHousesList?.length,
                   itemBuilder: ((context, index) {
-                    return InformationCard(
-                      path: 'assets/images/house1.jpg',
-                      stars: _filteredHousesList![index].rating,
-                      text: _filteredHousesList![index].name,
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => HouseDetail(house: _housesLikingList![index]),
+                        ));
+                      },
+                      child: InformationCard(
+                        path: 'assets/images/house1.jpg',
+                        stars: _filteredHousesList![index].rating,
+                        text: _filteredHousesList![index].name,
+                      ),
                     );
                   }),
                 ),

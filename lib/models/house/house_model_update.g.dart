@@ -31,6 +31,8 @@ HouseModelUpdate _$HouseModelUpdateFromJson(Map<String, dynamic> json) =>
       supermarkets: json['supermarkets'] as bool,
       description: json['description'] as String,
       rating: json['rating'] as int,
+      longitude: (json['longitude'] as num).toDouble(),
+      latitude: (json['latitude'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$HouseModelUpdateToJson(HouseModelUpdate instance) =>
@@ -58,4 +60,6 @@ Map<String, dynamic> _$HouseModelUpdateToJson(HouseModelUpdate instance) =>
       'supermarkets': instance.supermarkets,
       'description': instance.description,
       'rating': instance.rating,
+      'longitude': instance.longitude,
+      'latitude': instance.latitude,
     };

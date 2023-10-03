@@ -27,6 +27,8 @@ class HouseModelUpdate {
   bool supermarkets;
   String description;
   int rating;
+  double longitude;
+  double latitude;
   // Image
   HouseModelUpdate({
     required this.id,
@@ -52,6 +54,8 @@ class HouseModelUpdate {
     required this.supermarkets,
     required this.description,
     required this.rating,
+    required this.longitude,
+    required this.latitude,
   });
 
   factory HouseModelUpdate.fromJson(Map<String, dynamic> json) =>
