@@ -7,7 +7,7 @@ class UserModelUpdate {
   String username;
   String password;
   String name;
-  int id;
+  String id;
   int age;
   String bring_people;
   int sleep;

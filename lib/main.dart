@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:giusseppe_flut/app_navigator.dart';
+import 'package:giusseppe_flut/auth/auth_cubit.dart';
+import 'package:giusseppe_flut/auth/auth_navigator.dart';
 import 'package:giusseppe_flut/auth/auth_repository.dart';
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
 
@@ -10,6 +13,7 @@ import 'package:giusseppe_flut/screens/back_test.dart';
 import 'package:giusseppe_flut/screens/filter_users/filter_users_location.dart';
 import 'package:giusseppe_flut/screens/login.dart';
 import 'package:giusseppe_flut/screens/pruebas_mapa.dart';
+import 'package:giusseppe_flut/session_cubit.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -46,7 +50,10 @@ class MyApp extends StatelessWidget {
       ),
       home: RepositoryProvider(
         create: (context) => AuthRepository(),
-        child: Login(),
+        child: BlocProvider(
+          create: (context) => SessionCubit(authRepo: context.read<AuthRepository>()),
+          child: AppNavigator(),
+        ),
         ),
     );
   }

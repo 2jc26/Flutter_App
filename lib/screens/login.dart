@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
+import "package:giusseppe_flut/auth/auth_cubit.dart";
 import "package:giusseppe_flut/auth/auth_repository.dart";
 import "package:giusseppe_flut/auth/form_submission_status.dart";
 import "package:giusseppe_flut/auth/login/login_block.dart";
 import "package:giusseppe_flut/auth/login/login_event.dart";
 import "package:giusseppe_flut/auth/login/login_state.dart";
-import "package:giusseppe_flut/screens/sign_up.dart";
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -25,7 +25,10 @@ class _LoginState extends State<Login> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: BlocProvider(
-      create: (context) => LoginBloc(authRepo: context.read<AuthRepository>()),
+      create: (context) => LoginBloc(
+        authRepo: context.read<AuthRepository>(),
+        authCubit: context.read<AuthCubit>(),
+        ),
       child: _page(),
       )) // Call the _page() method to display the icon
     );
@@ -46,8 +49,6 @@ class _LoginState extends State<Login> {
               _begainText(),
               _otherTexr(),
               _loginForm(),
-              const SizedBox(height: 20),
-              _extraText(),
             ],
           ),
         ),
@@ -99,6 +100,8 @@ class _LoginState extends State<Login> {
                 _passwordField(),
                 const SizedBox(height: 50),
                 _loginButton(),
+                const SizedBox(height: 20),
+                _extraText(context),
               ],
             ),
           ),
@@ -183,9 +186,7 @@ class _LoginState extends State<Login> {
               ),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  String username = usernameController.text;
-                  String password = passwordController.text;
-                  context.read<LoginBloc>().add(LoginSubmitted(username: username, password: password));
+                  context.read<LoginBloc>().add(LoginSubmitted());
                 }
               },
               child: const Text('Login'),
@@ -219,18 +220,13 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget _extraText() {
+  Widget _extraText(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         ElevatedButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SignUp(),
-              ),
-            );
+            context.read<AuthCubit>().showSignUp();
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.transparent,
@@ -250,7 +246,7 @@ class _LoginState extends State<Login> {
           "Forget Details?",
           textAlign: TextAlign.right,
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 10,
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),

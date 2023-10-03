@@ -11,7 +11,7 @@ UserModelUpdate _$UserModelUpdateFromJson(Map<String, dynamic> json) =>
       username: json['username'] as String,
       password: json['password'] as String,
       name: json['name'] as String,
-      id: json['id'] as int,
+      id: json['id'] as String,
       age: json['age'] as int,
       bring_people: json['bring_people'] as String,
       sleep: json['sleep'] as int,

@@ -1,8 +1,29 @@
+import 'package:giusseppe_flut/models/user/user_model_update.dart';
+import 'package:giusseppe_flut/repository/user_repository_prueba.dart';
+
 class AuthRepository {
-  Future<void> login(String username, String password) async {
-    print('attemping to login');
-    await Future.delayed(const Duration(seconds: 3));
-    print('login successful');
-    // throw Exception('Login Failure');
+    
+  final UserRepository userRepository = UserRepository();
+
+  Future<UserModelUpdate?> login(String username, String password) async {
+    try {
+      final user = await userRepository.validateUsernameAndPassword(username, password);
+      if (user != null) {
+        return user;
+      } else {
+        throw Exception("Login fallido");
+      }
+    } catch(e) {  
+      throw Exception(e);
+    }
   }
+
+  Future<void> logOut() async {
+    try {
+      await Future.delayed(const Duration(seconds: 2));
+    } catch(e) {
+      throw Exception(e);
+    }
+  }
+
 }

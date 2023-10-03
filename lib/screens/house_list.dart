@@ -12,7 +12,11 @@ class HouseListView {
 }
 
 class HouseList extends StatefulWidget {
-  HouseList({super.key});
+
+  String userId = '';
+
+  HouseList({super.key, required this.userId});
+
 
   @override
   State<HouseList> createState() => _HouseListState();
@@ -21,10 +25,13 @@ class HouseList extends StatefulWidget {
 class _HouseListState extends State<HouseList> implements HouseListView{
   final HouseListPresenter userListPresenter = HouseListPresenter();
   List<HouseModelUpdate>? _housesList;
+  String? _userId;
 
   @override
   void refreshHouseListView(List<HouseModelUpdate> housesList) {
     setState(() {
+      print(widget.userId);
+      _userId = widget.userId;
       _housesList = housesList;
     });
   }
