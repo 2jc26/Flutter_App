@@ -3,6 +3,7 @@ import 'package:giusseppe_flut/screens/house_detail.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
+import 'package:giusseppe_flut/screens/house_list.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
           tertiary: Color(0xFFEDF9B9)
         ),
       ),
-      home: HouseDetail(),
+      home: HouseList(),
     );
   }
 }

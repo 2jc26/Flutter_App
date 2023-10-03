@@ -11,7 +11,7 @@ class HouseListView {
 }
 
 class HouseList extends StatefulWidget {
-  HouseList({super.key});
+  const HouseList({super.key});
 
   @override
   State<HouseList> createState() => _HouseListState();
@@ -81,7 +81,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
                 padding: EdgeInsets.symmetric(vertical: 5),
                 child: Text("Houses that match your tastes", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
               ),
-              Container(
+              SizedBox(
                 height: 250,
                 child: ListView.builder(
                   itemCount: _housesLikingList?.length,
@@ -98,7 +98,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
                 padding: EdgeInsets.symmetric(vertical: 5),
                 child: Text("Houses that match your searchs", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
               ),
-              Container(
+              SizedBox(
                 height: 250,
                 child: ListView.builder(
                   itemCount: _housesLikingList?.length,
@@ -116,7 +116,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
                 child: Text("All the houses", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
               ),
               SearchField(searchController: _searchController),
-              Container(
+              SizedBox(
                 height: 250,
                 child: ListView.builder(
                   itemCount: _filteredHousesList?.length,
