@@ -1,61 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
 
-//Sensors
-import 'dart:async';
-import 'package:light/light.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => new _MyAppState();
-}
-
-class _MyAppState  extends State<MyApp> {
-  String _luxString = 'Unknown';
-  Light? _light;
-  StreamSubscription? _subscription;
-
-  void onData(int luxValue) async {
-    print("Lux value: $luxValue");
-    setState(() {
-      _luxString = "$luxValue";
-    });
-  }
-
-  void stopListening() {
-    _subscription?.cancel();
-  }
-
-  void startListening() {
-    _light = Light();
-    try {
-      _subscription = _light?.lightSensorStream.listen(onData);
-    } on LightException catch (exception) {
-      print(exception);
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    startListening();
-  }
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Light Example App'),
-        ),
-        body: Center(
-          child: Text('Lux value: $_luxString\n'),
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: const ColorScheme(
+          primary: Color(0xFF2e5eaa),
+          secondary: Colors.white,
+          surface: Color(0xFFdae3e5),
+          background: Color(0xFFdae3e5),
+          error: Color(0xFFB00020),
+          onPrimary: Color(0xFF2c595b),
+          onSecondary: Color(0xFF2c595b),
+          onSurface: Color(0xFF2c595b),
+          onBackground: Color(0xFF2c595b),
+          onError: Colors.red,
+          brightness: Brightness.light,
         ),
       ),
+      home: const AppartmentFilter(),
     );
   }
 }
