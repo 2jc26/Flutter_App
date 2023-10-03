@@ -1,6 +1,11 @@
 import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:giusseppe_flut/auth/auth_repository.dart";
+import "package:giusseppe_flut/auth/form_submission_status.dart";
+import "package:giusseppe_flut/auth/login/login_block.dart";
+import "package:giusseppe_flut/auth/login/login_event.dart";
+import "package:giusseppe_flut/auth/login/login_state.dart";
 import "package:giusseppe_flut/screens/sign_up.dart";
-import "package:giusseppe_flut/screens/user_list.dart";
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -12,15 +17,17 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Container(
       color: const Color(0xffDAE3E5),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: _page(), // Call the _page() method to display the icon
-      ),
+        body: BlocProvider(
+      create: (context) => LoginBloc(authRepo: context.read<AuthRepository>()),
+      child: _page(),
+      )) // Call the _page() method to display the icon
     );
   }
 
@@ -38,12 +45,7 @@ class _LoginState extends State<Login> {
               const SizedBox(height: 20),
               _begainText(),
               _otherTexr(),
-              const SizedBox(height: 50),
-              _inputField("E-mail", usernameController),
-              const SizedBox(height: 20),
-              _inputField("Password", passwordController, isPassword: true),
-              const SizedBox(height: 50),
-              _loginButton(),
+              _loginForm(),
               const SizedBox(height: 20),
               _extraText(),
             ],
@@ -76,56 +78,127 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget _inputField(String hintText, TextEditingController controller,
-      {isPassword = false}) {
-    var border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
-    );
-    return TextField(
-      style: const TextStyle(color: Colors.black),
-      controller: controller,
-      decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: const TextStyle(color: Color(0xFFC4C4C4)),
-        enabledBorder: border,
-        focusedBorder: border,
-        filled: true,
-        fillColor: const Color(0XffEBEDF0),
-      ),
-      obscureText: isPassword,
+  Widget _loginForm() {
+    return BlocListener<LoginBloc, LoginState>(
+        listener: (context, state) {
+          final formStatus = state.formStatus;
+          if (formStatus is SubmissionFailed) {
+            _showSnackBar(context, formStatus.exception.toString());
+          }
+        },
+        child: Form(
+          key: _formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 50),
+                _usernameField(),
+                const SizedBox(height: 20),
+                _passwordField(),
+                const SizedBox(height: 50),
+                _loginButton(),
+              ],
+            ),
+          ),
+        ));
+  }
+
+  Widget _usernameField() {
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        return TextFormField(
+          style: const TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            hintStyle: const TextStyle(color: Color(0xFFC4C4C4)),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+            ),
+            filled: true,
+            fillColor: const Color(0XffEBEDF0),
+            // icon: const Icon(Icons.person),
+            hintText: 'Username',
+          ),
+          validator: (value) =>
+              state.isValidUsername ? null : 'Username is invalid',
+          onChanged: (value) {
+            context.read<LoginBloc>().add(LoginUsernameChanged(username: value));
+            usernameController.text = value;
+          },
+        );
+      },
     );
   }
 
+  Widget _passwordField() {
+    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+      return TextFormField(
+        obscureText: true,
+        style: const TextStyle(color: Colors.black),
+        decoration: InputDecoration(
+          hintStyle: const TextStyle(color: Color(0xFFC4C4C4)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+          ),
+          filled: true,
+          fillColor: const Color(0XffEBEDF0),
+          // icon: const Icon(Icons.lock),
+          hintText: 'Password',
+        ),
+        validator: (value) =>
+            state.isValidPassword ? null : 'Password is to short',
+        onChanged: (value) {
+          context.read<LoginBloc>().add(LoginPasswordChanged(password: value));
+          passwordController.text = value;
+        },
+      );
+    });
+  }
+
   Widget _loginButton() {
-    return ElevatedButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => UserList(title: 'Senehouse')),
-        );
-        debugPrint("Username: ${usernameController.text}");
-        debugPrint("Password: ${passwordController.text}");
-      },
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        backgroundColor: const Color(0xFF2E5EAA),
-        foregroundColor: const Color(0xFFF2F4F6),
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        elevation: 10,
-        shadowColor: Colors.black,
-      ),
-      child: const SizedBox(
-        width: double.infinity,
-        child: Text(
-          "Sign In",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
+    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+      return state.formStatus is FormSubmitting
+          ? const CircularProgressIndicator()
+          : ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                backgroundColor: const Color(0xFF2E5EAA),
+                foregroundColor: const Color(0xFFF2F4F6),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                elevation: 10,
+                shadowColor: Colors.black,
+              ),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  String username = usernameController.text;
+                  String password = passwordController.text;
+                  context.read<LoginBloc>().add(LoginSubmitted(username: username, password: password));
+                }
+              },
+              child: const Text('Login'),
+            );
+    });
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      dismissDirection: DismissDirection.down,
     );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   Widget _begainText() {
@@ -147,44 +220,42 @@ class _LoginState extends State<Login> {
   }
 
   Widget _extraText() {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      ElevatedButton(
-        onPressed: () {
-          // Handle navigation here, e.g., go to the sign-up page
-          // Replace 'YourSignUpRoute' with the actual route for sign-up
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SignUp(),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SignUp(),
+              ),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.transparent,
+            elevation: 0, // Remove button elevation
+          ),
+          child: const Text(
+            "Don't have an account?",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
             ),
-          );
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          elevation: 0, // Remove button elevation
+          ),
         ),
-        child: const Text(
-          "Don't have an account?",
-          textAlign: TextAlign.left,
+        const Text(
+          "Forget Details?",
+          textAlign: TextAlign.right,
           style: TextStyle(
             fontSize: 16,
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
         ),
-      ),
-      const Text(
-        "Forget Details?",
-        textAlign: TextAlign.right,
-        style: TextStyle(
-          fontSize: 16,
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ],
-  );
-}
+      ],
+    );
+  }
 }

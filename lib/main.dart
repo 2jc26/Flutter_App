@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:giusseppe_flut/auth/auth_repository.dart';
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
 
 // Firebase
@@ -6,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:giusseppe_flut/screens/house_list.dart';
 import 'package:giusseppe_flut/screens/back_test.dart';
 import 'package:giusseppe_flut/screens/filter_users/filter_users_location.dart';
+import 'package:giusseppe_flut/screens/login.dart';
 import 'package:giusseppe_flut/screens/pruebas_mapa.dart';
 import 'firebase_options.dart';
 
@@ -41,7 +44,10 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: HouseList(),
+      home: RepositoryProvider(
+        create: (context) => AuthRepository(),
+        child: Login(),
+        ),
     );
   }
 }
