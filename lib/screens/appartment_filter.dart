@@ -63,7 +63,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SearchField(),
+                  // SearchField(),
                 ],
               ),
             ),

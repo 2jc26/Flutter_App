@@ -8,6 +8,7 @@ part of 'house_model_update.dart';
 
 HouseModelUpdate _$HouseModelUpdateFromJson(Map<String, dynamic> json) =>
     HouseModelUpdate(
+      id: json['id'] as String,
       name: json['name'] as String,
       city: json['city'] as String,
       neighborhood: json['neighborhood'] as String,
@@ -30,10 +31,13 @@ HouseModelUpdate _$HouseModelUpdateFromJson(Map<String, dynamic> json) =>
       supermarkets: json['supermarkets'] as bool,
       description: json['description'] as String,
       rating: json['rating'] as int,
+      longitude: (json['longitude'] as num).toDouble(),
+      latitude: (json['latitude'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$HouseModelUpdateToJson(HouseModelUpdate instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'city': instance.city,
       'neighborhood': instance.neighborhood,
@@ -56,4 +60,6 @@ Map<String, dynamic> _$HouseModelUpdateToJson(HouseModelUpdate instance) =>
       'supermarkets': instance.supermarkets,
       'description': instance.description,
       'rating': instance.rating,
+      'longitude': instance.longitude,
+      'latitude': instance.latitude,
     };

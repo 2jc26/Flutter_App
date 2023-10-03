@@ -4,6 +4,7 @@ part 'house_model_update.g.dart';
 
 @JsonSerializable()
 class HouseModelUpdate {
+  String id;
   String name;
   String city;
   String neighborhood;
@@ -26,8 +27,11 @@ class HouseModelUpdate {
   bool supermarkets;
   String description;
   int rating;
+  double longitude;
+  double latitude;
   // Image
   HouseModelUpdate({
+    required this.id,
     required this.name,
     required this.city,
     required this.neighborhood,
@@ -50,6 +54,8 @@ class HouseModelUpdate {
     required this.supermarkets,
     required this.description,
     required this.rating,
+    required this.longitude,
+    required this.latitude,
   });
 
   factory HouseModelUpdate.fromJson(Map<String, dynamic> json) =>
