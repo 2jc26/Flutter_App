@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:giusseppe_flut/screens/appartment_filter.dart';
-
-// Firebase
 import 'package:firebase_core/firebase_core.dart';
-import 'package:giusseppe_flut/screens/house_list.dart';
-import 'package:giusseppe_flut/screens/back_test.dart';
 import 'package:giusseppe_flut/screens/filter_users/filter_users_location.dart';
-import 'package:giusseppe_flut/screens/pruebas_mapa.dart';
+import 'package:giusseppe_flut/screens/filter_users/filter_users_other.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -24,6 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      restorationScopeId: "root",
       title: 'Flutter Demo',
       theme: ThemeData(
         useMaterial3: true,
@@ -41,7 +37,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: HouseList(),
+      home: FilterUsersLocations(),
     );
   }
 }

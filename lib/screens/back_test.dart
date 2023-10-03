@@ -1,14 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/presenter/user_presenter.dart';
+import 'package:giusseppe_flut/screens/views_abs.dart';
 import '../models/user/user_model_update.dart';
 import '../services/firestore_service.dart.dart';
 import '../widgets/drawer.dart';
 import '../repository/user_repository_prueba.dart';
 
-class UserListView {
-  void refreshUserListView(List<UserModelUpdate> usersList) {}
-}
+/*
 class BackTest extends StatefulWidget {
   
   BackTest({super.key, required this.title});
@@ -45,5 +44,4 @@ class _BackTestState extends State<BackTest> implements UserListView{
     }
     return Text('Nombre no disponible');
   }
-
-}
+}*/

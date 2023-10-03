@@ -102,7 +102,7 @@ class _LoginState extends State<Login> {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => UserList(title: 'Senehouse')),
+          MaterialPageRoute(builder: (context) => UserList()),
         );
         debugPrint("Username: ${usernameController.text}");
         debugPrint("Password: ${passwordController.text}");
