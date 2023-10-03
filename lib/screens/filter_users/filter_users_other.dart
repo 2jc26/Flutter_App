@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
-
+import '../../models/user/query_likes_user.dart';
 import '../../widgets/drawer.dart';
-
+import '../user_list.dart';
 
 class FilterUsersOthers extends StatelessWidget {
-  const FilterUsersOthers({Key? key}) : super(key: key);
+  final TextEditingController petController = TextEditingController();
+  final TextEditingController introvertedController = TextEditingController();
+  final TextEditingController cleaningController = TextEditingController();
+  final TextEditingController vapeController = TextEditingController();
+  final TextEditingController smokeController = TextEditingController();
+  final TextEditingController workFromHomeController = TextEditingController();
+  final TextEditingController sleepTimeController = TextEditingController();
+  final TextEditingController externalPeopleController = TextEditingController();
+
+
+  FilterUsersOthers({Key? key, required UserPreferencesDTO userPreferences}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +63,10 @@ class FilterUsersOthers extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ExclusiveCheckboxGroup(labels: const ['Yes', 'No']),
+                  ExclusiveCheckboxGroup(
+                    labels: const ['Yes', 'No'],
+                    controller: petController,
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -68,7 +81,10 @@ class FilterUsersOthers extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ExclusiveCheckboxGroup(labels: const ['Introverted', 'Extroverted']),
+                  ExclusiveCheckboxGroup(
+                    labels: const ['Introverted', 'Extroverted'],
+                    controller: introvertedController,
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -80,7 +96,7 @@ class FilterUsersOthers extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              CleaningFrequencySlider(),
+              CleaningFrequencySlider(controller: cleaningController),
               const SizedBox(height: 16),
               const Text(
                 'Do you Vape?',
@@ -93,7 +109,10 @@ class FilterUsersOthers extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ExclusiveCheckboxGroup(labels: const ['Yes', 'No']),
+                  ExclusiveCheckboxGroup(
+                    labels: const ['Yes', 'No'],
+                    controller: vapeController,
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -108,7 +127,10 @@ class FilterUsersOthers extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ExclusiveCheckboxGroup(labels: ['Yes', 'No']),
+                  ExclusiveCheckboxGroup(
+                    labels: ['Yes', 'No'],
+                    controller: smokeController,
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -123,7 +145,10 @@ class FilterUsersOthers extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ExclusiveCheckboxGroup(labels: ['Yes', 'No']),
+                  ExclusiveCheckboxGroup(
+                    labels: ['Yes', 'No'],
+                    controller: workFromHomeController,
+                  ),
                 ],
               ),
               const Text(
@@ -134,7 +159,7 @@ class FilterUsersOthers extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SleepHourFrequencySlider(),
+              SleepHourFrequencySlider(controller: sleepTimeController),
               const Text(
                 'How many times will you bring people a week?',
                 textAlign: TextAlign.center,
@@ -143,7 +168,22 @@ class FilterUsersOthers extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const FrequencyOfExternalPeople(),
+              FrequencyOfExternalPeople(
+                controller: externalPeopleController,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  UserPreferencesDTO userPrefs = UserPreferencesDTO(
+
+                  );
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => UserList(userPreferences: userPrefs, title: '',),
+                    ),
+                  );
+                },
+                child: Text('Continuar'),
+              ),
             ],
           ),
         ),
@@ -154,11 +194,16 @@ class FilterUsersOthers extends StatelessWidget {
 
 class ExclusiveCheckboxGroup extends StatefulWidget {
   final List<String> labels;
+  final TextEditingController controller;
 
-  ExclusiveCheckboxGroup({required this.labels});
+  ExclusiveCheckboxGroup({
+    required this.labels,
+    required this.controller,
+  });
 
   @override
-  _ExclusiveCheckboxGroupState createState() => _ExclusiveCheckboxGroupState();
+  _ExclusiveCheckboxGroupState createState() =>
+      _ExclusiveCheckboxGroupState();
 }
 
 class _ExclusiveCheckboxGroupState extends State<ExclusiveCheckboxGroup> {
@@ -175,6 +220,7 @@ class _ExclusiveCheckboxGroupState extends State<ExclusiveCheckboxGroup> {
           onSelect: () {
             setState(() {
               _selectedLabel = label;
+              widget.controller.text = label;
             });
           },
         ),
@@ -244,8 +290,13 @@ class RoundedButton extends StatelessWidget {
 }
 
 class CleaningFrequencySlider extends StatefulWidget {
+  final TextEditingController controller;
+
+  CleaningFrequencySlider({required this.controller});
+
   @override
-  _CleaningFrequencySliderState createState() => _CleaningFrequencySliderState();
+  _CleaningFrequencySliderState createState() =>
+      _CleaningFrequencySliderState();
 }
 
 class _CleaningFrequencySliderState extends State<CleaningFrequencySlider> {
@@ -254,33 +305,38 @@ class _CleaningFrequencySliderState extends State<CleaningFrequencySlider> {
   @override
   Widget build(BuildContext context) {
     return SliderTheme(
-        data: SliderTheme.of(context).copyWith(
-          overlayColor: Colors.white.withOpacity(0.4),
-          valueIndicatorTextStyle: const TextStyle(
-            color: Colors.white,
-          ),
+      data: SliderTheme.of(context).copyWith(
+        overlayColor: Colors.white.withOpacity(0.4),
+        valueIndicatorTextStyle: const TextStyle(
+          color: Colors.white,
         ),
-        child: Slider(
-      value: _value.toDouble(),
-      onChanged: (newValue) {
-        setState(() {
-          _value = newValue.round();
-        });
-      },
-      min: 1,
-      max: 3,
-      divisions: 2,
-      label: _value == 1
-          ? 'Once a week'
-          : _value == 2
-          ? 'Twice a week'
-          : 'Three times a week',
-      )
+      ),
+      child: Slider(
+        value: _value.toDouble(),
+        onChanged: (newValue) {
+          setState(() {
+            _value = newValue.round();
+            widget.controller.text = _value.toString();
+          });
+        },
+        min: 1,
+        max: 3,
+        divisions: 2,
+        label: _value == 1
+            ? 'Once a week'
+            : _value == 2
+            ? 'Twice a week'
+            : 'Three times a week',
+      ),
     );
   }
 }
 
 class SleepHourFrequencySlider extends StatefulWidget {
+  final TextEditingController controller;
+
+  SleepHourFrequencySlider({required this.controller});
+
   @override
   _SleepHourFrequencySlider createState() => _SleepHourFrequencySlider();
 }
@@ -302,6 +358,7 @@ class _SleepHourFrequencySlider extends State<SleepHourFrequencySlider> {
         onChanged: (newValue) {
           setState(() {
             _value = newValue.round();
+            widget.controller.text = '$_value:00';
           });
         },
         min: 1,
@@ -309,13 +366,14 @@ class _SleepHourFrequencySlider extends State<SleepHourFrequencySlider> {
         divisions: 23,
         label: '$_value:00',
       ),
-
     );
   }
 }
 
 class FrequencyOfExternalPeople extends StatefulWidget {
-  const FrequencyOfExternalPeople({super.key});
+  final TextEditingController controller;
+
+  FrequencyOfExternalPeople({required this.controller});
 
   @override
   _FrequencyOfExternalPeople createState() => _FrequencyOfExternalPeople();
@@ -327,28 +385,33 @@ class _FrequencyOfExternalPeople extends State<FrequencyOfExternalPeople> {
   @override
   Widget build(BuildContext context) {
     return SliderTheme(
-        data: SliderTheme.of(context).copyWith(
-          overlayColor: Colors.white.withOpacity(0.4),
-          valueIndicatorTextStyle: const TextStyle(
-            color: Colors.white,
-          ),
+      data: SliderTheme.of(context).copyWith(
+        overlayColor: Colors.white.withOpacity(0.4),
+        valueIndicatorTextStyle: const TextStyle(
+          color: Colors.white,
         ),
-        child: Slider(
-          value: _value.toDouble(),
-          onChanged: (newValue) {
-            setState(() {
-              _value = newValue.round();
-            });
-          },
-          min: 1,
-          max: 3,
-          divisions: 2,
-          label: _value == 1
-              ? 'Once a week'
-              : _value == 2
-              ? 'Twice a week'
-              : 'Three times a week',
-        )
+      ),
+      child: Slider(
+        value: _value.toDouble(),
+        onChanged: (newValue) {
+          setState(() {
+            _value = newValue.round();
+            widget.controller.text = _value == 1
+                ? 'Once a week'
+                : _value == 2
+                ? 'Twice a week'
+                : 'Three times a week';
+          });
+        },
+        min: 1,
+        max: 3,
+        divisions: 2,
+        label: _value == 1
+            ? 'Once a week'
+            : _value == 2
+            ? 'Twice a week'
+            : 'Three times a week',
+      ),
     );
   }
 }
