@@ -16,11 +16,11 @@ class FilterUsersLocations extends StatefulWidget {
 
 }
 
-class _FilterUsersLocationsState extends State<FilterUsersLocations> {
+class _FilterUsersLocationsState extends State<FilterUsersLocations> with RestorationMixin{
 
 
-  TextEditingController cityController = TextEditingController();
-  TextEditingController neighborhoodController = TextEditingController();
+  RestorableTextEditingController cityController = RestorableTextEditingController();
+  RestorableTextEditingController neighborhoodController = RestorableTextEditingController();
   LatLng markerLocation = LatLng(4.6097, -74.0817);
 
 
@@ -56,13 +56,22 @@ class _FilterUsersLocationsState extends State<FilterUsersLocations> {
       ),
     );
   }
+
+  @override
+  String? get restorationId => "filter_users_location";
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    registerForRestoration(cityController, "city");
+    registerForRestoration(neighborhoodController, "neighborhood");
+  }
 }
 
 class BodyLocation extends StatelessWidget {
   final UserPreferencesDTO userPrefs = UserPreferencesDTO();
-  FilterUsersOthers filterUsersOthers;
-  final TextEditingController cityController;
-  final TextEditingController neighborhoodController;
+  final FilterUsersOthers filterUsersOthers;
+  final RestorableTextEditingController cityController;
+  final RestorableTextEditingController neighborhoodController;
   final LatLng markerLocation;
   final Function(LatLng) updateMarkerLocation;
 
@@ -92,7 +101,7 @@ class BodyLocation extends StatelessWidget {
           const SizedBox(height: 16),
           CustomTextField(
             hintText: 'City/Municipality',
-            controller: cityController,
+            controller: cityController.value,
             onTextChanged: (text) async {
               final locations = await GeocodingPlatform.instance.locationFromAddress(text);
               if (locations.isNotEmpty) {
@@ -104,7 +113,7 @@ class BodyLocation extends StatelessWidget {
           const SizedBox(height: 20),
           CustomTextField(
             hintText: 'Neighborhood',
-            controller: neighborhoodController,
+            controller: neighborhoodController.value,
             onTextChanged: (text) async {
               final locations = await GeocodingPlatform.instance.locationFromAddress(text);
               if (locations.isNotEmpty) {
@@ -137,15 +146,20 @@ class BodyLocation extends StatelessWidget {
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              String city=cityController.text ;
-              String neighborhood = neighborhoodController.text;
+              String city=cityController.value.text ;
+              String neighborhood = neighborhoodController.value.text;
               if (city!=''){
                 userPrefs.city=city;
               }
               if (neighborhood!=''){
                 userPrefs.neighborhood=neighborhood;
               }
-              Navigator.push(context, MaterialPageRoute(builder: (context) => filterUsersOthers));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => filterUsersOthers,
+                ),
+              );
             },
             child: Text('Continuar'),
           ),

@@ -9,17 +9,16 @@ import '../widgets/information_card.dart';
 import '../widgets/drawer.dart';
 
 class UserList extends StatefulWidget {
-  final UserPreferencesDTO? userPreferences;
+  UserPreferencesDTO? userPreferences;
 
-  const UserList({super.key, required this.title, this.userPreferences});
-
-  final String title;
+  UserList({Key? key, this.userPreferences}) : super(key: key);
 
   @override
-  State<UserList> createState() => _UserListState();
+  _UserListState createState() => _UserListState();
 }
 
 class _UserListState extends State<UserList> implements UserListView{
+
   final UserListPresenter userListPresenter = UserListPresenter();
   List<UserModelUpdate>? _userList;
   List<UserModel> Users = [];
@@ -34,6 +33,7 @@ class _UserListState extends State<UserList> implements UserListView{
   @override
   void initState() {
     super.initState();
+    userListPresenter.setUserPreferences(widget.userPreferences);
     userListPresenter.backView = this;
   }
   void _getUsers() {
@@ -46,9 +46,9 @@ class _UserListState extends State<UserList> implements UserListView{
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF2E5EAA),
-        title: Text(
-          widget.title,
-          style: const TextStyle(
+        title: const Text(
+          "Senehouse",
+          style: TextStyle(
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,

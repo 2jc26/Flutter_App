@@ -1,3 +1,4 @@
+import '../models/user/query_likes_user.dart';
 import '../models/user/user_model_update.dart';
 import '../repository/user_repository_prueba.dart';
 import '../screens/user_list.dart';
@@ -7,19 +8,25 @@ class UserListPresenter {
   final UserRepository userRepository = UserRepository();
   List<UserModelUpdate>? usersList = [];
   late UserListView _backView= UserListView();
+  UserPreferencesDTO? userPreferences;
 
-
-  UserListPresenter() {
-    getAllUsers();
+  UserListPresenter({this.userPreferences}) {
   }
 
   void getAllUsers() async {
     try {
-      final users = await userRepository.getAllUsers();
+      List<UserModelUpdate>? users = [];
+      if (userPreferences != null){
+        users = await userRepository.getAllUsersByPreferences(userPreferences!);
+      }
+      else{
+        users = await userRepository.getAllUsers();
+      }
       if (users != null) {
         usersList = users;
         _backView.refreshUserListView(usersList!);
       }
+
     } catch (error) {
       rethrow;
     }
@@ -30,4 +37,8 @@ class UserListPresenter {
     _backView.refreshUserListView(usersList!);
   }
 
+  void setUserPreferences(UserPreferencesDTO? preferences) {
+    userPreferences = preferences;
+    getAllUsers();
+  }
 }

@@ -7,7 +7,6 @@ class UserModelUpdate {
   String username;
   String password;
   String name;
-  int id;
   int age;
   String bring_people;
   int sleep;
@@ -25,7 +24,6 @@ class UserModelUpdate {
     required this.username,
     required this.password,
     required this.name,
-    required this.id,
     required this.age,
     required this.bring_people,
     required this.sleep,

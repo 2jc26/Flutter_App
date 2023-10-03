@@ -15,15 +15,16 @@ class FilterUsersOthers extends StatefulWidget {
   _FilterUsersOthersState createState() => _FilterUsersOthersState();
 }
 
-class _FilterUsersOthersState extends State<FilterUsersOthers> {
-  final TextEditingController petController = TextEditingController();
-  final TextEditingController introvertedController = TextEditingController();
-  final TextEditingController cleaningController = TextEditingController();
-  final TextEditingController vapeController = TextEditingController();
-  final TextEditingController smokeController = TextEditingController();
-  final TextEditingController workFromHomeController = TextEditingController();
-  final TextEditingController sleepTimeController = TextEditingController();
-  final TextEditingController externalPeopleController = TextEditingController();
+class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationMixin {
+
+  final RestorableTextEditingController petController = RestorableTextEditingController();
+  final RestorableTextEditingController introvertedController = RestorableTextEditingController();
+  final RestorableTextEditingController cleaningController = RestorableTextEditingController();
+  final RestorableTextEditingController vapeController = RestorableTextEditingController();
+  final RestorableTextEditingController smokeController = RestorableTextEditingController();
+  final RestorableTextEditingController workFromHomeController = RestorableTextEditingController();
+  final RestorableTextEditingController sleepTimeController = RestorableTextEditingController();
+  final RestorableTextEditingController externalPeopleController = RestorableTextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +75,7 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> {
                 children: [
                   ExclusiveCheckboxGroup(
                     labels: const ['Yes', 'No'],
-                    controller: petController,
+                    controller: petController.value,
                   ),
                 ],
               ),
@@ -91,8 +92,8 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ExclusiveCheckboxGroup(
-                    labels: const ['Introverted', 'Extroverted'],
-                    controller: introvertedController,
+                    labels: const ['Introvert', 'Extrovert'],
+                    controller: introvertedController.value,
                   ),
                 ],
               ),
@@ -105,7 +106,7 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              CleaningFrequencySlider(controller: cleaningController),
+              CleaningFrequencySlider(controller: cleaningController.value),
               const SizedBox(height: 16),
               const Text(
                 'Do you Vape?',
@@ -120,7 +121,7 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> {
                 children: [
                   ExclusiveCheckboxGroup(
                     labels: const ['Yes', 'No'],
-                    controller: vapeController,
+                    controller: vapeController.value,
                   ),
                 ],
               ),
@@ -138,7 +139,7 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> {
                 children: [
                   ExclusiveCheckboxGroup(
                     labels: ['Yes', 'No'],
-                    controller: smokeController,
+                    controller: smokeController.value,
                   ),
                 ],
               ),
@@ -156,7 +157,7 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> {
                 children: [
                   ExclusiveCheckboxGroup(
                     labels: ['Yes', 'No'],
-                    controller: workFromHomeController,
+                    controller: workFromHomeController.value,
                   ),
                 ],
               ),
@@ -168,7 +169,7 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SleepHourFrequencySlider(controller: sleepTimeController),
+              SleepHourFrequencySlider(controller: sleepTimeController.value),
               const Text(
                 'How many times will you bring people a week?',
                 textAlign: TextAlign.center,
@@ -178,11 +179,63 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> {
                 ),
               ),
               FrequencyOfExternalPeople(
-                controller: externalPeopleController,
+                controller: externalPeopleController.value,
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  String pet = petController.value.text;
+                  String introverted=  introvertedController.value.text;
+                  String cleaning= cleaningController.value.text;
+                  String vape=  vapeController.value.text;
+                  String smoke= smokeController.value.text;
+                  String work=  workFromHomeController.value.text;
+                  String sleep=  sleepTimeController.value.text;
+                  String external=  externalPeopleController.value.text;
+                  widget.userPreferences.petPreference = pet == "Yes"
+                      ? true
+                      : pet == "No"
+                      ? false
+                      : null;
+
+                  if (introverted.isEmpty) {
+                    widget.userPreferences.introvertedPreference = null;
+                  } else {
+                    widget.userPreferences.introvertedPreference = introverted;
+                  }
+                  if (cleaning.isEmpty) {
+                    widget.userPreferences.cleaningFrequency = null;
+                  } else {
+                    widget.userPreferences.cleaningFrequency = cleaning;
+                  }
+
+                  widget.userPreferences.vapePreference = vape == "Yes"
+                      ? true
+                      : vape == "No"
+                      ? false
+                      : null;
+                  widget.userPreferences.smokePreference = smoke == "Yes"
+                      ? true
+                      : smoke == "No"
+                      ? false
+                      : null;
+                  widget.userPreferences.workFromHomePreference = (work == "Yes"
+                      ? true
+                      : work == "No"
+                      ? false
+                      : null);
+
+                  List<String> parts = sleep.split(":");
+                  widget.userPreferences.sleepTime = int.tryParse(parts[0]);
+                  if (external.isEmpty) {
+                    widget.userPreferences.externalPeopleFrequency = null;
+                  } else {
+                    widget.userPreferences.externalPeopleFrequency = external;
+                  }
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserList(userPreferences: widget.userPreferences)),
+                  );
                 },
                 child: Text('Continuar'),
               ),
@@ -191,6 +244,22 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> {
         ),
       ),
     );
+  }
+
+  @override
+  String? get restorationId => "filter_users_other";
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    registerForRestoration(petController, "pet");
+    registerForRestoration(introvertedController, "introverted");
+    registerForRestoration(cleaningController, "clean");
+    registerForRestoration(vapeController, "vape");
+    registerForRestoration(smokeController, "smoke");
+    registerForRestoration(workFromHomeController, "from_home");
+    registerForRestoration(sleepTimeController, "sleep");
+    registerForRestoration(externalPeopleController, "externalPeople");
+
   }
 }
 
@@ -302,7 +371,9 @@ class CleaningFrequencySlider extends StatefulWidget {
 }
 
 class _CleaningFrequencySliderState extends State<CleaningFrequencySlider> {
-  int _value = 1; // Valor inicial
+  int _value = 0; // Valor inicial
+
+  List<String> frequencyTitles = ['Once a week', 'Twice a week', 'Three times a week'];
 
   @override
   Widget build(BuildContext context) {
@@ -318,17 +389,13 @@ class _CleaningFrequencySliderState extends State<CleaningFrequencySlider> {
         onChanged: (newValue) {
           setState(() {
             _value = newValue.round();
-            widget.controller.text = _value.toString();
+            widget.controller.text = frequencyTitles[_value];
           });
         },
-        min: 1,
-        max: 3,
-        divisions: 2,
-        label: _value == 1
-            ? 'Once a week'
-            : _value == 2
-            ? 'Twice a week'
-            : 'Three times a week',
+        min: 0,
+        max: frequencyTitles.length - 1,
+        divisions: frequencyTitles.length - 1,
+        label: frequencyTitles[_value],
       ),
     );
   }
@@ -344,7 +411,7 @@ class SleepHourFrequencySlider extends StatefulWidget {
 }
 
 class _SleepHourFrequencySlider extends State<SleepHourFrequencySlider> {
-  int _value = 1; // Valor inicial
+  int _value = 22; // Valor inicial
 
   @override
   Widget build(BuildContext context) {
