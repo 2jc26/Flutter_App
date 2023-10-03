@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/screens/pruebas_mapa.dart';
 import 'package:giusseppe_flut/widgets/search_field.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../models/house/house_model_update.dart';
+import '../presenter/house_detail_presenter.dart';
 import '../widgets/rating_rectangle.dart';
 import '../widgets/drawer.dart';
+
+class HouseDetailView {
+  void refreshHouseDetailView(HouseModelUpdate houseDetail) {}
+}
+
 
 class HouseDetail extends StatefulWidget {
   HouseDetail({super.key});
@@ -12,7 +19,23 @@ class HouseDetail extends StatefulWidget {
   State<HouseDetail> createState() => _HouseDetailState();
 }
 
-class _HouseDetailState extends State<HouseDetail> {
+
+class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
+  final HouseDetailPresenter houseDetailPresenter = HouseDetailPresenter();
+  HouseModelUpdate? _house;
+
+    @override
+  void refreshHouseDetailView(HouseModelUpdate house) {
+    setState(() {
+      _house = house;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    houseDetailPresenter.backView = this;
+  }
 
   @override
   Widget build(BuildContext context) {

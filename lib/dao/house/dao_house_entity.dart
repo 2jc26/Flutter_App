@@ -7,14 +7,16 @@ import '../../models/house/house_model_update.dart';
 abstract class HouseDao {
 
   Future<List<HouseModelUpdate>> getAllHouses();
-  // Future<HouseModelUpdate?> getHouseById(int id);
+  Future<HouseModelUpdate?> getHouseById(String id);
   // Future<void> insertHouse(HouseModelUpdate house);
   // Future<void> updateHouse(HouseModelUpdate house);
   // Future<void> deleteHouse(int id);
 }
 
 class HouseDaoFireStore extends HouseDao {
+
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   @override
   Future<List<HouseModelUpdate>> getAllHouses() async {
     List<HouseModelUpdate> houses = [];
@@ -24,6 +26,25 @@ class HouseDaoFireStore extends HouseDao {
         houses.add(HouseModelUpdate.fromJson(house.data()));
       }
       return houses;
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error fetching houses: $error");
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<HouseModelUpdate> getHouseById(String id) async {
+    try {
+      final querySnapshot = await _firestore.collection("Houses").doc(id).get();
+      final data = querySnapshot.data();
+
+      if (data != null) {
+        return HouseModelUpdate.fromJson(data);
+      } else {
+        throw Exception("No data found for ID: $id");
+      }
     } catch (error) {
       if (kDebugMode) {
         print("Error fetching houses: $error");
