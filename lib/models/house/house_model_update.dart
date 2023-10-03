@@ -4,6 +4,7 @@ part 'house_model_update.g.dart';
 
 @JsonSerializable()
 class HouseModelUpdate {
+  String id;
   String name;
   String city;
   String neighborhood;
@@ -28,6 +29,7 @@ class HouseModelUpdate {
   int rating;
   // Image
   HouseModelUpdate({
+    required this.id,
     required this.name,
     required this.city,
     required this.neighborhood,

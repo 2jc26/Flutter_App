@@ -25,7 +25,10 @@ class HouseDaoFireStore extends HouseDao {
     try {
       final querySnapshot = await _firestore.collection("Houses").get();
       for (var house in querySnapshot.docs) {
-        houses.add(HouseModelUpdate.fromJson(house.data()));
+        final houseData = house.data();
+        final houseId = house.id;
+        final houseModel = HouseModelUpdate.fromJson({...houseData, 'id': houseId});
+        houses.add(houseModel);
       }
       return houses;
     } catch (error) {
@@ -40,10 +43,12 @@ class HouseDaoFireStore extends HouseDao {
   Future<HouseModelUpdate> getHouseById(String id) async {
     try {
       final querySnapshot = await _firestore.collection("Houses").doc(id).get();
-      final data = querySnapshot.data();
+      final houseData = querySnapshot.data();
+      final houseId = querySnapshot.id;
 
-      if (data != null) {
-        return HouseModelUpdate.fromJson(data);
+      if (houseData != null) {
+        final houseModel = HouseModelUpdate.fromJson({...houseData, 'id': houseId});
+        return houseModel;
       } else {
         throw Exception("No data found for ID: $id");
       }
@@ -75,9 +80,11 @@ class HouseDaoFireStore extends HouseDao {
           .where("supermarkets", isEqualTo: likings.supermarkets)
           .limit(2)
           .get();
-      
       for (var house in querySnapshot.docs) {
-        houses.add(HouseModelUpdate.fromJson(house.data()));
+        final houseData = house.data();
+        final houseId = house.id;
+        final houseModel = HouseModelUpdate.fromJson({...houseData, 'id': houseId});
+        houses.add(houseModel);
       }
       return houses;
     } catch (error) {

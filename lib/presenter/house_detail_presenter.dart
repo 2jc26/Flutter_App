@@ -6,13 +6,14 @@ import '../screens/house_detail.dart';
 class HouseDetailPresenter {
   final HouseRepository houseRepository = HouseRepository();
   HouseModelUpdate? house;
+  late HouseDetailView _backView;
 
-  late HouseDetailView _backView= HouseDetailView();
-  HouseListPresenter() {
-    getHousebyId("0");
+  HouseDetailPresenter(String id) {
+    _backView = HouseDetailView();
+    getHouseById(id);
   }
 
-  void getHousebyId(String id) async {
+  void getHouseById(String id) async {
     try {
       final h = await houseRepository.getHouseById(id);
       if (house != null) {

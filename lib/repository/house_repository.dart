@@ -15,6 +15,14 @@ class HouseRepository {
     }
   }
 
+  Future<HouseModelUpdate> getHouseById(String id) async {
+    try {
+      return await houseDao.getHouseById(id);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<List<HouseModelUpdate>> getSimilarLikingHouses(String id) async {
     try {
       HouseLikingModelUpdate? liking = await houseLikingDao.getHouseLikingById(id);
