@@ -8,7 +8,7 @@ import '../widgets/drawer.dart';
 
 
 class HouseListView {
-  void refreshHouseListView(List<HouseModelUpdate> houseList) {}
+  void refreshHouseListView(List<HouseModelUpdate> housesList, List<HouseModelUpdate> housesLikingList) {}
 }
 
 class HouseList extends StatefulWidget {
@@ -19,20 +19,24 @@ class HouseList extends StatefulWidget {
 }
 
 class _HouseListState extends State<HouseList> implements HouseListView{
-  final HouseListPresenter userListPresenter = HouseListPresenter();
+  final HouseListPresenter houseListPresenter = HouseListPresenter();
   List<HouseModelUpdate>? _housesList;
+  List<HouseModelUpdate>? _housesLikingList;
 
   @override
-  void refreshHouseListView(List<HouseModelUpdate> housesList) {
+  void refreshHouseListView(List<HouseModelUpdate> housesList, List<HouseModelUpdate> housesLikingList) {
     setState(() {
+      _housesLikingList = housesLikingList;
+      print(_housesLikingList);
       _housesList = housesList;
+      print(_housesList);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    userListPresenter.backView = this;
+    houseListPresenter.backView = this;
   }
 
   @override
@@ -42,7 +46,7 @@ class _HouseListState extends State<HouseList> implements HouseListView{
         appBar: AppBar(
           backgroundColor: const Color(0xFF2E5EAA),
           title:  const Text(
-            'Houses',
+            'Senehouse',
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,
@@ -55,22 +59,63 @@ class _HouseListState extends State<HouseList> implements HouseListView{
           centerTitle: true,
         ),
         drawer: const CustomDrawer(),
-        body: Column(
-          children: [
-            const SearchField(),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _housesList?.length,
-                itemBuilder: ((context, index) {
-                  return InformationCard(
-                    path: 'assets/images/house1.jpg',
-                    stars: _housesList![index].rating,
-                    text: _housesList![index].name,
-                  );
-                }),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Text("Houses that match your tastes", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
               ),
-            ),
-          ],
+              Container(
+                height: 250,
+                child: ListView.builder(
+                  itemCount: _housesLikingList?.length,
+                  itemBuilder: ((context, index) {  
+                    return InformationCard(
+                      path: 'assets/images/house1.jpg',
+                      stars: _housesLikingList![index].rating,
+                      text: _housesLikingList![index].name,
+                    );
+                  }),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Text("Houses that match your searchs", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              ),
+              Container(
+                height: 250,
+                child: ListView.builder(
+                  itemCount: _housesLikingList?.length,
+                  itemBuilder: ((context, index) {  
+                    return InformationCard(
+                      path: 'assets/images/house1.jpg',
+                      stars: _housesLikingList![index].rating,
+                      text: _housesLikingList![index].name,
+                    );
+                  }),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Text("All the houses", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              ),
+              const SearchField(),
+              Container(
+                height: 250,
+                child: ListView.builder(
+                  itemCount: _housesList?.length,
+                  itemBuilder: ((context, index) {
+                    return InformationCard(
+                      path: 'assets/images/house1.jpg',
+                      stars: _housesList![index].rating,
+                      text: _housesList![index].name,
+                    );
+                  }),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     } else {

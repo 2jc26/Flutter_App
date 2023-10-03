@@ -8,7 +8,7 @@ class SearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 30,
-      margin: const EdgeInsets.only(top: 40, left: 20, right: 20),
+      margin: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
           color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.11),
