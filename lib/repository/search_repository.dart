@@ -21,7 +21,6 @@ class SearchRepository {
   Future<List<HouseModelUpdate>> getSimilarSearchingHouses(String id) async {
     try {
       HouseSearchingModelUpdate? searching = await houseSearchDao.getHouseSearchingById(id);
-      print(searching);
       if (searching == null) {
         throw Exception("No house searching found");
       }
