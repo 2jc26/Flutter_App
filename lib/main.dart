@@ -42,14 +42,13 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: AppartmentFilter(),
-      // RepositoryProvider(
-      //   create: (context) => AuthRepository(),
-      //   child: BlocProvider(
-      //     create: (context) => SessionCubit(authRepo: context.read<AuthRepository>()),
-      //     child: AppNavigator(),
-      //   ),
-      //   ),
+      home: RepositoryProvider(
+        create: (context) => AuthRepository(),
+        child: BlocProvider(
+          create: (context) => SessionCubit(authRepo: context.read<AuthRepository>()),
+          child: AppNavigator(),
+        ),
+      ),
     );
   }
 }
