@@ -105,7 +105,6 @@ class HouseDaoFireStore extends HouseDao {
           .collection("Houses")
           .where("city", isEqualTo: searchs.city)
           .where("neighborhood", isEqualTo: searchs.neighborhood)
-          .where("address", isEqualTo: searchs.address)
           .where("housingType", isEqualTo: searchs.housingType)
           .where("rentPrice", isEqualTo: searchs.rentPrice)
           .where("stratum", isEqualTo: searchs.stratum)

@@ -18,9 +18,14 @@ class SearchRepository {
     }
   }
 
-  Future<HouseSearchingModelUpdate?> getHouseById(String id) async {
+  Future<List<HouseModelUpdate>> getSimilarSearchingHouses(String id) async {
     try {
-      return await houseSearchDao.getHouseSearchingById(id);
+      HouseSearchingModelUpdate? searching = await houseSearchDao.getHouseSearchingById(id);
+      print(searching);
+      if (searching == null) {
+        throw Exception("No house searching found");
+      }
+      return await houseDao.getHousesBySearchs(searching);
     } catch (error) {
       rethrow;
     }

@@ -8,7 +8,7 @@ import '../widgets/drawer.dart';
 
 
 class HouseListView {
-  void refreshHouseListView(List<HouseModelUpdate> housesList, List<HouseModelUpdate> housesLikingList) {}
+  void refreshHouseListView(List<HouseModelUpdate> housesList, List<HouseModelUpdate> housesLikingList, List<HouseModelUpdate> housesSearchingList) {}
 }
 
 class HouseList extends StatefulWidget {
@@ -29,13 +29,15 @@ class _HouseListState extends State<HouseList> implements HouseListView {
   final TextEditingController _searchController = TextEditingController();
   List<HouseModelUpdate>? _filteredHousesList;
   List<HouseModelUpdate>? _housesLikingList;
+  List<HouseModelUpdate>? _housesSearchingList;
 
   @override
-  void refreshHouseListView(List<HouseModelUpdate> housesList, List<HouseModelUpdate> housesLikingList) {
+  void refreshHouseListView(List<HouseModelUpdate> housesList, List<HouseModelUpdate> housesLikingList, List<HouseModelUpdate> housesSearchingList) {
     setState(() {
       _userId = widget.userId;
       _housesLikingList = housesLikingList;
       _housesList = housesList;
+      _housesSearchingList = housesSearchingList;
       _filteredHousesList = _housesList; // Initialize filtered list with all houses
     });
   }
@@ -108,12 +110,12 @@ class _HouseListState extends State<HouseList> implements HouseListView {
               SizedBox(
                 height: 250,
                 child: ListView.builder(
-                  itemCount: _housesLikingList?.length,
+                  itemCount: _housesSearchingList?.length,
                   itemBuilder: ((context, index) {  
                     return InformationCard(
                       path: 'assets/images/house1.jpg',
-                      stars: _housesLikingList![index].rating,
-                      text: _housesLikingList![index].name,
+                      stars: _housesSearchingList![index].rating,
+                      text: _housesSearchingList![index].name,
                     );
                   }),
                 ),
