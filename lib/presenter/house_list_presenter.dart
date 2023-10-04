@@ -27,7 +27,7 @@ class HouseListPresenter {
 
   void getLikingHouses() async {
     try {
-      final houses = await houseRepository.getSimilarLikingHouses("3RDNXGBLdftc42pv2wPI");
+      final houses = await houseRepository.getSimilarLikingHouses("3rzGsju5Bznuyp7t1tla");
       if (houses != null) {
         housesLikingList = houses;
         _backView.refreshHouseListView(housesList,housesLikingList);
