@@ -4,8 +4,6 @@ import '../models/user/query_likes_user.dart';
 import '../models/user/user_model_update.dart';
 import '../presenter/user_presenter.dart';
 import './roomie_detail.dart';
-import '../models/user_model.dart';
-import '../widgets/information_card.dart';
 import '../widgets/drawer.dart';
 
 class UserList extends StatefulWidget {
@@ -21,7 +19,6 @@ class _UserListState extends State<UserList> implements UserListView{
 
   final UserListPresenter userListPresenter = UserListPresenter();
   List<UserModelUpdate>? _userList;
-  List<UserModel> Users = [];
 
   @override
   void refreshUserListView(List<UserModelUpdate> userList) {
@@ -36,13 +33,9 @@ class _UserListState extends State<UserList> implements UserListView{
     userListPresenter.setUserPreferences(widget.userPreferences);
     userListPresenter.backView = this;
   }
-  void _getUsers() {
-    Users = UserModel.getUsers();
-  }
 
   @override
   Widget build(BuildContext context) {
-    _getUsers();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF2E5EAA),
@@ -88,18 +81,18 @@ class _UserListState extends State<UserList> implements UserListView{
               ),
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _userList?.length,
-              itemBuilder: ((context, index) {
-                return InformationCard(
-                  path: 'assets/images/house1.jpg',
-                  stars: 5,
-                  text: _userList![index].name,
-                );
-              }),
-            ),
-          ),
+          // Expanded(
+          //   child: ListView.builder(
+          //     itemCount: Users.length,
+          //     itemBuilder: ((context, index) {
+          //       return InformationCard(
+          //         path: Users[index].path,
+          //         stars: Users[index].stars,
+          //         text: Users[index].name,
+          //       );
+          //     }),
+          //   ),
+          // ),
         ],
       ),
     );

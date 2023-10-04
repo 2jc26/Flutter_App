@@ -1,11 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'house_model_update.g.dart';
+part 'house_searching_model_update.g.dart';
 
 @JsonSerializable()
-class HouseModelUpdate {
-  String id;
-  String name;
+class HouseSearchingModelUpdate {
   String city;
   String neighborhood;
   String address;
@@ -15,7 +13,6 @@ class HouseModelUpdate {
   double area;
   int apartmentFloor;
   int roomsNumber;
-  double roomArea;
   int bathroomsNumber;
   bool laundryArea;
   bool internet;
@@ -25,14 +22,8 @@ class HouseModelUpdate {
   bool gymnasium;
   bool reception;
   bool supermarkets;
-  String description;
-  int rating;
-  double longitude;
-  double latitude;
   // Image
-  HouseModelUpdate({
-    required this.id,
-    required this.name,
+  HouseSearchingModelUpdate({
     required this.city,
     required this.neighborhood,
     required this.address,
@@ -42,7 +33,6 @@ class HouseModelUpdate {
     required this.area,
     required this.apartmentFloor,
     required this.roomsNumber,
-    required this.roomArea,
     required this.bathroomsNumber,
     required this.laundryArea,
     required this.internet,
@@ -52,14 +42,10 @@ class HouseModelUpdate {
     required this.gymnasium,
     required this.reception,
     required this.supermarkets,
-    required this.description,
-    required this.rating,
-    required this.longitude,
-    required this.latitude,
   });
 
-  factory HouseModelUpdate.fromJson(Map<String, dynamic> json) =>
-      _$HouseModelUpdateFromJson(json);
+  factory HouseSearchingModelUpdate.fromJson(Map<String, dynamic> json) =>
+      _$HouseSearchingModelUpdateFromJson(json);
 
-  Map<String, dynamic> toJson() => _$HouseModelUpdateToJson(this);
+  Map<String, dynamic> toJson() => _$HouseSearchingModelUpdateToJson(this);
 }

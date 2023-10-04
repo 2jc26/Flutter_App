@@ -11,7 +11,7 @@ class InformationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
+      padding: const EdgeInsets.only(left: 30, right: 30),
       child: GestureDetector(
         onTap: () {
           // Navigator.push(

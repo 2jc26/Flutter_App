@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SearchField extends StatelessWidget {
-  const SearchField({super.key});
+  final TextEditingController searchController;
+  const SearchField({super.key, required this.searchController});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 30,
-      margin: const EdgeInsets.only(top: 40, left: 20, right: 20),
+      margin: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
           color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.11),
@@ -17,6 +18,7 @@ class SearchField extends StatelessWidget {
         )
       ]),
       child: TextField(
+        controller: searchController,
         decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,

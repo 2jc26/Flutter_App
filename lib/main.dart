@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:giusseppe_flut/app_navigator.dart';
 import 'package:giusseppe_flut/auth/auth_repository.dart';
+import 'package:giusseppe_flut/session_cubit.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
@@ -19,6 +21,9 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  @override
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +45,7 @@ class MyApp extends StatelessWidget {
           onBackground: Color(0xFF2c595b),
           onError: Colors.red,
           brightness: Brightness.light,
+          tertiary: Color(0xFFEDF9B9)
         ),
       ),
       home: RepositoryProvider(
