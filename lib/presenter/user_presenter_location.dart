@@ -9,26 +9,19 @@ class UserListPresenterLocation {
   final UserRepository userRepository = UserRepository();
   List<UserModelUpdate>? usersList = [];
   late UserListView _backView= UserListView();
-  UserPreferencesDTO? userPreferences;
-  double? longitud;
-  double? latitud;
-  UserListPresenterLocation({this.userPreferences}) {
-    getCurrentLocation();
+
+  UserListPresenterLocation() {
   }
 
-  void getNearUsers() async {
+  void getNearUsers(double latitud, double longitud) async {
 
     try {
       List<UserModelUpdate>? users = [];
-      if (userPreferences != null){
-        getCurrentLocation();
-        users = await userRepository.getDocumentsWithinRadius(latitud!,longitud!);
-        if (users != null) {
-          usersList = users;
-          _backView.refreshUserListView(usersList!);
-        }
+      users = await userRepository.getDocumentsWithinRadius(latitud!,longitud!);
+      if (users != null) {
+        usersList = users;
+        _backView.refreshUserListView(usersList!);
       }
-
     } catch (error) {
       rethrow;
     }
@@ -39,24 +32,5 @@ class UserListPresenterLocation {
     _backView.refreshUserListView(usersList!);
   }
 
-  void setUserPreferences(UserPreferencesDTO? preferences) {
-    userPreferences = preferences;
-    getNearUsers();
-  }
-  Future<Position> determinePosition() async {
-    LocationPermission permission;
-    permission= await Geolocator.checkPermission();
-    if(permission == LocationPermission.denied){
-      permission= await Geolocator.checkPermission();
-      if(permission == LocationPermission.denied) {
-        print("a");
-      }
-    }
-    return await Geolocator.getCurrentPosition();
-  }
-  void getCurrentLocation() async {
-    Position position = await determinePosition();
-    longitud= position.longitude;
-    latitud= position.latitude;
-  }
+
 }

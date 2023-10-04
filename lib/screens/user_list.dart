@@ -94,7 +94,7 @@ class _UserListState extends State<UserList> implements UserListView{
               itemBuilder: ((context, index) {
                 return InformationCard(
                   path: 'assets/images/house1.jpg',
-                  stars: 5,
+                  stars: _userList![index].stars,
                   text: _userList![index].name,
                 );
               }),

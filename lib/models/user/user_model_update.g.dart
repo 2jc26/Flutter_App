@@ -22,6 +22,9 @@ UserModelUpdate _$UserModelUpdateFromJson(Map<String, dynamic> json) =>
       clean: json['clean'] as String,
       smoke: json['smoke'] as bool,
       gender: json['gender'] as String,
+      lat: (json['lat'] as num).toDouble(),
+      long: (json['long'] as num).toDouble(),
+      stars: json['stars'] as int,
     );
 
 Map<String, dynamic> _$UserModelUpdateToJson(UserModelUpdate instance) =>
@@ -40,4 +43,7 @@ Map<String, dynamic> _$UserModelUpdateToJson(UserModelUpdate instance) =>
       'clean': instance.clean,
       'smoke': instance.smoke,
       'gender': instance.gender,
+      'lat': instance.lat,
+      'long': instance.long,
+      'stars': instance.stars,
     };

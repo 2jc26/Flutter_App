@@ -5,6 +5,7 @@ import 'package:giusseppe_flut/auth/auth_repository.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
+import 'package:giusseppe_flut/screens/user_recomendation_ubication.dart';
 import 'package:giusseppe_flut/session_cubit.dart';
 import 'firebase_options.dart';
 
@@ -41,13 +42,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: RepositoryProvider(
-        create: (context) => AuthRepository(),
-        child: BlocProvider(
-          create: (context) => SessionCubit(authRepo: context.read<AuthRepository>()),
-          child: AppNavigator(),
-        ),
-        ),
+      home: LocationPermissionView(),
     );
   }
 }

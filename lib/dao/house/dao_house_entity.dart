@@ -21,6 +21,7 @@ class HouseDaoFireStore extends HouseDao {
     try {
       final querySnapshot = await _firestore.collection("Houses").get();
       for (var house in querySnapshot.docs) {
+
         houses.add(HouseModelUpdate.fromJson(house.data()));
       }
       return houses;

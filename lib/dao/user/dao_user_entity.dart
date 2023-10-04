@@ -95,7 +95,8 @@ class UserDaoFireStore extends UserDao{
 
       for (var user in querySnapshot.docs) {
         final userData = user.data() as Map<String, dynamic>;
-        users.add(UserModelUpdate.fromJson(userData));
+        final userId = user.id;
+        users.add(UserModelUpdate.fromJson({...userData, 'id': userId}));
       }
       return users;
     } catch (error) {
@@ -108,8 +109,7 @@ class UserDaoFireStore extends UserDao{
   Future<List<UserModelUpdate>> getDocumentsWithinRadius(double latitude, double longitude) async {
     List<UserModelUpdate> users=[];
 
-    final double radiusInDegrees = 0.09;
-
+    const double radiusInDegrees = 20;
 
     final double minLat = latitude - radiusInDegrees;
     final double maxLat = latitude + radiusInDegrees;
@@ -117,17 +117,18 @@ class UserDaoFireStore extends UserDao{
     final double maxLon = longitude + radiusInDegrees;
 
     final QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('tu_coleccion')
+        .collection('Users')
         .where('lat', isGreaterThanOrEqualTo: minLat)
         .where('lat', isLessThanOrEqualTo: maxLat)
-        .where('lon', isGreaterThanOrEqualTo: minLon)
-        .where('lon', isLessThanOrEqualTo: maxLon)
         .get();
 
-    // Iterar a través de los documentos dentro del radio.
     for (var user in snapshot.docs) {
       final userData = user.data() as Map<String, dynamic>;
-      users.add(UserModelUpdate.fromJson(userData));
+      if (userData["long"]>=minLon 	&& userData["long"]<=maxLon){
+        final userId = user.id;
+        users.add(UserModelUpdate.fromJson({...userData, 'id': userId}));
+      }
+
     }
     return users;
 

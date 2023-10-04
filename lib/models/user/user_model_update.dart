@@ -20,6 +20,10 @@ class UserModelUpdate {
   //String week;
   bool smoke;
   String gender;
+  double lat;
+  double long;
+  int stars;
+
   // Image
   UserModelUpdate({
     required this.username,
@@ -38,6 +42,9 @@ class UserModelUpdate {
     //required this.week,
     required this.smoke,
     required this.gender,
+    required this.lat,
+    required this.long,
+    required this.stars
   });
 
   factory UserModelUpdate.fromJson(Map<String, dynamic> json) =>
