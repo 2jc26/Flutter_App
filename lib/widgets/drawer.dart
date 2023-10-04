@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:giusseppe_flut/screens/house_list.dart';
+import 'package:giusseppe_flut/screens/user_list.dart';
+import 'package:giusseppe_flut/screens/user_recomendation_ubication.dart';
 
 
 class CustomDrawer extends StatelessWidget {
@@ -35,9 +38,32 @@ class CustomDrawer extends StatelessWidget {
 
             },
           ),
-          const ListTile(
-            title: Text("Discover"),
-            // Agregar más elementos del Drawer según tus necesidades
+          ListTile(
+            title: const Text("Houses"),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HouseList(userId: '',)),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text("Users"),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UserList()),
+              );
+            },
+          ),
+          ListTile(
+            title: Text("Discover Near"),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LocationPermissionView()),
+              );
+            },
           ),
           const ListTile(
             title: Text("Settings"),

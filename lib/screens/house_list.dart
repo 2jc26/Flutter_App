@@ -98,10 +98,18 @@ class _HouseListState extends State<HouseList> implements HouseListView {
                 child: ListView.builder(
                   itemCount: _housesLikingList?.length,
                   itemBuilder: ((context, index) {
-                    return InformationCard(
-                      path: 'assets/images/house1.jpg',
-                      stars: _housesLikingList![index].rating,
-                      text: _housesLikingList![index].name,
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              HouseDetail(house: _housesLikingList![index]),
+                        ));
+                      },
+                      child: InformationCard(
+                        path: 'assets/images/house1.jpg',
+                        stars: _housesLikingList![index].rating,
+                        text: _housesLikingList![index].name,
+                      ),
                     );
                   }),
                 ),
@@ -118,10 +126,18 @@ class _HouseListState extends State<HouseList> implements HouseListView {
                 child: ListView.builder(
                   itemCount: _housesSearchingList?.length,
                   itemBuilder: ((context, index) {  
-                    return InformationCard(
-                      path: 'assets/images/house1.jpg',
-                      stars: _housesSearchingList![index].rating,
-                      text: _housesSearchingList![index].name,
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              HouseDetail(house: _housesSearchingList![index]),
+                        ));
+                      },
+                      child: InformationCard(
+                        path: 'assets/images/house1.jpg',
+                        stars: _housesSearchingList![index].rating,
+                        text: _housesSearchingList![index].name,
+                      ),
                     );
                   }),
                 ),
@@ -152,7 +168,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) =>
-                              HouseDetail(house: _housesLikingList![index]),
+                              HouseDetail(house: _filteredHousesList![index]),
                         ));
                       },
                       child: InformationCard(

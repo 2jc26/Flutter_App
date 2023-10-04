@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:giusseppe_flut/screens/filter_users/filter_users_location.dart';
 import 'package:giusseppe_flut/screens/views_abs.dart';
 import '../models/user/query_likes_user.dart';
 import '../models/user/user_model_update.dart';
@@ -63,7 +64,7 @@ class _UserListState extends State<UserList> implements UserListView{
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const RoommateDetail()),
+                    MaterialPageRoute(builder: (context) => FilterUsersLocations()),
                   );
                 },
                 style: ElevatedButton.styleFrom(

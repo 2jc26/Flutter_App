@@ -435,7 +435,8 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
           supermarkets: _isSupermarketSelected,
         );
 
-        HouseSearchPresenter houseSearchPresenter = HouseSearchPresenter(widget.userId);
+        // HouseSearchPresenter houseSearchPresenter = HouseSearchPresenter(widget.userId);
+        HouseSearchPresenter houseSearchPresenter = HouseSearchPresenter();
         houseSearchPresenter.updateHouseSearchingById(widget.userId,filter);
         houseSearchPresenter.updateHouseFilters(filter);
 
