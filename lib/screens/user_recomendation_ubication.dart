@@ -4,6 +4,7 @@ import 'package:giusseppe_flut/screens/views_abs.dart';
 
 import '../models/user/user_model_update.dart';
 import '../presenter/user_presenter_location.dart';
+import '../widgets/drawer.dart';
 import '../widgets/information_card.dart';
 
 class LocationPermissionView extends StatefulWidget {
@@ -69,8 +70,21 @@ class _LocationPermissionViewState extends State<LocationPermissionView> impleme
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ubicación y Coordenadas'),
+        backgroundColor: const Color(0xFF2E5EAA),
+        title: const Text(
+          "Senehouse",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        centerTitle: true,
       ),
+      drawer: const CustomDrawer(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
