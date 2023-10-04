@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
-import 'package:giusseppe_flut/presenter/house_presenter.dart';
-import 'package:giusseppe_flut/repository/house_repository.dart';
+import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
+import 'package:giusseppe_flut/screens/house_detail.dart';
 import 'package:giusseppe_flut/widgets/search_field.dart';
 import 'package:giusseppe_flut/widgets/information_card.dart';
 import '../widgets/drawer.dart';
 
 
 class HouseListView {
-  void refreshHouseListView(List<HouseModelUpdate> houseList) {}
+  void refreshHouseListView(List<HouseModelUpdate> housesList, List<HouseModelUpdate> housesLikingList, List<HouseModelUpdate> housesSearchingList) {}
 }
 
 class HouseList extends StatefulWidget {
@@ -21,25 +21,46 @@ class HouseList extends StatefulWidget {
   @override
   State<HouseList> createState() => _HouseListState();
 }
-
-class _HouseListState extends State<HouseList> implements HouseListView{
-  final HouseListPresenter userListPresenter = HouseListPresenter();
+  
+class _HouseListState extends State<HouseList> implements HouseListView {
+  final HouseListPresenter houseListPresenter = HouseListPresenter();
   List<HouseModelUpdate>? _housesList;
   String? _userId;
+  final TextEditingController _searchController = TextEditingController();
+  List<HouseModelUpdate>? _filteredHousesList;
+  List<HouseModelUpdate>? _housesLikingList;
+  List<HouseModelUpdate>? _housesSearchingList;
 
   @override
-  void refreshHouseListView(List<HouseModelUpdate> housesList) {
+  void refreshHouseListView(List<HouseModelUpdate> housesList, List<HouseModelUpdate> housesLikingList, List<HouseModelUpdate> housesSearchingList) {
     setState(() {
-      print(widget.userId);
       _userId = widget.userId;
+      _housesLikingList = housesLikingList;
       _housesList = housesList;
+      _housesSearchingList = housesSearchingList;
+      _filteredHousesList = _housesList; // Initialize filtered list with all houses
+    });
+  }
+
+  void _onSearchTextChanged() {
+    setState(() {
+      if (_searchController.text.isEmpty) {
+        _filteredHousesList = _housesList; // If search text is empty, show all houses
+      } else {
+        // Filter houses based on search text (you can customize this filtering logic)
+        _filteredHousesList = _housesList
+            ?.where((house) =>
+            house.name.toLowerCase().contains(_searchController.text.toLowerCase()))
+            .toList();
+      }
     });
   }
 
   @override
   void initState() {
     super.initState();
-    userListPresenter.backView = this;
+    houseListPresenter.backView = this;
+    _searchController.addListener(_onSearchTextChanged);
   }
 
   @override
@@ -49,7 +70,7 @@ class _HouseListState extends State<HouseList> implements HouseListView{
         appBar: AppBar(
           backgroundColor: const Color(0xFF2E5EAA),
           title:  const Text(
-            'Houses',
+            'Senehouse',
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,
@@ -62,22 +83,70 @@ class _HouseListState extends State<HouseList> implements HouseListView{
           centerTitle: true,
         ),
         drawer: const CustomDrawer(),
-        body: Column(
-          children: [
-            const SearchField(),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _housesList?.length,
-                itemBuilder: ((context, index) {
-                  return InformationCard(
-                    path: 'assets/images/house1.jpg',
-                    stars: _housesList![index].rating,
-                    text: _housesList![index].name,
-                  );
-                }),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Text("Houses that match your tastes", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
               ),
-            ),
-          ],
+              SizedBox(
+                height: 250,
+                child: ListView.builder(
+                  itemCount: _housesLikingList?.length,
+                  itemBuilder: ((context, index) {  
+                    return InformationCard(
+                      path: 'assets/images/house1.jpg',
+                      stars: _housesLikingList![index].rating,
+                      text: _housesLikingList![index].name,
+                    );
+                  }),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Text("Houses that match your searchs", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              ),
+              SizedBox(
+                height: 250,
+                child: ListView.builder(
+                  itemCount: _housesSearchingList?.length,
+                  itemBuilder: ((context, index) {  
+                    return InformationCard(
+                      path: 'assets/images/house1.jpg',
+                      stars: _housesSearchingList![index].rating,
+                      text: _housesSearchingList![index].name,
+                    );
+                  }),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Text("All the houses", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              ),
+              SearchField(searchController: _searchController),
+              SizedBox(
+                height: 250,
+                child: ListView.builder(
+                  itemCount: _filteredHousesList?.length,
+                  itemBuilder: ((context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => HouseDetail(house: _housesLikingList![index]),
+                        ));
+                      },
+                      child: InformationCard(
+                        path: 'assets/images/house1.jpg',
+                        stars: _filteredHousesList![index].rating,
+                        text: _filteredHousesList![index].name,
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     } else {

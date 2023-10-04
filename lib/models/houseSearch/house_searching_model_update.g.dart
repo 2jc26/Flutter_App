@@ -1,15 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'house_model_update.dart';
+part of 'house_searching_model_update.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-HouseModelUpdate _$HouseModelUpdateFromJson(Map<String, dynamic> json) =>
-    HouseModelUpdate(
-      id: json['id'] as String,
-      name: json['name'] as String,
+HouseSearchingModelUpdate _$HouseSearchingModelUpdateFromJson(
+        Map<String, dynamic> json) =>
+    HouseSearchingModelUpdate(
       city: json['city'] as String,
       neighborhood: json['neighborhood'] as String,
       address: json['address'] as String,
@@ -19,7 +18,6 @@ HouseModelUpdate _$HouseModelUpdateFromJson(Map<String, dynamic> json) =>
       area: (json['area'] as num).toDouble(),
       apartmentFloor: json['apartmentFloor'] as int,
       roomsNumber: json['roomsNumber'] as int,
-      roomArea: (json['roomArea'] as num).toDouble(),
       bathroomsNumber: json['bathroomsNumber'] as int,
       laundryArea: json['laundryArea'] as bool,
       internet: json['internet'] as bool,
@@ -29,16 +27,11 @@ HouseModelUpdate _$HouseModelUpdateFromJson(Map<String, dynamic> json) =>
       gymnasium: json['gymnasium'] as bool,
       reception: json['reception'] as bool,
       supermarkets: json['supermarkets'] as bool,
-      description: json['description'] as String,
-      rating: json['rating'] as int,
-      longitude: (json['longitude'] as num).toDouble(),
-      latitude: (json['latitude'] as num).toDouble(),
     );
 
-Map<String, dynamic> _$HouseModelUpdateToJson(HouseModelUpdate instance) =>
+Map<String, dynamic> _$HouseSearchingModelUpdateToJson(
+        HouseSearchingModelUpdate instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
       'city': instance.city,
       'neighborhood': instance.neighborhood,
       'address': instance.address,
@@ -48,7 +41,6 @@ Map<String, dynamic> _$HouseModelUpdateToJson(HouseModelUpdate instance) =>
       'area': instance.area,
       'apartmentFloor': instance.apartmentFloor,
       'roomsNumber': instance.roomsNumber,
-      'roomArea': instance.roomArea,
       'bathroomsNumber': instance.bathroomsNumber,
       'laundryArea': instance.laundryArea,
       'internet': instance.internet,
@@ -58,8 +50,4 @@ Map<String, dynamic> _$HouseModelUpdateToJson(HouseModelUpdate instance) =>
       'gymnasium': instance.gymnasium,
       'reception': instance.reception,
       'supermarkets': instance.supermarkets,
-      'description': instance.description,
-      'rating': instance.rating,
-      'longitude': instance.longitude,
-      'latitude': instance.latitude,
     };

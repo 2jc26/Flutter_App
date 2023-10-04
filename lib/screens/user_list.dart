@@ -3,9 +3,8 @@ import 'package:giusseppe_flut/screens/views_abs.dart';
 import '../models/user/query_likes_user.dart';
 import '../models/user/user_model_update.dart';
 import '../presenter/user_presenter.dart';
-import './roomie_detail.dart';
-import '../models/user_model.dart';
 import '../widgets/information_card.dart';
+import './roomie_detail.dart';
 import '../widgets/drawer.dart';
 
 class UserList extends StatefulWidget {
@@ -21,7 +20,6 @@ class _UserListState extends State<UserList> implements UserListView{
 
   final UserListPresenter userListPresenter = UserListPresenter();
   List<UserModelUpdate>? _userList;
-  List<UserModel> Users = [];
 
   @override
   void refreshUserListView(List<UserModelUpdate> userList) {
@@ -36,13 +34,9 @@ class _UserListState extends State<UserList> implements UserListView{
     userListPresenter.setUserPreferences(widget.userPreferences);
     userListPresenter.backView = this;
   }
-  void _getUsers() {
-    Users = UserModel.getUsers();
-  }
 
   @override
   Widget build(BuildContext context) {
-    _getUsers();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF2E5EAA),
