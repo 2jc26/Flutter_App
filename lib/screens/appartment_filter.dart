@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:giusseppe_flut/screens/appartment_advance_search.dart";
 import "package:giusseppe_flut/screens/roomie_detail.dart";
 import "package:giusseppe_flut/widgets/drawer.dart";
 import "package:giusseppe_flut/widgets/search_field.dart";
@@ -18,12 +20,9 @@ class AppartmentFilter extends StatefulWidget {
 
 class _AppartmentFilterState extends State<AppartmentFilter> {
   double ratingVal = 0;
-  TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController lastnameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController ageController = TextEditingController();
-  TextEditingController ocupationController = TextEditingController();
+  TextEditingController objectivePriceController = TextEditingController();
+  TextEditingController directionController = TextEditingController();
+  TextEditingController distanceController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +84,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                       ),
                     ),
                     const SizedBox(height: 5.0),
-                    _inputField("500.000 a 5.000.000", nameController),
+                    _inputField("\$ 500.000 to \$ 5.000.000", objectivePriceController, isNumber: true),
                     const SizedBox(height: 5.0),
                     const Text (
                       "Enter your location",
@@ -96,6 +95,9 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    const SizedBox(height: 5.0),
+                    _inputField("Enter the temptative adress", directionController),
+                    const SizedBox(height: 5.0),
                     const SizedBox(
                       height: 300,
                       width: 300,// Ajusta el tamaño del mapa según tus necesidades
@@ -117,7 +119,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    _inputField("Ingrese su distancia", passwordController),
+                    _inputField("Enter distance", distanceController, isNumber: true),
                   ],
                 ),
               ),
@@ -167,7 +169,19 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                         )
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AppartmentAdvanceSearch(
+                                direction: directionController.text,
+                                obPrice: objectivePriceController.text,
+                                distance: distanceController.text,
+                                ratingVal: ratingVal,
+                              ),
+                            ),
+                          );
+                        },
                         child: const Column(
                           children: [
                             Text(
@@ -206,24 +220,42 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
   }
 
   Widget _inputField(String hintText, TextEditingController controller,
-      {isPassword = false}) {
+      {isNumber = false}) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
       borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
     );
-    return TextField(
-      style: const TextStyle(color: Color(0XFF2C595B)),
-      controller: controller,
-      decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: const TextStyle(color: Color(0xFF2C595B)),
-        enabledBorder: border,
-        focusedBorder: border,
-        filled: true,
-        fillColor: Colors.white,
-      ),
-      obscureText: isPassword,
-    );
+    if (isNumber) {
+      return TextField(
+        keyboardType: TextInputType.number,
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.digitsOnly,
+        ],
+        style: const TextStyle(color: Color(0XFF2C595B)),
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: const TextStyle(color: Color(0xFF2C595B)),
+          enabledBorder: border,
+          focusedBorder: border,
+          filled: true,
+          fillColor: Colors.white,
+        )
+      );
+    } else {
+      return TextField(
+        style: const TextStyle(color: Color(0XFF2C595B)),
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: const TextStyle(color: Color(0xFF2C595B)),
+          enabledBorder: border,
+          focusedBorder: border,
+          filled: true,
+          fillColor: Colors.white,
+        ),
+      );
+    }
   }
 
   Widget _searchButton() {
@@ -233,12 +265,9 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
           context,
           MaterialPageRoute(builder: (context) => RoommateDetail()),
         );
-        debugPrint("Name: ${nameController.text}");
-        debugPrint("Password: ${passwordController.text}");
-        debugPrint("Lastname: ${lastnameController.text}");
-        debugPrint("E-mail: ${emailController.text}");
-        debugPrint("Age: ${ageController.text}");
-        debugPrint("Ocupation: ${ocupationController.text}");
+        debugPrint("Objective Price: ${objectivePriceController.text}");
+        debugPrint("Direction: ${directionController.text}");
+        debugPrint("Distance: ${distanceController.text}");
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
