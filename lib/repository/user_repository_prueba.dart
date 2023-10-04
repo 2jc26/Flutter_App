@@ -37,4 +37,13 @@ class UserRepository {
       rethrow;
     }
   }
+
+  Future<List<UserModelUpdate>> getDocumentsWithinRadius(double latitude, double longitude) async {
+    try {
+      return await userDao.getDocumentsWithinRadius(latitude,longitude);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
 }
