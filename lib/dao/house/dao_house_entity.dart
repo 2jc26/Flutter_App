@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:giusseppe_flut/models/houseLiking/house_liking_model_update.dart';
+import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 
 import '../../models/house/house_model_update.dart';
 
@@ -10,6 +11,7 @@ abstract class HouseDao {
   Future<List<HouseModelUpdate>> getAllHouses();
   Future<HouseModelUpdate?> getHouseById(String id);
   Future<List<HouseModelUpdate>> getHousesByLikings(HouseLikingModelUpdate likings);
+  Future<List<HouseModelUpdate>> getHousesBySearchs(HouseSearchingModelUpdate searchs);
   // Future<void> insertHouse(HouseModelUpdate house);
   // Future<void> updateHouse(HouseModelUpdate house);
   // Future<void> deleteHouse(int id);
@@ -90,6 +92,47 @@ class HouseDaoFireStore extends HouseDao {
     } catch (error) {
       if (kDebugMode) {
         print("Error fetching houses by likings: $error");
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<HouseModelUpdate>> getHousesBySearchs(HouseSearchingModelUpdate searchs) async {
+    List<HouseModelUpdate> houses = [];
+    try {
+      final querySnapshot = await _firestore
+          .collection("Houses")
+          .where("city", isEqualTo: searchs.city)
+          .where("neighborhood", isEqualTo: searchs.neighborhood)
+          .where("address", isEqualTo: searchs.address)
+          .where("housingType", isEqualTo: searchs.housingType)
+          .where("rentPrice", isEqualTo: searchs.rentPrice)
+          .where("stratum", isEqualTo: searchs.stratum)
+          .where("area", isEqualTo: searchs.area)
+          .where("apartmentFloor", isEqualTo: searchs.apartmentFloor)
+          .where("roomsNumber", isEqualTo: searchs.roomsNumber)
+          .where("bathroomsNumber", isEqualTo: searchs.bathroomsNumber)
+          .where("laundryArea", isEqualTo: searchs.laundryArea)
+          .where("internet", isEqualTo: searchs.internet)
+          .where("tv", isEqualTo: searchs.tv)
+          .where("furnished", isEqualTo: searchs.furnished)
+          .where("elevator", isEqualTo: searchs.elevator)
+          .where("gymnasium", isEqualTo: searchs.gymnasium)
+          .where("reception", isEqualTo: searchs.reception)
+          .where("supermarkets", isEqualTo: searchs.supermarkets)
+          .limit(2)
+          .get();
+      for (var house in querySnapshot.docs) {
+        final houseData = house.data();
+        final houseId = house.id;
+        final houseModel = HouseModelUpdate.fromJson({...houseData, 'id': houseId});
+        houses.add(houseModel);
+      }
+      return houses;
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error fetching houses by searching: $error");
       }
       rethrow;
     }
