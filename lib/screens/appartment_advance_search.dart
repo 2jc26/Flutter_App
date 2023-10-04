@@ -1,5 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
+import 'package:giusseppe_flut/presenter/house_search_presenter.dart';
 import 'package:giusseppe_flut/screens/roomie_detail.dart';
 import 'package:giusseppe_flut/widgets/drawer.dart';
 
@@ -10,6 +14,7 @@ class AppartmentAdvanceSearch extends StatefulWidget {
     required this.obPrice,
     required this.distance,
     required this.ratingVal,
+    required this.userId,
   }) : super(key: key);
 
   final String title = 'Advance Filter';
@@ -18,6 +23,7 @@ class AppartmentAdvanceSearch extends StatefulWidget {
   final String obPrice;
   final String distance;
   final double ratingVal;
+  final String userId;
 
   @override
   State<AppartmentAdvanceSearch> createState() =>
@@ -53,10 +59,6 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
 
   @override
   Widget build(BuildContext context) {
-    print("Objective Price: "+widget.direction);
-    print("Direction: "+widget.obPrice);
-    print("Distance: "+widget.distance);
-    print("Rating: "+widget.ratingVal.toString());
 
     return Scaffold(
       backgroundColor: const Color(0xffDAE3E5),
@@ -213,7 +215,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 20),
-                    _inputField("Stratum", stratumController),
+                    _inputField("Stratum", stratumController, isNumber: true),
                     const SizedBox(height: 20),
                     _inputField("Area", areaController, isNumber: true),
                     const SizedBox(height: 20),
@@ -411,18 +413,32 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
   Widget _loginButton() {
     return ElevatedButton(
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => RoommateDetail()),
+        
+        HouseSearchingModelUpdate filter = HouseSearchingModelUpdate(
+          city: cityController.text,
+          neighborhood: neighborhoodController.text,
+          address: widget.direction,
+          housingType: _selectedPropertyType.toString(),
+          rentPrice: widget.obPrice,
+          stratum: int.parse(stratumController.text),
+          area: double.parse(areaController.text),
+          apartmentFloor: int.parse(floorNumberController.text),
+          roomsNumber: int.parse(roomsNumberontroller.text),
+          bathroomsNumber: int.parse(bathroomAreaController.text),
+          laundryArea: _isLaundrySelected,
+          internet: _isInternetSelected,
+          tv: _isTvSelected,
+          furnished: _isFurnishedSelected,
+          elevator: _isElevatorSelected,
+          gymnasium: _isGymSelected,
+          reception: _isReceptionSelected,
+          supermarkets: _isSupermarketSelected,
         );
-        debugPrint("City: ${cityController.text}");
-        debugPrint("Neighborhood: ${neighborhoodController.text}");
-        debugPrint("Stratum: ${stratumController.text}");
-        debugPrint("Area: ${areaController.text}");
-        debugPrint("Floor Number: ${floorNumberController.text}");
-        debugPrint("Rooms Number: ${roomsNumberontroller.text}");
-        debugPrint("Room Area: ${roomAreaController.text}");
-        debugPrint("Bathrooms Area: ${bathroomAreaController.text}");
+
+        HouseSearchPresenter houseSearchPresenter = HouseSearchPresenter(widget.userId);
+        houseSearchPresenter.updateHouseSearchingById(widget.userId,filter);
+        houseSearchPresenter.updateHouseFilters(filter);
+
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(

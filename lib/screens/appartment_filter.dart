@@ -3,13 +3,14 @@ import "package:flutter/services.dart";
 import "package:giusseppe_flut/screens/appartment_advance_search.dart";
 import "package:giusseppe_flut/screens/roomie_detail.dart";
 import "package:giusseppe_flut/widgets/drawer.dart";
-import "package:giusseppe_flut/widgets/search_field.dart";
 import "package:flutter_rating_bar/flutter_rating_bar.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 
 
 class AppartmentFilter extends StatefulWidget {
-  const AppartmentFilter({super.key});
+  const AppartmentFilter({super.key, required this.userId});
+
+  final String userId;
 
   final String title = 'Senehouse';
 
@@ -178,6 +179,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                                 obPrice: objectivePriceController.text,
                                 distance: distanceController.text,
                                 ratingVal: ratingVal,
+                                userId: widget.userId,
                               ),
                             ),
                           );
@@ -265,9 +267,6 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
           context,
           MaterialPageRoute(builder: (context) => RoommateDetail()),
         );
-        debugPrint("Objective Price: ${objectivePriceController.text}");
-        debugPrint("Direction: ${directionController.text}");
-        debugPrint("Distance: ${distanceController.text}");
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
