@@ -1,10 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_search_presenter.dart';
-import 'package:giusseppe_flut/screens/roomie_detail.dart';
 import 'package:giusseppe_flut/widgets/drawer.dart';
 
 class AppartmentAdvanceSearch extends StatefulWidget {

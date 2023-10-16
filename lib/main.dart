@@ -8,8 +8,6 @@ import 'package:giusseppe_flut/session_cubit.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
-import 'package:giusseppe_flut/screens/user_recomendation_ubication.dart';
-import 'package:giusseppe_flut/session_cubit.dart';
 import 'firebase_options.dart';
 
 void main() async {
