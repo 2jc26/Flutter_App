@@ -12,10 +12,10 @@ class HouseListPresenter {
   List<HouseModelUpdate> housesLikingList = [];
   List<HouseModelUpdate> housesSearchingList = [];
   late HouseListView _backView= HouseListView();
-  HouseListPresenter() {
+  HouseListPresenter(String? userId) {
     getAllHouses();
-    getLikingHouses();
-    getSearchingHouses();
+    getLikingHouses(userId);
+    getSearchingHouses(userId);
   }
 
   void getAllHouses() async {
@@ -30,7 +30,7 @@ class HouseListPresenter {
     }
   }
 
-  void getLikingHouses() async {
+  void getLikingHouses(String? userId) async {
     try {
       final houses = await houseRepository.getSimilarLikingHouses("3rzGsju5Bznuyp7t1tla");
       if (houses.isNotEmpty) {
@@ -42,7 +42,7 @@ class HouseListPresenter {
     }
   }
 
-  void getSearchingHouses() async {
+  void getSearchingHouses(String? userId) async {
     try {
       final houses = await searchRepository.getSimilarSearchingHouses("3rzGsju5Bznuyp7t1tla");
       print(houses);
