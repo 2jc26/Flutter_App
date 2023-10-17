@@ -39,7 +39,6 @@ class _SignUpState extends State<SignUp> {
         ),
         centerTitle: true,
       ),
-      drawer: const CustomDrawer(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
