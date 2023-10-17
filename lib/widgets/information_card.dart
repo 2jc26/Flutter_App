@@ -11,14 +11,7 @@ class InformationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 30, right: 30),
-      child: GestureDetector(
-        onTap: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => HouseList()),
-          // );
-        },
-        child: Card(
+      child: Card(
           color: const Color(0xFF2C595B),
           elevation: 4,
           shape: RoundedRectangleBorder(
@@ -87,7 +80,6 @@ class InformationCard extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }
