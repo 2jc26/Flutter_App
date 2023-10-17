@@ -1,10 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_search_presenter.dart';
-import 'package:giusseppe_flut/screens/roomie_detail.dart';
 import 'package:giusseppe_flut/widgets/drawer.dart';
 
 class AppartmentAdvanceSearch extends StatefulWidget {
@@ -420,11 +417,12 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
           address: widget.direction,
           housingType: _selectedPropertyType.toString(),
           rentPrice: widget.obPrice,
-          stratum: int.parse(stratumController.text),
-          area: double.parse(areaController.text),
-          apartmentFloor: int.parse(floorNumberController.text),
-          roomsNumber: int.parse(roomsNumberontroller.text),
-          bathroomsNumber: int.parse(bathroomAreaController.text),
+
+          stratum: stratumController.text.isEmpty ? 0 : int.parse(stratumController.text),
+          area: areaController.text.isEmpty ? 0.0 : double.parse(areaController.text),
+          apartmentFloor: floorNumberController.text.isEmpty ? 0 : int.parse(floorNumberController.text),
+          roomsNumber: roomsNumberontroller.text.isEmpty ? 0 : int.parse(roomsNumberontroller.text),
+          bathroomsNumber: bathroomAreaController.text.isEmpty ? 0 : int.parse(bathroomAreaController.text),
           laundryArea: _isLaundrySelected,
           internet: _isInternetSelected,
           tv: _isTvSelected,
