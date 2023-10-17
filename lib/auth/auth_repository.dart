@@ -18,6 +18,20 @@ class AuthRepository {
     }
   }
 
+  Future<UserModelUpdate?> signUp(String username,String password) async {
+    try {
+      final user = null;
+      // = await userRepository.createUser(username, password);
+      if (user != null) {
+        return user;
+      } else {
+        throw Exception("SignUp fallido");
+      }
+    } catch(e) {  
+      throw Exception(e);
+    }
+  }
+
   Future<void> logOut() async {
     try {
       await Future.delayed(const Duration(seconds: 2));
