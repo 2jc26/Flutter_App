@@ -11,7 +11,7 @@ abstract class HouseDao {
   Future<List<HouseModelUpdate>> getAllHouses();
   Future<HouseModelUpdate?> getHouseById(String id);
   Future<List<HouseModelUpdate>> getHousesByLikings(HouseLikingModelUpdate likings);
-  Future<List<HouseModelUpdate>> getHousesBySearchs(HouseSearchingModelUpdate searchs);
+  Future<List<HouseModelUpdate>> getHousesByFilters(HouseSearchingModelUpdate filters);
   // Future<void> insertHouse(HouseModelUpdate house);
   // Future<void> updateHouse(HouseModelUpdate house);
   // Future<void> deleteHouse(int id);
@@ -98,37 +98,47 @@ class HouseDaoFireStore extends HouseDao {
   }
 
   @override
-  Future<List<HouseModelUpdate>> getHousesBySearchs(HouseSearchingModelUpdate searchs) async {
-    List<HouseModelUpdate> houses = [];
+  Future<List<HouseModelUpdate>> getHousesByFilters(HouseSearchingModelUpdate? filters) async {
     try {
-      final querySnapshot = await _firestore
-          .collection("Houses")
-          .where("city", isEqualTo: searchs.city)
-          .where("neighborhood", isEqualTo: searchs.neighborhood)
-          .where("housingType", isEqualTo: searchs.housingType)
-          .where("rentPrice", isEqualTo: searchs.rentPrice)
-          .where("stratum", isEqualTo: searchs.stratum)
-          .where("area", isEqualTo: searchs.area)
-          .where("apartmentFloor", isEqualTo: searchs.apartmentFloor)
-          .where("roomsNumber", isEqualTo: searchs.roomsNumber)
-          .where("bathroomsNumber", isEqualTo: searchs.bathroomsNumber)
-          .where("laundryArea", isEqualTo: searchs.laundryArea)
-          .where("internet", isEqualTo: searchs.internet)
-          .where("tv", isEqualTo: searchs.tv)
-          .where("furnished", isEqualTo: searchs.furnished)
-          .where("elevator", isEqualTo: searchs.elevator)
-          .where("gymnasium", isEqualTo: searchs.gymnasium)
-          .where("reception", isEqualTo: searchs.reception)
-          .where("supermarkets", isEqualTo: searchs.supermarkets)
-          .limit(2)
-          .get();
+      List<HouseModelUpdate> allHouses = [];
+
+      if (filters == null) {
+        return allHouses;
+      }
+
+      final querySnapshot = await _firestore.collection("Houses").get();
+
       for (var house in querySnapshot.docs) {
         final houseData = house.data();
         final houseId = house.id;
         final houseModel = HouseModelUpdate.fromJson({...houseData, 'id': houseId});
-        houses.add(houseModel);
+        allHouses.add(houseModel);
       }
-      return houses;
+
+      List<HouseModelUpdate> filteredHouses = allHouses.where((house) {
+        int matchingAttributes = 0;
+
+        if (house.city == filters.city) matchingAttributes++;
+        if (house.neighborhood == filters.neighborhood) matchingAttributes++;
+        if (house.housingType == filters.housingType) matchingAttributes++;
+        if (house.rentPrice == filters.rentPrice) matchingAttributes++;
+        if (house.stratum == filters.stratum) matchingAttributes++;
+        if (house.area == filters.area) matchingAttributes++;
+        if (house.apartmentFloor == filters.apartmentFloor) matchingAttributes++;
+        if (house.roomsNumber == filters.roomsNumber) matchingAttributes++;
+        if (house.bathroomsNumber == filters.bathroomsNumber) matchingAttributes++;
+        if (house.laundryArea == filters.laundryArea) matchingAttributes++;
+        if (house.internet == filters.internet) matchingAttributes++;
+        if (house.tv == filters.tv) matchingAttributes++;
+        if (house.furnished == filters.furnished) matchingAttributes++;
+        if (house.elevator == filters.elevator) matchingAttributes++;
+        if (house.gymnasium == filters.gymnasium) matchingAttributes++;
+        if (house.reception == filters.reception) matchingAttributes++;
+        if (house.supermarkets == filters.supermarkets) matchingAttributes++;
+        return matchingAttributes >= 14;
+      }).toList();
+
+      return filteredHouses;
     } catch (error) {
       if (kDebugMode) {
         print("Error fetching houses by searching: $error");

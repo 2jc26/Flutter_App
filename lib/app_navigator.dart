@@ -30,7 +30,7 @@ class AppNavigator extends StatelessWidget {
               ),
 
           if (state is Authenticated)
-            MaterialPage(child: HouseList(userId: state.userid)),
+            MaterialPage(child: HouseList(userId: state.userid, houseFilters: null)),
         ],
         onPopPage: (route, result) => route.didPop(result),
       );

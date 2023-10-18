@@ -1,3 +1,4 @@
+import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/repository/search_repository.dart';
 
 import '../models/house/house_model_update.dart';
@@ -12,10 +13,10 @@ class HouseListPresenter {
   List<HouseModelUpdate> housesLikingList = [];
   List<HouseModelUpdate> housesSearchingList = [];
   late HouseListView _backView= HouseListView();
-  HouseListPresenter(String? userId) {
+  HouseListPresenter(String? userId, HouseSearchingModelUpdate? houseFilters) {
     getAllHouses();
     getLikingHouses(userId);
-    getSearchingHouses(userId);
+    getFilteredHouses(houseFilters);
   }
 
   void getAllHouses() async {
@@ -42,10 +43,11 @@ class HouseListPresenter {
     }
   }
 
-  void getSearchingHouses(String? userId) async {
+  void getFilteredHouses(HouseSearchingModelUpdate? houseFilters) async {
     try {
-      final houses = await searchRepository.getSimilarSearchingHouses(userId!);
+      final houses = await searchRepository.getSimilarFilteredHouses(houseFilters!);
       print(houses);
+      //TODO: Fix this
       if (houses.isNotEmpty) {
         housesSearchingList = houses;
         _backView.refreshHouseListView(housesList,housesLikingList,housesSearchingList);

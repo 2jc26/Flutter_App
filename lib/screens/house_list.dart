@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
+import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
 import 'package:giusseppe_flut/screens/house_detail.dart';
@@ -12,19 +13,24 @@ class HouseListView {
 }
 
 class HouseList extends StatefulWidget {
-  const HouseList({super.key, required this.userId});
+  const HouseList({super.key, required this.userId, required this.houseFilters});
 
   final String userId;
+
+  final HouseSearchingModelUpdate? houseFilters;
 
   @override
   State<HouseList> createState() => _HouseListState();
 }
 
 class _HouseListState extends State<HouseList> implements HouseListView {
-  List<HouseModelUpdate>? _housesList;
-  String? _userId;
   late HouseListPresenter houseListPresenter;
+  
+  String? _userId;
+
   final TextEditingController _searchController = TextEditingController();
+  
+  List<HouseModelUpdate>? _housesList;
   List<HouseModelUpdate>? _filteredHousesList;
   List<HouseModelUpdate>? _housesLikingList;
   List<HouseModelUpdate>? _housesSearchingList;
@@ -59,7 +65,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
   void initState() {
     super.initState();
     _userId = widget.userId;
-    houseListPresenter = HouseListPresenter(widget.userId); // Pass the userId during construction
+    houseListPresenter = HouseListPresenter(widget.userId,widget.houseFilters); // Pass the userId during construction
     houseListPresenter.backView = this;
     _searchController.addListener(_onSearchTextChanged);
   }
@@ -152,7 +158,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
               ),
               SearchField(searchController: _searchController),
               IconButton(
-                icon: Icon(Icons.filter_list), // Specify the icon you want to use
+                icon: Icon(Icons.filter_list),
                 onPressed: () {
                   Navigator.push(
                     context,
