@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:giusseppe_flut/screens/house_list.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/house/house_model_update.dart';
-import '../widgets/rating_rectangle.dart';
 import '../widgets/drawer.dart';
 
 class HouseDetailView {
@@ -11,7 +9,7 @@ class HouseDetailView {
 
 
 class HouseDetail extends StatefulWidget {
-  HouseDetail({Key? key, required this.house}) : super(key: key);
+  const HouseDetail({Key? key, required this.house}) : super(key: key);
 
   final HouseModelUpdate house;
   
@@ -145,7 +143,7 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                     return DescriptionCard(house: _house);
                   } else if ( index == 1) {
                     return LocationCard(house: _house, newMarker: newMarker);
-                  } else if ( index == 2) {
+                  } else {
                     return AmenitiesCard(house: _house);
                   }
                 }
@@ -154,7 +152,7 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
           ],
         ),
         // Botón Abajo
-        bottomNavigationBar: Button(),
+        bottomNavigationBar: const Button(),
       );
     } else {
       return const Scaffold(
