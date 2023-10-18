@@ -4,7 +4,6 @@ import 'package:geocoding/geocoding.dart'; // Importa geocoding para convertir d
 
 import "package:giusseppe_flut/widgets/drawer.dart";
 import '../../models/user/query_likes_user.dart';
-import '../back_test.dart';
 import 'filter_users_other.dart';
 
 class FilterUsersLocations extends StatefulWidget {

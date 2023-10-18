@@ -138,7 +138,7 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
             Flexible(
               flex: 1,
               child: ListView.builder(
-                itemCount: 5,
+                itemCount: 4,
                 itemBuilder: (context, index) {
                   if ( index == 0) {
                     return Card(
@@ -206,46 +206,6 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                       ),
                     );
                   } else if ( index == 3) {
-                    return Card(
-                      color: Theme.of(context).colorScheme.primary,
-                      child: ExpansionTile(
-                        title: Text('Renter',
-                        style: TextStyle(
-                  color: Theme.of(context).colorScheme.tertiary, // Set the text color here
-                  ),
-                  ),
-                        expandedAlignment: Alignment.topLeft,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
-                            child: Row(
-                              children: <Widget>[
-                                Center(
-                                  child: Container(
-                                    width: 100.0,
-                                    height: 100.0, // Set both width and height to make it a square
-                                    child: Image.asset(
-                                      'assets/images/house1.jpg', // Replace with your image asset
-                                      fit: BoxFit.cover, // Ensure the image covers the square area
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 16.0), // Add spacing between the image and text
-                                Expanded(
-                                  child: Text('Additional Text fdhsajfhaksjhfksahfkshafkjhaskfhkasjhfkjsahfkjhaskfhkajsf',
-                                    style: TextStyle(
-                                        color: Theme.of(context).colorScheme.secondary, // Set the text color here
-                                        fontSize: 16.0
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else if ( index == 4) {
                     return Card(
                       color: Theme.of(context).colorScheme.primary,
                       child: ExpansionTile(
@@ -352,7 +312,7 @@ class FeatureTable extends StatelessWidget {
   final HouseModelUpdate house;
   
   final List<String> caracs = ["apartmentFloor","housingType","rentPrice","stratum","area","roomsNumber","roomArea","bathroomsNumber","laundryArea","internet","tv","furnished","elevator","gymnasium","reception","supermarkets"];
-  final List<String> texts = ["apartmentFloor","housingType","rentPrice","stratum","area","roomsNumber","roomArea","bathroomsNumber","laundryArea","internet","tv","furnished","elevator","gymnasium","reception","supermarkets"];
+  final List<String> texts = ["Apartment Floor","housing Type","Rent Price","Stratum","Area","Rooms Number","Room Area","Bathrooms Number","Laundry Area","Internet","TV","Furnished","Elevator","Gymnasium","Reception","Supermarkets"];
 
 
   FeatureTable({Key? key, required this.house}) : super(key: key);
@@ -382,8 +342,14 @@ class FeatureTable extends StatelessWidget {
 
   // Iterate through the caracs list and add rows to the tableRows list
   for (int i = 0; i < caracs.length; i++) {
-    final caracName = caracs[i];
-    final caracValue = caracValues[caracName];
+    var caracName = caracs[i];
+    var caracValue = caracValues[caracName];
+    caracName = texts[i];
+    if (caracValue == "true") {
+      caracValue = "Yes";
+    } else if (caracValue == "false") {
+      caracValue = "No";
+    }
     tableRows.add(
       TableRow(
         children: [
