@@ -74,7 +74,7 @@ class HouseSearchingDaoFireStore extends HouseSearchingDao {
     try {
       
       DocumentSnapshot docSnapshot = await _firestore
-          .collection("FiltersHouse")
+          .collection("FilterHouse")
           .doc('snF8sl1hqZpisoFQGXF7')
           .get();
 
@@ -89,7 +89,7 @@ class HouseSearchingDaoFireStore extends HouseSearchingDao {
         });
 
         await _firestore
-            .collection("FiltersHouse")
+            .collection("FilterHouse")
             .doc('snF8sl1hqZpisoFQGXF7')
             .update(currentFilters);
       }

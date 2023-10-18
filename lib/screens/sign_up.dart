@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:giusseppe_flut/screens/roomie_detail.dart";
-import "package:giusseppe_flut/widgets/drawer.dart";
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -12,12 +11,16 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  TextEditingController nameController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController lastnameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
+  TextEditingController lastusernameController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   TextEditingController ageController = TextEditingController();
-  TextEditingController ocupationController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController generoController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+  TextEditingController localityController = TextEditingController();
+  String rolController = "Renter";
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,6 @@ class _SignUpState extends State<SignUp> {
         ),
         centerTitle: true,
       ),
-      drawer: const CustomDrawer(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -72,7 +74,11 @@ class _SignUpState extends State<SignUp> {
                         width: MediaQuery.of(context).size.width / 3,
                         height: MediaQuery.of(context).size.width / 4,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              rolController = "Renter";
+                            });
+                          },
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.white,
                             padding: EdgeInsets.zero,
@@ -108,7 +114,11 @@ class _SignUpState extends State<SignUp> {
                         width: MediaQuery.of(context).size.width / 3,
                         height: MediaQuery.of(context).size.width / 4,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              rolController = "Landlord";
+                            });
+                          },
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.white,
                             padding: EdgeInsets.zero,
@@ -160,21 +170,24 @@ class _SignUpState extends State<SignUp> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 20),
-                    _inputField("Name", nameController),
+                    _inputField("Username", usernameController),
                     const SizedBox(height: 20),
-                    _inputField("Lastname", passwordController),
+                    _inputField("Password", passwordController, isPassword: true),
                     const SizedBox(height: 20),
-                    _inputField("E-mail", emailController),
+                    _inputField("Full Name", nameController),
                     const SizedBox(height: 20),
                     _inputField("Age", ageController),
                     const SizedBox(height: 20),
                     _inputField(
-                      "Ocupation",
-                      ocupationController,
+                      "Phone Number",
+                      phoneController,
                     ),
                     const SizedBox(height: 20),
-                    _inputField("Password", passwordController,
-                        isPassword: true),
+                    _inputField("Genre", generoController),
+                    const SizedBox(height: 20),
+                    _inputField("City", cityController),
+                    const SizedBox(height: 20),
+                    _inputField("Locality", localityController),
                     const SizedBox(height: 20),
                   ],
                 ),
@@ -225,12 +238,15 @@ class _SignUpState extends State<SignUp> {
           context,
           MaterialPageRoute(builder: (context) => RoommateDetail()),
         );
-        debugPrint("Name: ${nameController.text}");
+        debugPrint("Username: ${usernameController.text}");
         debugPrint("Password: ${passwordController.text}");
-        debugPrint("Lastname: ${lastnameController.text}");
-        debugPrint("E-mail: ${emailController.text}");
+        debugPrint("Fullname: ${lastusernameController.text}");
         debugPrint("Age: ${ageController.text}");
-        debugPrint("Ocupation: ${ocupationController.text}");
+        debugPrint("Phone: ${phoneController.text}");
+        debugPrint("Genre: ${generoController.text}");
+        debugPrint("Role: $rolController");
+        debugPrint("City: ${cityController.text}");
+        debugPrint("Locality: ${localityController.text}");
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
