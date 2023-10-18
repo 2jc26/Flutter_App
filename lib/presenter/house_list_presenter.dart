@@ -32,7 +32,7 @@ class HouseListPresenter {
 
   void getLikingHouses(String? userId) async {
     try {
-      final houses = await houseRepository.getSimilarLikingHouses("3rzGsju5Bznuyp7t1tla");
+      final houses = await houseRepository.getSimilarLikingHouses(userId!);
       if (houses.isNotEmpty) {
         housesLikingList = houses;
         _backView.refreshHouseListView(housesList,housesLikingList,housesSearchingList);
@@ -44,7 +44,7 @@ class HouseListPresenter {
 
   void getSearchingHouses(String? userId) async {
     try {
-      final houses = await searchRepository.getSimilarSearchingHouses("3rzGsju5Bznuyp7t1tla");
+      final houses = await searchRepository.getSimilarSearchingHouses(userId!);
       print(houses);
       if (houses.isNotEmpty) {
         housesSearchingList = houses;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:giusseppe_flut/screens/house_list.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/house/house_model_update.dart';
 import '../widgets/rating_rectangle.dart';
@@ -138,99 +139,14 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
             Flexible(
               flex: 1,
               child: ListView.builder(
-                itemCount: 4,
+                itemCount: 3,
                 itemBuilder: (context, index) {
                   if ( index == 0) {
-                    return Card(
-                      color: Theme.of(context).colorScheme.primary,
-                      child: ExpansionTile(
-                        title: Text(
-                          'Description',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary, // Set the text color here
-                          ),
-                        ),
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
-                            child: Text(_house!.description,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary, // Set the text color here
-                                fontSize: 16.0
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    );
+                    return DescriptionCard(house: _house);
                   } else if ( index == 1) {
-                    return Card(
-                      color: Theme.of(context).colorScheme.primary,
-                      child: ExpansionTile(
-                        title: Text('Location',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary, // Set the text color here
-                          ),
-                        ),
-                        children: <Widget>[
-                          SizedBox(
-                            width: 250,
-                            height: 250,
-                            child: GoogleMap(
-                              mapType: MapType.hybrid,
-                              initialCameraPosition: CameraPosition(
-                                target: LatLng(_house!.latitude, _house!.longitude), // Cambia esto a las coordenadas deseadas
-                                zoom: 18,
-                              ),
-                              markers: {newMarker},
-                            )
-                          ),
-                        ],
-                      ),
-                    );
+                    return LocationCard(house: _house, newMarker: newMarker);
                   } else if ( index == 2) {
-                    return Card(
-                      color: Theme.of(context).colorScheme.primary,
-                      child: ExpansionTile(
-                        title: Text('Included Amenities',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary, // Set the text color here
-                          ),
-                        ),
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
-                            child: FeatureTable(house: _house!,)
-                          ),
-                        ],
-                      ),
-                    );
-                  } else if ( index == 3) {
-                    return Card(
-                      color: Theme.of(context).colorScheme.primary,
-                      child: ExpansionTile(
-                        title: Text('Ratings',
-                        style: TextStyle(
-                  color: Theme.of(context).colorScheme.tertiary, // Set the text color here
-                  ),
-                  ),
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              RatingRectangle(
-                                imageUrl: 'assets/images/house1.jpg', // Replace with your image asset
-                                rating: 4.5, // Replace with your rating
-                              ),
-                              RatingRectangle(
-                                imageUrl: 'assets/images/house1.jpg', // Replace with your image asset
-                                rating: 3.0, // Replace with your rating
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
+                    return AmenitiesCard(house: _house);
                   }
                 }
               ),
@@ -238,37 +154,7 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
           ],
         ),
         // Botón Abajo
-        bottomNavigationBar: BottomAppBar(
-          child: SizedBox(
-            height: 56.0, // Set the desired height for your button
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  width: 300.0,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Handle button tap here
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary, // Set the button color here
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0), // Adjust the border radius as needed
-                      ),
-                    ),
-                    child: Text("I'm Interested",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.background, // Set the text color here
-                          fontSize: 16.0
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        bottomNavigationBar: Button(),
       );
     } else {
       return const Scaffold(
@@ -277,6 +163,150 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
         ),
       );
     }
+  }
+}
+
+class DescriptionCard extends StatelessWidget {
+  const DescriptionCard({
+    super.key,
+    required HouseModelUpdate? house,
+  }) : _house = house;
+
+  final HouseModelUpdate? _house;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Theme.of(context).colorScheme.primary,
+      child: ExpansionTile(
+        title: Text(
+          'Description',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.tertiary, // Set the text color here
+          ),
+        ),
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
+            child: Text(_house!.description,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary, // Set the text color here
+                fontSize: 16.0
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class AmenitiesCard extends StatelessWidget {
+  const AmenitiesCard({
+    super.key,
+    required HouseModelUpdate? house,
+  }) : _house = house;
+
+  final HouseModelUpdate? _house;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Theme.of(context).colorScheme.primary,
+      child: ExpansionTile(
+        title: Text('Included Amenities',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.tertiary, // Set the text color here
+          ),
+        ),
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
+            child: FeatureTable(house: _house!,)
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class LocationCard extends StatelessWidget {
+  const LocationCard({
+    super.key,
+    required HouseModelUpdate? house,
+    required this.newMarker,
+  }) : _house = house;
+
+  final HouseModelUpdate? _house;
+  final Marker newMarker;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Theme.of(context).colorScheme.primary,
+      child: ExpansionTile(
+        title: Text('Location',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.tertiary, // Set the text color here
+          ),
+        ),
+        children: <Widget>[
+          SizedBox(
+            width: 250,
+            height: 250,
+            child: GoogleMap(
+              mapType: MapType.hybrid,
+              initialCameraPosition: CameraPosition(
+                target: LatLng(_house!.latitude, _house!.longitude), // Cambia esto a las coordenadas deseadas
+                zoom: 18,
+              ),
+              markers: {newMarker},
+            )
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Button extends StatelessWidget {
+  const Button({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      child: SizedBox(
+        height: 56.0, // Set the desired height for your button
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              width: 300.0,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary, // Set the button color here
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0), // Adjust the border radius as needed
+                  ),
+                ),
+                child: Text("I'm Interested",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.background, // Set the text color here
+                      fontSize: 16.0
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
