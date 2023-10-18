@@ -5,7 +5,6 @@ import '../models/user/query_likes_user.dart';
 import '../models/user/user_model_update.dart';
 import '../presenter/user_presenter.dart';
 import '../widgets/information_card.dart';
-import './roomie_detail.dart';
 import '../widgets/drawer.dart';
 
 class UserList extends StatefulWidget {

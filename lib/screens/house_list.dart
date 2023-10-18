@@ -12,18 +12,18 @@ class HouseListView {
 }
 
 class HouseList extends StatefulWidget {
-  String userId;
+  const HouseList({super.key, required this.userId});
 
-  HouseList({super.key, required this.userId});
+  final String userId;
 
   @override
   State<HouseList> createState() => _HouseListState();
 }
 
 class _HouseListState extends State<HouseList> implements HouseListView {
-  final HouseListPresenter houseListPresenter = HouseListPresenter();
   List<HouseModelUpdate>? _housesList;
   String? _userId;
+  late HouseListPresenter houseListPresenter;
   final TextEditingController _searchController = TextEditingController();
   List<HouseModelUpdate>? _filteredHousesList;
   List<HouseModelUpdate>? _housesLikingList;
@@ -32,7 +32,6 @@ class _HouseListState extends State<HouseList> implements HouseListView {
   @override
   void refreshHouseListView(List<HouseModelUpdate> housesList, List<HouseModelUpdate> housesLikingList, List<HouseModelUpdate> housesSearchingList) {
     setState(() {
-      _userId = widget.userId;
       _housesLikingList = housesLikingList;
       _housesList = housesList;
       _housesSearchingList = housesSearchingList;
@@ -59,13 +58,15 @@ class _HouseListState extends State<HouseList> implements HouseListView {
   @override
   void initState() {
     super.initState();
+    _userId = widget.userId;
+    houseListPresenter = HouseListPresenter(widget.userId); // Pass the userId during construction
     houseListPresenter.backView = this;
     _searchController.addListener(_onSearchTextChanged);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_housesList!.isNotEmpty) {
+    if (_housesList!.isNotEmpty && _userId != null) {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xFF2E5EAA),
