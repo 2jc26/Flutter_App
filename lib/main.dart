@@ -3,15 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:giusseppe_flut/app_navigator.dart';
 import 'package:giusseppe_flut/auth/auth_repository.dart';
-import 'package:giusseppe_flut/screens/appartment_advance_search.dart';
-import 'package:giusseppe_flut/screens/appartment_filter.dart';
-import 'package:giusseppe_flut/screens/house_list.dart';
 import 'package:giusseppe_flut/session_cubit.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
-import 'package:giusseppe_flut/screens/user_recomendation_ubication.dart';
-import 'package:giusseppe_flut/session_cubit.dart';
 import 'firebase_options.dart';
 
 void main() async {
