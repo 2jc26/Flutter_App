@@ -58,6 +58,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
   @override
   void initState() {
     super.initState();
+    _userId = widget.userId;
     houseListPresenter = HouseListPresenter(widget.userId); // Pass the userId during construction
     houseListPresenter.backView = this;
     _searchController.addListener(_onSearchTextChanged);
@@ -65,7 +66,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
 
   @override
   Widget build(BuildContext context) {
-    if (_housesList!.isNotEmpty) {
+    if (_housesList!.isNotEmpty && _userId != null) {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xFF2E5EAA),
