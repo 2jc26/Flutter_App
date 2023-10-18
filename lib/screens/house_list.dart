@@ -15,7 +15,7 @@ class HouseList extends StatefulWidget {
   String userId;
 
   HouseList({super.key, required this.userId});
-
+  
   @override
   State<HouseList> createState() => _HouseListState();
 }

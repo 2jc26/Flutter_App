@@ -38,4 +38,11 @@ class SearchRepository {
     }
   }
 
+  Future<void> updateHouseFilters(HouseSearchingModelUpdate searchFilters) async {
+    try {
+      await houseSearchDao.updateHouseFilters(searchFilters);
+    } catch (error) {
+      rethrow;
+    }
+  }
 }

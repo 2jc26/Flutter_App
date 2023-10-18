@@ -27,31 +27,41 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       yield state.copyWith(password: event.password);
 
     // SignUpSubmitted
+    } else if (event is SignUpFullNameChanged) {
+      yield state.copyWith(fullname: event.fullname);
+
+    // SignUpSubmitted
+    } else if (event is SignUpAgeChanged) {
+      yield state.copyWith(age: event.age);
+
+    // SignUpSubmitted
+    } else if (event is SignUpPhoneChanged) {
+      yield state.copyWith(phone: event.phone);
+
+    // SignUpSubmitted
+    } else if (event is SignUpGeneroChanged) {
+      yield state.copyWith(genero: event.genero);
+
+    // SignUpSubmitted
+    } else if (event is SignUpCityChanged) {
+      yield state.copyWith(city: event.city);
+
+    // SignUpSubmitted
+    } else if (event is SignUpLocalityChanged) {
+      yield state.copyWith(locality: event.locality);
+
+    // SignUpSubmitted
     } else if (event is SignUpSubmitted) {
       yield state.copyWith(formStatus: FormSubmitting());
-
       try {
-        final user = await authRepo.signUp(state.username, state.password);
-        yield state.copyWith(formStatus: SubmissionSuccess());
+        final user = await authRepo.signUp(state.username, state.password, state.fullname, state.age, state.phone, state.genero, state.city, state.locality);
+        yield state.copyWith(formStatus: FormSubmitting());
         if (user != null) {
           authCubit.launchSession(AuthCredentials(username: user.username, userId: user.id));
         }
       } catch(e) {
         yield state.copyWith(formStatus: SubmissionFailed(e as Exception, exception: e));
       }
-    } else if (event is LogOut) {
-      yield state.copyWith(formStatus: FormSubmitting());
-
-      try {
-        unawaited(authRepo.logOut());
-      } catch(e) {
-        yield state.copyWith(formStatus: SubmissionFailed(e as Exception, exception: e));
-      }
     } 
-  }
-
-  @override
-  Future<void> close() {
-    return super.close();
   }
 }
