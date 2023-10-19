@@ -13,10 +13,10 @@ class HouseListView {
 }
 
 class HouseList extends StatefulWidget {
+
   const HouseList({super.key, required this.userId, required this.houseFilters});
 
   final String userId;
-
   final HouseSearchingModelUpdate? houseFilters;
 
   @override
@@ -41,17 +41,24 @@ class _HouseListState extends State<HouseList> implements HouseListView {
       _housesLikingList = housesLikingList;
       _housesList = housesList;
       _housesSearchingList = housesSearchingList;
-      _filteredHousesList = _housesList; // Initialize filtered list with all houses
+      if(housesSearchingList.isEmpty) {
+        _filteredHousesList = _housesList;
+      } else {
+        _filteredHousesList = _housesSearchingList;
+      }
     });
   }
 
   void _onSearchTextChanged() {
     setState(() {
       if (_searchController.text.isEmpty) {
-        _filteredHousesList =
-            _housesList; // If search text is empty, show all houses
+        if(_housesSearchingList!.isEmpty) {
+          _filteredHousesList = _housesList;
+        } else {
+          _filteredHousesList = _housesSearchingList;
+        }
       } else {
-        // Filter houses based on search text (you can customize this filtering logic)
+        // Filter houses based on search text
         _filteredHousesList = _housesList
             ?.where((house) => house.name
                 .toLowerCase()
@@ -65,7 +72,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
   void initState() {
     super.initState();
     _userId = widget.userId;
-    houseListPresenter = HouseListPresenter(widget.userId,widget.houseFilters); // Pass the userId during construction
+    houseListPresenter = HouseListPresenter(widget.userId,widget.houseFilters);
     houseListPresenter.backView = this;
     _searchController.addListener(_onSearchTextChanged);
   }
@@ -93,6 +100,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
         body: SingleChildScrollView(
           child: Column(
             children: [
+              if (_housesSearchingList!.isEmpty)
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 5),
                 child: Text(
@@ -100,65 +108,18 @@ class _HouseListState extends State<HouseList> implements HouseListView {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
-              SizedBox(
-                height: 250,
-                child: ListView.builder(
-                  itemCount: _housesLikingList?.length,
-                  itemBuilder: ((context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              HouseDetail(house: _housesLikingList![index]),
-                        ));
-                      },
-                      child: InformationCard(
-                        path: 'assets/images/house1.jpg',
-                        stars: _housesLikingList![index].rating,
-                        text: _housesLikingList![index].name,
-                      ),
-                    );
-                  }),
-                ),
-              ),
+              if (_housesSearchingList!.isEmpty)
+              HouseSection(houseList: _housesLikingList),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 5),
                 child: Text(
-                  "Houses that match your searchs",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(
-                height: 250,
-                child: ListView.builder(
-                  itemCount: _housesSearchingList?.length,
-                  itemBuilder: ((context, index) {  
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              HouseDetail(house: _housesSearchingList![index]),
-                        ));
-                      },
-                      child: InformationCard(
-                        path: 'assets/images/house1.jpg',
-                        stars: _housesSearchingList![index].rating,
-                        text: _housesSearchingList![index].name,
-                      ),
-                    );
-                  }),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 5),
-                child: Text(
-                  "All the houses",
+                  "Houses",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
               SearchField(searchController: _searchController),
               IconButton(
-                icon: Icon(Icons.filter_list),
+                icon: const Icon(Icons.filter_list),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -166,27 +127,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
                   );
                 },
               ),
-              SizedBox(
-                height: 250,
-                child: ListView.builder(
-                  itemCount: _filteredHousesList?.length,
-                  itemBuilder: ((context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              HouseDetail(house: _filteredHousesList![index]),
-                        ));
-                      },
-                      child: InformationCard(
-                        path: 'assets/images/house1.jpg',
-                        stars: _filteredHousesList![index].rating,
-                        text: _filteredHousesList![index].name,
-                      ),
-                    );
-                  }),
-                ),
-              ),
+              HouseSection(houseList: _filteredHousesList),
             ],
           ),
         ),
@@ -198,5 +139,39 @@ class _HouseListState extends State<HouseList> implements HouseListView {
         ),
       );
     }
+  }
+}
+
+class HouseSection extends StatelessWidget {
+  const HouseSection({
+    super.key,
+    required List<HouseModelUpdate>? houseList,
+  }) : _houseList = houseList;
+
+  final List<HouseModelUpdate>? _houseList;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 250,
+      child: ListView.builder(
+        itemCount: _houseList?.length,
+        itemBuilder: ((context, index) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    HouseDetail(house: _houseList![index]),
+              ));
+            },
+            child: InformationCard(
+              path: 'assets/images/house1.jpg',
+              stars: _houseList![index].rating,
+              text: _houseList![index].name,
+            ),
+          );
+        }),
+      ),
+    );
   }
 }

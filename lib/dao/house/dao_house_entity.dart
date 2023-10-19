@@ -100,6 +100,7 @@ class HouseDaoFireStore extends HouseDao {
   @override
   Future<List<HouseModelUpdate>> getHousesByFilters(HouseSearchingModelUpdate? filters) async {
     try {
+      print(filters!.toJson());
       List<HouseModelUpdate> allHouses = [];
 
       if (filters == null) {
