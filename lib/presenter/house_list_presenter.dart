@@ -16,7 +16,9 @@ class HouseListPresenter {
   HouseListPresenter(String? userId, HouseSearchingModelUpdate? houseFilters) {
     getAllHouses();
     getLikingHouses(userId);
-    getFilteredHouses(houseFilters);
+    if(houseFilters != null) {
+      getFilteredHouses(houseFilters);
+    }
   }
 
   void getAllHouses() async {
@@ -46,12 +48,8 @@ class HouseListPresenter {
   void getFilteredHouses(HouseSearchingModelUpdate? houseFilters) async {
     try {
       final houses = await searchRepository.getSimilarFilteredHouses(houseFilters!);
-      print(houses);
-      //TODO: Fix this
-      if (houses.isNotEmpty) {
-        housesSearchingList = houses;
-        _backView.refreshHouseListView(housesList,housesLikingList,housesSearchingList);
-      }
+      housesSearchingList = houses;
+      _backView.refreshHouseListView(housesList,housesLikingList,housesSearchingList);
     } catch (error) {
       rethrow;
     }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_search_presenter.dart';
+import 'package:giusseppe_flut/screens/house_list.dart';
 import 'package:giusseppe_flut/widgets/drawer.dart';
 
 class AppartmentAdvanceSearch extends StatefulWidget {
@@ -437,7 +438,9 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
         HouseSearchPresenter houseSearchPresenter = HouseSearchPresenter();
         houseSearchPresenter.updateHouseSearchingById(widget.userId,filter);
         houseSearchPresenter.updateHouseFilters(filter);
-
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => HouseList(userId: widget.userId, houseFilters: filter),
+        ));
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
