@@ -1,9 +1,6 @@
-import '../models/user/query_likes_user.dart';
 import '../models/user/user_model_update.dart';
 import '../repository/user_repository_prueba.dart';
-import '../screens/user_list.dart';
 import '../screens/views_abs.dart';
-import 'package:geolocator/geolocator.dart';
 
 class UserListPresenterLocation {
   final UserRepository userRepository = UserRepository();

@@ -4,9 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:giusseppe_flut/app_navigator.dart';
 import 'package:giusseppe_flut/auth/auth_repository.dart';
-import 'package:giusseppe_flut/screens/appartment_advance_search.dart';
-import 'package:giusseppe_flut/screens/appartment_filter.dart';
-import 'package:giusseppe_flut/screens/house_list.dart';
 import 'package:giusseppe_flut/session_cubit.dart';
 
 // Firebase
