@@ -183,29 +183,50 @@ class UserDaoFireStore extends UserDao{
       bool smoke = false;
       double lat = 4.601932494220323;
       double long = -74.0653645602065;
-      int star = 5;
-      String id = '';
+      int star = 5;     
 
+      Map<String, dynamic> toJson() => {
+        'username': username, 
+        'password': password, 
+        'name': fullname, 
+        'age': age, 
+        'phone': phoneFin, 
+        'gender': genero, 
+        'bring_people': bringPeople, 
+        'sleep': sleep, 
+        'vape': vape, 
+        'personality': personality, 
+        'likes_pets': likesPets, 
+        'clean': clean, 
+        'smoke': smoke,
+        'lat': lat, 
+        'long': long, 
+        'stars': star
+      };
 
-      final user = UserModelUpdate(username: username, password: password, name: fullname, age: age, phone: phoneFin, gender: genero, 
-      bring_people: bringPeople, sleep: sleep, vape: vape, personality: personality, likes_pets: likesPets, clean: clean, smoke: smoke,
-      lat: lat, long: long, stars: star, id: id
-      );
+      // Check if a user with the given username exists in Firestore
+      final querySnapshot = await _firestore
+          .collection("Users")
+          .where("username", isEqualTo: username)
+          .get();
 
-      print(user.toJson());
-      // final docRef = await _firestore.collection("Users").add(user.toJson());
-      // final docSnapshot = await docRef.get();
-      // final userData = docSnapshot.data();
-      // final userId = docSnapshot.id;
-      // if (userData != null) {
-      //   final userModel = UserModelUpdate.fromJson({...userData, 'id': userId});
-      //   return userModel;
-    //   } else {
-    //     throw Exception("User not created");
-    //   }
+      if (querySnapshot.docs.isEmpty) {
+        final docRef = await _firestore.collection("Users").add(toJson());
+        final docSnapshot = await docRef.get();
+        final userData = docSnapshot.data();
+        final userId = docSnapshot.id;
+        if (userData != null) {
+          final userModel = UserModelUpdate.fromJson({...userData, 'id': userId});
+          return userModel;
+        } else {
+          throw Exception("User not created");
+        }
+      } else {
+        throw Exception("User already exists");
+      }
     } catch (error) {
       if (kDebugMode) {
-        print("Error creating user: $error");
+        throw Exception("Error creating user: $error");
       }
       rethrow;
     }
