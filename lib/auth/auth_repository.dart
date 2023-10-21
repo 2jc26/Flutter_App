@@ -20,8 +20,7 @@ class AuthRepository {
 
   Future<UserModelUpdate?> signUp(String username, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
     try {
-      final user = null;
-      // = await userRepository.createUser(username, password);
+      final user = await userRepository.createUser(username, password, fullname, age, phone, genero, city, locality);
       if (user != null) {
         return user;
       } else {

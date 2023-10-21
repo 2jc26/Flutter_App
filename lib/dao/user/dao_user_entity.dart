@@ -10,6 +10,7 @@ abstract class UserDao {
   Future<UserModelUpdate?> getUserById(String id);
   Future<List<UserModelUpdate>> getAllUsers();
   Future<UserModelUpdate?> validateUsernameAndPassword(String username, String password);
+  Future<UserModelUpdate?> createUser(String username, String password, String fullname, int age, String phone, String genero, String city, String locality);
   // Future<void> insertUser(UserModelUpdate user);
   // Future<void> updateUser(UserModelUpdate user);
   // Future<void> deleteUser(int id);
@@ -167,5 +168,48 @@ class UserDaoFireStore extends UserDao{
       rethrow;
     }
   }
+
+  @override
+  Future<UserModelUpdate?> createUser(String username, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
+    try {
+      // To Do In base of city and locality get lat and long
+      String bringPeople = '';
+      int sleep = 0;
+      int phoneFin = int.parse(phone);
+      bool vape = false;
+      String personality = '';
+      bool likesPets = false;
+      String clean = '';
+      bool smoke = false;
+      double lat = 4.601932494220323;
+      double long = -74.0653645602065;
+      int star = 5;
+      String id = '';
+
+
+      final user = UserModelUpdate(username: username, password: password, name: fullname, age: age, phone: phoneFin, gender: genero, 
+      bring_people: bringPeople, sleep: sleep, vape: vape, personality: personality, likes_pets: likesPets, clean: clean, smoke: smoke,
+      lat: lat, long: long, stars: star, id: id
+      );
+
+      print(user.toJson());
+      // final docRef = await _firestore.collection("Users").add(user.toJson());
+      // final docSnapshot = await docRef.get();
+      // final userData = docSnapshot.data();
+      // final userId = docSnapshot.id;
+      // if (userData != null) {
+      //   final userModel = UserModelUpdate.fromJson({...userData, 'id': userId});
+      //   return userModel;
+    //   } else {
+    //     throw Exception("User not created");
+    //   }
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error creating user: $error");
+      }
+      rethrow;
+    }
+  }
+
   
 }

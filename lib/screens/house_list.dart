@@ -167,10 +167,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
                   itemBuilder: ((context, index) {
                     return GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              HouseDetail(house: _filteredHousesList![index]),
-                        ));
+                        openHouseDetail(_filteredHousesList![index]);
                       },
                       child: InformationCard(
                         path: 'assets/images/house1.jpg',
@@ -192,5 +189,14 @@ class _HouseListState extends State<HouseList> implements HouseListView {
         ),
       );
     }
+  }
+
+  void openHouseDetail(HouseModelUpdate house) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HouseDetail(house: house),
+      )
+    );
   }
 }
