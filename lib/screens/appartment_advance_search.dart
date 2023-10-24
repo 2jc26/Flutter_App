@@ -416,7 +416,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
           city: cityController.text,
           neighborhood: neighborhoodController.text,
           address: widget.direction,
-          housingType: _selectedPropertyType.toString().replaceAll("PropertyType", ""),
+          housingType: _selectedPropertyType.toString().replaceAll("PropertyType.", ""),
           rentPrice: widget.obPrice,
 
           stratum: stratumController.text.isEmpty ? 0 : int.parse(stratumController.text),
