@@ -1,16 +1,30 @@
-
 import "package:flutter/material.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
-
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart' show Uint8List, kIsWeb; // Importa esta línea para manejar el entorno web.
 import "../widgets/drawer.dart";
+
+final storageRef = FirebaseStorage.instance.ref();
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
   @override
   State<MapScreen> createState() => _MapScreenState();
 }
+
 class _MapScreenState extends State<MapScreen> {
   LatLng initialLocation = const LatLng(37.422131, -122.084801);
+  String imageName = '0.jpg';
+
+  Future<Uint8List?> getImage(String imageName) async {
+    final ref = storageRef.child('images_profile/Female/$imageName');
+    try {
+      const oneMegabyte = 1024 * 1024;
+      final Uint8List? data = await ref.getData(oneMegabyte);
+      return data;
+    } on FirebaseException catch (e) {
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +46,39 @@ class _MapScreenState extends State<MapScreen> {
         centerTitle: true,
       ),
       drawer: const CustomDrawer(),
-      body:  const SizedBox(
-        height: 300,
-        width: 300,// Ajusta el tamaño del mapa según tus necesidades
-        child: GoogleMap(
-          mapType: MapType.hybrid,
-          initialCameraPosition: CameraPosition(
-            target: LatLng(37.422131, -122.084801), // Cambia esto a las coordenadas deseadas
-            zoom: 3,
+      body: Column(
+        children: [
+          const SizedBox(
+            height: 300,
+            width: 300,
+            child: GoogleMap(
+              mapType: MapType.hybrid,
+              initialCameraPosition: CameraPosition(
+                target: LatLng(37.422131, -122.084801), // Cambia esto a las coordenadas deseadas
+                zoom: 3,
+              ),
+            ),
           ),
-        ),
+          FutureBuilder<Uint8List?>(
+            future: getImage(imageName),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return Image.memory(
+                    snapshot.data!, // Datos de la imagen
+                    width: 200,
+                    height: 200,
+                    fit: BoxFit.cover,
+                  );
+                }
+              } else {
+                return CircularProgressIndicator(); // Muestra un indicador de carga mientras se descarga la imagen.
+              }
+            },
+          ),
+        ],
       ),
     );
   }

@@ -4,6 +4,7 @@ part 'user_model_update.g.dart';
 
 @JsonSerializable()
 class UserModelUpdate {
+  String image;
   String username;
   String password;
   String name;
@@ -23,9 +24,14 @@ class UserModelUpdate {
   double lat;
   double long;
   int stars;
+  String city;
+  String locality;
 
   // Image
   UserModelUpdate({
+    required this.locality,
+    required this.city,
+    required this.image,
     required this.username,
     required this.password,
     required this.name,
