@@ -49,6 +49,9 @@ dependencies:
 
   flutter_bloc: ^7.0.0
   firebase_auth: ^4.10.0
+  csc_picker: ^0.2.7
+  firebase_storage: ^11.3.1
+  get: ^4.6.6
 
 dev_dependencies:
   flutter_test:
