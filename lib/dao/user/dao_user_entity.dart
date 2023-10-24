@@ -2,14 +2,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:giusseppe_flut/models/user/query_likes_user.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 
 import '../../models/user/user_model_update.dart';
-
+final storageRef = FirebaseStorage.instance.ref();
 abstract class UserDao {
 
   Future<UserModelUpdate?> getUserById(String id);
   Future<List<UserModelUpdate>> getAllUsers();
   Future<UserModelUpdate?> validateUsernameAndPassword(String username, String password);
+  Future<UserModelUpdate?> createUser(String username, String password, String fullname, int age, String phone, String genero, String city, String locality);
   // Future<void> insertUser(UserModelUpdate user);
   // Future<void> updateUser(UserModelUpdate user);
   // Future<void> deleteUser(int id);
@@ -17,15 +20,31 @@ abstract class UserDao {
 
 class UserDaoFireStore extends UserDao{
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  //final storage = FirebaseStorage.instance;
+  //final storageRef = FirebaseStorage.instance.ref();
+
+  Future<Uint8List?> getImage(String image) async {
+    final ref = storageRef.child(image);
+    try {
+      const oneMegabyte = 1024 * 1024;
+      final Uint8List? data = await ref.getData(oneMegabyte);
+      return data;
+      // Data for "images/island.jpg" is returned, use this as needed.
+    } on FirebaseException catch (e) {
+      // Handle any errors.
+    }
+  }
+
   @override
   Future<List<UserModelUpdate>> getAllUsers() async {
     List<UserModelUpdate> users = [];
     try {
-      final querySnapshot = await _firestore.collection("Users").get();
+      final querySnapshot = await _firestore.collection("NewUsersTest").get();//Users
       for (var user in querySnapshot.docs) {
         final userData = user.data();
         final userId = user.id;
-        final userModel = UserModelUpdate.fromJson({...userData, 'id': userId});
+        var userModel = UserModelUpdate.fromJson({...userData, 'id': userId});
+
         users.add(userModel);
       }
       return users;
@@ -40,7 +59,7 @@ class UserDaoFireStore extends UserDao{
   @override
   Future<UserModelUpdate> getUserById(String id) async {
     try {
-      final querySnapshot = await _firestore.collection("Users").doc(id).get();
+      final querySnapshot = await _firestore.collection("NewUsersTest").doc(id).get();
       final userData = querySnapshot.data();
       final userId = querySnapshot.id;
 
@@ -65,10 +84,10 @@ class UserDaoFireStore extends UserDao{
   }
 
   @override
-  Future<List<UserModelUpdate>> getHousesByLikings(UserPreferencesDTO userPreferences) async {
+  Future<List<UserModelUpdate>> getUsersByPreferences(UserPreferencesDTO userPreferences) async {
     List<UserModelUpdate> users = [];
     try {
-      Query query= _firestore.collection("Users");
+      Query query= _firestore.collection("NewUsersTest");
       if (userPreferences.externalPeopleFrequency != null) {
         query = query.where("bring_people", isEqualTo: userPreferences.externalPeopleFrequency);
       }
@@ -90,6 +109,13 @@ class UserDaoFireStore extends UserDao{
       if (userPreferences.petPreference != null) {
         query = query.where("likes_pets", isEqualTo: userPreferences.petPreference);
       }
+      //if (userPreferences.petPreference != null) {
+        //query = query.where("city", isEqualTo: userPreferences.petPreference);
+      //}
+      //if (userPreferences.petPreference != null) {
+        //query = query.where("localizati", isEqualTo: userPreferences.petPreference);
+      //}
+
 
       final querySnapshot = await query.get();
 
@@ -117,7 +143,7 @@ class UserDaoFireStore extends UserDao{
     final double maxLon = longitude + radiusInDegrees;
 
     final QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('Users')
+        .collection('NewUsersTest')
         .where('lat', isGreaterThanOrEqualTo: minLat)
         .where('lat', isLessThanOrEqualTo: maxLat)
         .get();
@@ -140,7 +166,7 @@ class UserDaoFireStore extends UserDao{
     try {
       // Check if a user with the given username exists in Firestore
       final querySnapshot = await _firestore
-          .collection("Users")
+          .collection("NewUsersTest")
           .where("username", isEqualTo: username)
           .get();
 
@@ -167,5 +193,69 @@ class UserDaoFireStore extends UserDao{
       rethrow;
     }
   }
+
+  @override
+  Future<UserModelUpdate?> createUser(String username, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
+    try {
+      // To Do In base of city and locality get lat and long
+      String bringPeople = '';
+      int sleep = 0;
+      int phoneFin = int.parse(phone);
+      bool vape = false;
+      String personality = '';
+      bool likesPets = false;
+      String clean = '';
+      bool smoke = false;
+      double lat = 4.601932494220323;
+      double long = -74.0653645602065;
+      int star = 5;     
+
+      Map<String, dynamic> toJson() => {
+        'username': username, 
+        'password': password, 
+        'name': fullname, 
+        'age': age, 
+        'phone': phoneFin, 
+        'gender': genero, 
+        'bring_people': bringPeople, 
+        'sleep': sleep, 
+        'vape': vape, 
+        'personality': personality, 
+        'likes_pets': likesPets, 
+        'clean': clean, 
+        'smoke': smoke,
+        'lat': lat, 
+        'long': long, 
+        'stars': star
+      };
+
+      // Check if a user with the given username exists in Firestore
+      final querySnapshot = await _firestore
+          .collection("Users")
+          .where("username", isEqualTo: username)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        final docRef = await _firestore.collection("Users").add(toJson());
+        final docSnapshot = await docRef.get();
+        final userData = docSnapshot.data();
+        final userId = docSnapshot.id;
+        if (userData != null) {
+          final userModel = UserModelUpdate.fromJson({...userData, 'id': userId});
+          return userModel;
+        } else {
+          throw Exception("User not created");
+        }
+      } else {
+        throw Exception("User already exists");
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        throw Exception("Error creating user: $error");
+      }
+      rethrow;
+    }
+  }
+
   
 }

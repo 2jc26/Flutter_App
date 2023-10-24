@@ -4,8 +4,11 @@ import 'package:geocoding/geocoding.dart'; // Importa geocoding para convertir d
 
 import "package:giusseppe_flut/widgets/drawer.dart";
 import '../../models/user/query_likes_user.dart';
-import '../back_test.dart';
 import 'filter_users_other.dart';
+import 'package:csc_picker/csc_picker.dart';
+
+
+final List<String> country_list = <String>['One', 'Two', 'Three', 'Four'];
 
 class FilterUsersLocations extends StatefulWidget {
 
@@ -17,12 +20,9 @@ class FilterUsersLocations extends StatefulWidget {
 }
 
 class _FilterUsersLocationsState extends State<FilterUsersLocations> with RestorationMixin{
-
-
   RestorableTextEditingController cityController = RestorableTextEditingController();
   RestorableTextEditingController neighborhoodController = RestorableTextEditingController();
   LatLng markerLocation = LatLng(4.6097, -74.0817);
-
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class _FilterUsersLocationsState extends State<FilterUsersLocations> with Restor
         centerTitle: true,
       ),
       drawer: const CustomDrawer(),
-      body: BodyLocation(
+      body: SingleChildScrollView( child:BodyLocation(
         cityController: cityController,
         neighborhoodController: neighborhoodController,
         markerLocation: markerLocation,
@@ -54,6 +54,7 @@ class _FilterUsersLocationsState extends State<FilterUsersLocations> with Restor
           });
         },
       ),
+    )
     );
   }
 
@@ -66,15 +67,13 @@ class _FilterUsersLocationsState extends State<FilterUsersLocations> with Restor
     registerForRestoration(neighborhoodController, "neighborhood");
   }
 }
-
-class BodyLocation extends StatelessWidget {
+class BodyLocation extends StatefulWidget {
   final UserPreferencesDTO userPrefs = UserPreferencesDTO();
   final FilterUsersOthers filterUsersOthers;
   final RestorableTextEditingController cityController;
   final RestorableTextEditingController neighborhoodController;
   final LatLng markerLocation;
   final Function(LatLng) updateMarkerLocation;
-
   BodyLocation({
     super.key,
     required this.cityController,
@@ -83,88 +82,105 @@ class BodyLocation extends StatelessWidget {
     required this.updateMarkerLocation,
     FilterUsersOthers? filterUsersOthers,
   }) : filterUsersOthers = filterUsersOthers ?? FilterUsersOthers(userPreferences: UserPreferencesDTO());
+  @override
+  State<BodyLocation> createState() => _BodyLocation();
+
+}
+
+class _BodyLocation extends State<BodyLocation> {
+  String countryValue = "";
+  String stateValue = "";
+  String cityValue = "";
+  String address = "";
+  String dropdownValue = country_list.first;
+  String localidadValue = "Seleccione una opción";
+  String ciudadValue = "Seleccione una opción";
 
   @override
   Widget build(BuildContext context) {
     return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              RoundedButton(text: 'Location', onPressed: () {}),
-              const SizedBox(width: 10),
-              RoundedButton(text: 'Information', onPressed: () {}),
-            ],
-          ),
-          const SizedBox(height: 16),
-          CustomTextField(
-            hintText: 'City/Municipality',
-            controller: cityController.value,
-            onTextChanged: (text) async {
-              final locations = await GeocodingPlatform.instance.locationFromAddress(text);
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            RoundedButton(text: 'Location', onPressed: () {}),
+            const SizedBox(width: 10),
+            RoundedButton(text: 'Information', onPressed: () {}),
+          ],
+        ),
+        const SizedBox(height: 20),
+        CustomListField(
+          hintText: 'Selecciona una opción',
+          selectedValue: ciudadValue,
+          items: ["Seleccione una opción",'Bogotá'],
+          onItemSelected: (String? value) {
+            setState(() =>ciudadValue =value!);
+          },
+        ),
+        const SizedBox(height: 20),
+        CustomListField(
+          hintText: 'Selecciona una opción',
+          selectedValue: localidadValue,
+          items: const ["Seleccione una opción","Usaquén", "Chapinero", "Santa Fe", "San Cristóbal", "Usme",
+            "Tunjuelito", "Bosa", "Kennedy", "Fontibón", "Engativá", "Suba",
+            "Barrios Unidos", "Teusaquillo", "Los Mártires", "Antonio Nariño",
+            "Puente Aranda", "La Candelaria", "Rafael Uribe Uribe",
+            "Ciudad Bolívar", "Sumapaz"],
+          onItemSelected: (String? value) async {
+            setState(() =>localidadValue =value!);
+            if (localidadValue!="Seleccione una opción" && ciudadValue!="Seleccione una opción"){
+              String query= "$localidadValue , $ciudadValue";
+              final locations = await GeocodingPlatform.instance.locationFromAddress(query);
               if (locations.isNotEmpty) {
                 final newLocation = LatLng(locations[0].latitude, locations[0].longitude);
-                updateMarkerLocation(newLocation);
+                widget.updateMarkerLocation(newLocation);
               }
-            },
-          ),
-          const SizedBox(height: 20),
-          CustomTextField(
-            hintText: 'Neighborhood',
-            controller: neighborhoodController.value,
-            onTextChanged: (text) async {
-              final locations = await GeocodingPlatform.instance.locationFromAddress(text);
-              if (locations.isNotEmpty) {
-                final newLocation = LatLng(locations[0].latitude, locations[0].longitude);
-                updateMarkerLocation(newLocation);
-              }
-            },
-          ),
-          const SizedBox(height: 16),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16.0),
-            child: SizedBox(
-              height: 400,
-              width: 350,
-              child: GoogleMap(
-                mapType: MapType.terrain,
-                initialCameraPosition: CameraPosition(
-                  target: markerLocation,
-                  zoom: 11,
-                ),
-                markers: {
-                  Marker(
-                    markerId: MarkerId('selectedLocation'),
-                    position: markerLocation,
-                  ),
-                },
+            }
+          },
+        ),
+        const SizedBox(height: 16),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(16.0),
+          child: SizedBox(
+            height: 400,
+            width: 350,
+            child: GoogleMap(
+              mapType: MapType.terrain,
+              initialCameraPosition: CameraPosition(
+                target: widget.markerLocation,
+                zoom: 11,
               ),
+              markers: {
+                Marker(
+                  markerId: MarkerId('selectedLocation'),
+                  position: widget.markerLocation,
+                ),
+              },
             ),
           ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              String city=cityController.value.text ;
-              String neighborhood = neighborhoodController.value.text;
-              if (city!=''){
-                userPrefs.city=city;
-              }
-              if (neighborhood!=''){
-                userPrefs.neighborhood=neighborhood;
-              }
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => filterUsersOthers,
-                ),
-              );
-            },
-            child: Text('Continuar'),
-          ),
-        ],
-      );
+        ),
+        const SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: () {
+            if (ciudadValue!="Seleccione una opción"){
+              widget.userPrefs.city=ciudadValue;
+            }
+            if (localidadValue!="Seleccione una opción"){
+              widget.userPrefs.neighborhood=localidadValue;
+            }
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => widget.filterUsersOthers,
+              ),
+            );
+          },
+          child: Text('Continuar'),
+        ),
+      ],
+    );
   }
 }
 
@@ -196,6 +212,80 @@ class CustomTextField extends StatelessWidget {
             borderSide: BorderSide.none,
           ),
         ),
+      ),
+    );
+  }
+}
+class SelectionList extends StatefulWidget {
+  final String hintText;
+  String selectedValue; // Removed 'final'
+  final List<String> items;
+  final Function(String?) onItemSelected;
+
+  SelectionList({
+    Key? key,
+    required this.hintText,
+    required this.selectedValue,
+    required this.items,
+    required this.onItemSelected,
+  }) : super(key: key);
+
+  @override
+  State<SelectionList> createState() => _SelectionList();
+}
+
+class _SelectionList extends State<SelectionList> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+      child: DropdownButton<String>(
+        value: widget.selectedValue,
+        items: widget.items.map((String item) {
+          return DropdownMenuItem<String>(
+            value: item,
+            child: Text(item),
+          );
+        }).toList(),
+        onChanged: widget.onItemSelected,
+        hint: Text(widget.hintText),
+        isExpanded: true,
+      ),
+    );
+  }
+}
+
+
+class CustomListField extends StatelessWidget {
+  final String hintText;
+  final String selectedValue;
+  final List<String> items;
+  final Function(String?) onItemSelected;
+
+  const CustomListField({
+    Key? key,
+    required this.hintText,
+    required this.selectedValue,
+    required this.items,
+    required this.onItemSelected,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+      child: DropdownButton<String>(
+        value: selectedValue,
+        items: items.map((String item) {
+          return DropdownMenuItem<String>(
+            value: item,
+            child: Text(item),
+          );
+        }).toList(),
+        onChanged: onItemSelected,
+        hint: Text(hintText),
+        isExpanded: true,
       ),
     );
   }

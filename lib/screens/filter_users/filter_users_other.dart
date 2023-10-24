@@ -73,7 +73,7 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ExclusiveCheckboxGroup(
+                  CheckboxGroup(
                     labels: const ['Yes', 'No'],
                     controller: petController.value,
                   ),
@@ -91,7 +91,7 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ExclusiveCheckboxGroup(
+                  CheckboxGroup(
                     labels: const ['Introvert', 'Extrovert'],
                     controller: introvertedController.value,
                   ),
@@ -119,7 +119,7 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ExclusiveCheckboxGroup(
+                  CheckboxGroup(
                     labels: const ['Yes', 'No'],
                     controller: vapeController.value,
                   ),
@@ -137,7 +137,7 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ExclusiveCheckboxGroup(
+                  CheckboxGroup(
                     labels: ['Yes', 'No'],
                     controller: smokeController.value,
                   ),
@@ -155,7 +155,7 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ExclusiveCheckboxGroup(
+                  CheckboxGroup(
                     labels: ['Yes', 'No'],
                     controller: workFromHomeController.value,
                   ),
@@ -263,40 +263,49 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
   }
 }
 
-class ExclusiveCheckboxGroup extends StatefulWidget {
+class CheckboxGroup extends StatefulWidget {
   final List<String> labels;
   final TextEditingController controller;
 
-  ExclusiveCheckboxGroup({
+  CheckboxGroup({
     required this.labels,
     required this.controller,
   });
 
   @override
-  _ExclusiveCheckboxGroupState createState() =>
-      _ExclusiveCheckboxGroupState();
+  _CheckboxGroupState createState() =>
+      _CheckboxGroupState();
 }
 
-class _ExclusiveCheckboxGroupState extends State<ExclusiveCheckboxGroup> {
+class _CheckboxGroupState extends State<CheckboxGroup> {
   String? _selectedLabel;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: widget.labels
-          .map(
-            (label) => ExclusiveCheckbox(
-          label: label,
-          isSelected: label == _selectedLabel,
-          onSelect: () {
-            setState(() {
-              _selectedLabel = label;
-              widget.controller.text = label;
-            });
-          },
+    return Column(
+      children: [
+        Row(
+          children: widget.labels
+              .map(
+                (label) => ExclusiveCheckbox(
+              label: label,
+              isSelected: label == _selectedLabel,
+              onSelect: () {
+                setState(() {
+                  if (label == _selectedLabel) {
+                    _selectedLabel = null;
+                    widget.controller.text = '';
+                  } else {
+                    _selectedLabel = label;
+                    widget.controller.text = label;
+                  }
+                });
+              },
+            ),
+          )
+              .toList(),
         ),
-      )
-          .toList(),
+      ],
     );
   }
 }
@@ -371,9 +380,9 @@ class CleaningFrequencySlider extends StatefulWidget {
 }
 
 class _CleaningFrequencySliderState extends State<CleaningFrequencySlider> {
-  int _value = 0; // Valor inicial
+  int _value = 0;
 
-  List<String> frequencyTitles = ['Once a week', 'Twice a week', 'Three times a week'];
+  List<String> frequencyTitles = ['No aplica','Once a week', 'Twice a week', 'Three times a week'];
 
   @override
   Widget build(BuildContext context) {
@@ -411,7 +420,7 @@ class SleepHourFrequencySlider extends StatefulWidget {
 }
 
 class _SleepHourFrequencySlider extends State<SleepHourFrequencySlider> {
-  int _value = 22; // Valor inicial
+  int _value = 0; // Valor inicial
 
   @override
   Widget build(BuildContext context) {
@@ -427,13 +436,17 @@ class _SleepHourFrequencySlider extends State<SleepHourFrequencySlider> {
         onChanged: (newValue) {
           setState(() {
             _value = newValue.round();
-            widget.controller.text = '$_value:00';
+            if (_value == 0) {
+              widget.controller.text = 'No aplica';
+            } else {
+              widget.controller.text = '$_value:00';
+            }
           });
         },
-        min: 1,
+        min: 0,
         max: 24,
-        divisions: 23,
-        label: '$_value:00',
+        divisions: 24,
+        label: _value == 0 ? 'No aplica' : '$_value:00',
       ),
     );
   }
@@ -449,7 +462,7 @@ class FrequencyOfExternalPeople extends StatefulWidget {
 }
 
 class _FrequencyOfExternalPeople extends State<FrequencyOfExternalPeople> {
-  int _value = 1;
+  int _value = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -465,17 +478,21 @@ class _FrequencyOfExternalPeople extends State<FrequencyOfExternalPeople> {
         onChanged: (newValue) {
           setState(() {
             _value = newValue.round();
-            widget.controller.text = _value == 1
-                ? 'Once a week'
-                : _value == 2
-                ? 'Twice a week'
-                : 'Three times a week';
+            if (_value == 0) {
+              widget.controller.text = 'No aplica';
+            } else {
+              widget.controller.text = _value == 1
+                  ? 'Once a week'
+                  : _value == 2
+                  ? 'Twice a week'
+                  : 'Three times a week';
+            }
           });
         },
-        min: 1,
+        min: 0,
         max: 3,
-        divisions: 2,
-        label: _value == 1
+        divisions: 3,
+        label: _value == 0 ? 'No aplica' : _value == 1
             ? 'Once a week'
             : _value == 2
             ? 'Twice a week'

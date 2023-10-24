@@ -25,12 +25,13 @@ class _LoginState extends State<Login> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: BlocProvider(
-      create: (context) => LoginBloc(
-        authRepo: context.read<AuthRepository>(),
-        authCubit: context.read<AuthCubit>(),
+        create: (context) => LoginBloc(
+          authRepo: context.read<AuthRepository>(),
+          authCubit: context.read<AuthCubit>(),
         ),
-      child: _page(),
-      )) // Call the _page() method to display the icon
+        child: _page(),
+        )
+      ) // Call the _page() method to display the icon
     );
   }
 

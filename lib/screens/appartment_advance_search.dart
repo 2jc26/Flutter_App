@@ -1,10 +1,8 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_search_presenter.dart';
-import 'package:giusseppe_flut/screens/roomie_detail.dart';
+import 'package:giusseppe_flut/screens/house_list.dart';
 import 'package:giusseppe_flut/widgets/drawer.dart';
 
 class AppartmentAdvanceSearch extends StatefulWidget {
@@ -30,10 +28,10 @@ class AppartmentAdvanceSearch extends StatefulWidget {
       _AppartmentAdvanceSearchState();
 }
 
-enum PropertyType { house, apartment }
+enum PropertyType { House, Apartment }
 
 class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
-  PropertyType _selectedPropertyType = PropertyType.house;
+  PropertyType _selectedPropertyType = PropertyType.House;
   TextEditingController cityController = TextEditingController();
   TextEditingController neighborhoodController = TextEditingController();
   TextEditingController stratumController = TextEditingController();
@@ -112,7 +110,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                             InkWell(
                               onTap: () {
                                 setState(() {
-                                  _selectedPropertyType = PropertyType.house;
+                                  _selectedPropertyType = PropertyType.House;
                                 });
                               },
                               child: Container(
@@ -124,7 +122,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                                     width: 2.0, // Border width
                                   ),
                                   color: _selectedPropertyType ==
-                                          PropertyType.house
+                                          PropertyType.House
                                       ? const Color(
                                           0xFF2c595b) // Background color when selected
                                       : Colors
@@ -134,7 +132,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                                 height: 24.0, // Adjust the size as needed
                                 child: Center(
                                   child: _selectedPropertyType ==
-                                          PropertyType.house
+                                          PropertyType.House
                                       ? const Icon(
                                           Icons.check,
                                           size: 16.0,
@@ -162,7 +160,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                               onTap: () {
                                 setState(() {
                                   _selectedPropertyType =
-                                      PropertyType.apartment;
+                                      PropertyType.Apartment;
                                 });
                               },
                               child: Container(
@@ -174,7 +172,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                                     width: 2.0, // Border width
                                   ),
                                   color: _selectedPropertyType ==
-                                          PropertyType.apartment
+                                          PropertyType.Apartment
                                       ? const Color(
                                           0xFF2c595b) // Background color when selected
                                       : Colors
@@ -184,7 +182,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                                 height: 24.0, // Adjust the size as needed
                                 child: Center(
                                   child: _selectedPropertyType ==
-                                          PropertyType.apartment
+                                          PropertyType.Apartment
                                       ? const Icon(
                                           Icons.check,
                                           size: 16.0,
@@ -418,13 +416,14 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
           city: cityController.text,
           neighborhood: neighborhoodController.text,
           address: widget.direction,
-          housingType: _selectedPropertyType.toString(),
+          housingType: _selectedPropertyType.toString().replaceAll("PropertyType.", ""),
           rentPrice: widget.obPrice,
-          stratum: int.parse(stratumController.text),
-          area: double.parse(areaController.text),
-          apartmentFloor: int.parse(floorNumberController.text),
-          roomsNumber: int.parse(roomsNumberontroller.text),
-          bathroomsNumber: int.parse(bathroomAreaController.text),
+
+          stratum: stratumController.text.isEmpty ? 0 : int.parse(stratumController.text),
+          area: areaController.text.isEmpty ? 0.0 : double.parse(areaController.text),
+          apartmentFloor: floorNumberController.text.isEmpty ? 0 : int.parse(floorNumberController.text),
+          roomsNumber: roomsNumberontroller.text.isEmpty ? 0 : int.parse(roomsNumberontroller.text),
+          bathroomsNumber: bathroomAreaController.text.isEmpty ? 0 : int.parse(bathroomAreaController.text),
           laundryArea: _isLaundrySelected,
           internet: _isInternetSelected,
           tv: _isTvSelected,
@@ -437,9 +436,11 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
 
         // HouseSearchPresenter houseSearchPresenter = HouseSearchPresenter(widget.userId);
         HouseSearchPresenter houseSearchPresenter = HouseSearchPresenter();
-        houseSearchPresenter.updateHouseSearchingById(widget.userId,filter);
+        // houseSearchPresenter.updateHouseSearchingById(widget.userId,filter);
         houseSearchPresenter.updateHouseFilters(filter);
-
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => HouseList(userId: widget.userId, houseFilters: filter),
+        ));
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(

@@ -1,3 +1,8 @@
+import 'dart:typed_data';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../dao/user/dao_user_entity.dart';
 import '../models/user/query_likes_user.dart';
 import '../models/user/user_model_update.dart';
 import '../repository/user_repository_prueba.dart';
@@ -10,8 +15,7 @@ class UserListPresenter {
   late UserListView _backView= UserListView();
   UserPreferencesDTO? userPreferences;
 
-  UserListPresenter({this.userPreferences}) {
-  }
+  UserListPresenter({this.userPreferences});
 
   void getAllUsers() async {
     try {
@@ -30,6 +34,9 @@ class UserListPresenter {
     } catch (error) {
       rethrow;
     }
+  }
+  Future<Uint8List?> getImage(String image) async {
+    return userRepository.getImage(image);
   }
 
   set backView(UserListView value) {

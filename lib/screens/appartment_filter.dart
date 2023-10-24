@@ -204,17 +204,17 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                 ],
               ),
             ),
-            Container(
-              margin: const EdgeInsets.all(20.0),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _searchButton(),
-                  ],
-                ),
-              ),
-            )
+            // Container(
+            //   margin: const EdgeInsets.all(20.0),
+            //   child: Center(
+            //     child: Column(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         _searchButton(),
+            //       ],
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),
