@@ -1,11 +1,12 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:giusseppe_flut/models/houseLiking/house_liking_model_update.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 
 import '../../models/house/house_model_update.dart';
-
+final storageRef = FirebaseStorage.instance.ref();
 abstract class HouseDao {
 
   Future<List<HouseModelUpdate>> getAllHouses();
@@ -101,10 +102,23 @@ class HouseDaoFireStore extends HouseDao {
     }
   }
 
+  Future<Uint8List?> getImage(String image) async {
+    final ref = storageRef.child(image);
+    try {
+      const oneMegabyte = 1024 * 1024 * 10;
+      final Uint8List? data = await ref.getData(oneMegabyte);
+      return data;
+      // Data for "images/island.jpg" is returned, use this as needed.
+    } on FirebaseException catch (e) {
+      // Handle any errors.
+      throw Exception("No data found for image: $image");
+    }
+  }
+
   @override
   Future<List<HouseModelUpdate>> getHousesByFilters(HouseSearchingModelUpdate? filters) async {
     try {
-      print(filters!.toJson());
+      
       List<HouseModelUpdate> allHouses = [];
 
       if (filters == null) {
