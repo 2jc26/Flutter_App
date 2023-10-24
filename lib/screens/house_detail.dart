@@ -256,7 +256,7 @@ class LocationCard extends StatelessWidget {
               mapType: MapType.hybrid,
               initialCameraPosition: CameraPosition(
                 target: LatLng(_house!.latitude, _house!.longitude), // Cambia esto a las coordenadas deseadas
-                zoom: 18,
+                zoom: 14,
               ),
               markers: {newMarker},
             )
