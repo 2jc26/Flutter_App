@@ -122,16 +122,77 @@ class HouseDaoFireStore extends HouseDao {
 
       List<HouseModelUpdate> filteredHouses = allHouses.where((house) {
         int matchingAttributes = 0;
+        int consideringAttributes = 8;
 
-        if (house.city == filters.city) matchingAttributes++;
-        if (house.neighborhood == filters.neighborhood) matchingAttributes++;
-        if (house.housingType == filters.housingType) matchingAttributes++;
-        if (house.rentPrice == filters.rentPrice) matchingAttributes++;
-        if (house.stratum == filters.stratum) matchingAttributes++;
-        if (house.area == filters.area) matchingAttributes++;
-        if (house.apartmentFloor == filters.apartmentFloor) matchingAttributes++;
-        if (house.roomsNumber == filters.roomsNumber) matchingAttributes++;
-        if (house.bathroomsNumber == filters.bathroomsNumber) matchingAttributes++;
+        double priceRange = 200000.0;
+        double areaRange = 20.0;
+        int floorRange = 3;
+        int stratumRange = 1;
+        int roomsNumberRange = 1;
+        int bathroomsNumberRange = 2;
+
+        if (filters.city != "") {
+          consideringAttributes++;
+          if (house.city == filters.city) {
+            matchingAttributes++;
+          }
+        }
+        if (filters.neighborhood != "") {
+          consideringAttributes++;
+          if (house.neighborhood == filters.neighborhood) {
+            matchingAttributes++;
+          }
+        }
+        if (filters.address != "") {
+          consideringAttributes++;
+          if (house.address == filters.address) {
+            matchingAttributes++;
+          }
+        }
+        if (filters.housingType != "") {
+          consideringAttributes++;
+          if (house.housingType == filters.housingType) {
+            matchingAttributes++;
+          }
+        }
+
+        if (filters.rentPrice != "") {
+          consideringAttributes++;
+          if ((int.parse(house.rentPrice) - int.parse(filters.rentPrice)).abs() <= priceRange) {
+            matchingAttributes++;
+          }
+        }
+        if (filters.stratum != 0) {
+          consideringAttributes++;
+          if ((house.stratum - filters.stratum).abs() <= stratumRange) {
+            matchingAttributes++;
+          }
+        }
+        if (filters.area != 0) {
+          consideringAttributes++;
+          if ((house.area - filters.area).abs() <= areaRange) {
+            matchingAttributes++;
+          }
+        }
+        if (filters.apartmentFloor != 0) {
+          consideringAttributes++;
+          if ((house.apartmentFloor - filters.apartmentFloor).abs() <= floorRange) {
+            matchingAttributes++;
+          }
+        }
+        if (filters.roomsNumber != 0) {
+          consideringAttributes++;
+          if ((house.roomsNumber - filters.roomsNumber).abs() <= roomsNumberRange) {
+            matchingAttributes++;
+          }
+        }
+        if (filters.bathroomsNumber != 0) {
+          consideringAttributes++;
+          if ((house.bathroomsNumber - filters.bathroomsNumber).abs() <= bathroomsNumberRange) {
+            matchingAttributes++;
+          }
+        }
+        
         if (house.laundryArea == filters.laundryArea) matchingAttributes++;
         if (house.internet == filters.internet) matchingAttributes++;
         if (house.tv == filters.tv) matchingAttributes++;
@@ -140,8 +201,10 @@ class HouseDaoFireStore extends HouseDao {
         if (house.gymnasium == filters.gymnasium) matchingAttributes++;
         if (house.reception == filters.reception) matchingAttributes++;
         if (house.supermarkets == filters.supermarkets) matchingAttributes++;
-        return matchingAttributes >= 14;
+        
+        return matchingAttributes >= (consideringAttributes*0.7).round();
       }).toList();
+
 
       return filteredHouses;
     } catch (error) {
