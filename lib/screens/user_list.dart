@@ -6,6 +6,7 @@ import '../models/user/user_model_update.dart';
 import '../presenter/user_presenter.dart';
 import '../widgets/information_card.dart';
 import '../widgets/drawer.dart';
+import 'InformationCardUser.dart';
 
 class UserList extends StatefulWidget {
   UserPreferencesDTO? userPreferences;
@@ -14,6 +15,7 @@ class UserList extends StatefulWidget {
 
   @override
   _UserListState createState() => _UserListState();
+
 }
 
 class _UserListState extends State<UserList> implements UserListView{
@@ -75,7 +77,7 @@ class _UserListState extends State<UserList> implements UserListView{
                   backgroundColor: Color.fromARGB(255, 255, 255, 255),
                 ),
                 child: const Icon(
-                  Icons.filter_alt_outlined, 
+                  Icons.filter_alt_outlined,
                   size: 36.0,
                   color: Colors.black,
                 ),
@@ -86,8 +88,8 @@ class _UserListState extends State<UserList> implements UserListView{
             child: ListView.builder(
               itemCount: _userList?.length,
               itemBuilder: ((context, index) {
-                return InformationCard(
-                  path: 'assets/images/house1.jpg',
+                return InformationCardUser(
+                  getImageURL: () => userListPresenter.getImage(_userList![index].image), // Pasa una función que obtiene la imagen.
                   stars: _userList![index].stars,
                   text: _userList![index].name,
                 );

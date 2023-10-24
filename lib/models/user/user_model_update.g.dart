@@ -8,6 +8,9 @@ part of 'user_model_update.dart';
 
 UserModelUpdate _$UserModelUpdateFromJson(Map<String, dynamic> json) =>
     UserModelUpdate(
+      locality: json['locality'] as String,
+      city: json['city'] as String,
+      image: json['image'] as String,
       username: json['username'] as String,
       password: json['password'] as String,
       name: json['name'] as String,
@@ -29,6 +32,7 @@ UserModelUpdate _$UserModelUpdateFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$UserModelUpdateToJson(UserModelUpdate instance) =>
     <String, dynamic>{
+      'image': instance.image,
       'username': instance.username,
       'password': instance.password,
       'name': instance.name,
@@ -46,4 +50,6 @@ Map<String, dynamic> _$UserModelUpdateToJson(UserModelUpdate instance) =>
       'lat': instance.lat,
       'long': instance.long,
       'stars': instance.stars,
+      'city': instance.city,
+      'locality': instance.locality,
     };

@@ -130,14 +130,15 @@ class _BodyLocation extends State<BodyLocation> {
             "Ciudad Bolívar", "Sumapaz"],
           onItemSelected: (String? value) async {
             setState(() =>localidadValue =value!);
-            String query= "$localidadValue , $ciudadValue";
-            final locations = await GeocodingPlatform.instance.locationFromAddress(query);
-            if (locations.isNotEmpty) {
-              final newLocation = LatLng(locations[0].latitude, locations[0].longitude);
-              widget.updateMarkerLocation(newLocation);
+            if (localidadValue!="Seleccione una opción" && ciudadValue!="Seleccione una opción"){
+              String query= "$localidadValue , $ciudadValue";
+              final locations = await GeocodingPlatform.instance.locationFromAddress(query);
+              if (locations.isNotEmpty) {
+                final newLocation = LatLng(locations[0].latitude, locations[0].longitude);
+                widget.updateMarkerLocation(newLocation);
+              }
             }
           },
-
         ),
         const SizedBox(height: 16),
         ClipRRect(
