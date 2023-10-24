@@ -16,15 +16,13 @@ class _MapScreenState extends State<MapScreen> {
   LatLng initialLocation = const LatLng(37.422131, -122.084801);
   String imageName = '0.jpg';
 
-  Future<Uint8List?> getImageURL(String imageName) async {
+  Future<Uint8List?> getImage(String imageName) async {
     final ref = storageRef.child('images_profile/Female/$imageName');
     try {
       const oneMegabyte = 1024 * 1024;
       final Uint8List? data = await ref.getData(oneMegabyte);
       return data;
-      // Data for "images/island.jpg" is returned, use this as needed.
     } on FirebaseException catch (e) {
-      // Handle any errors.
     }
   }
 
@@ -62,7 +60,7 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
           FutureBuilder<Uint8List?>(
-            future: getImageURL(imageName),
+            future: getImage(imageName),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
