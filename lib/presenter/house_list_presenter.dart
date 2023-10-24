@@ -1,3 +1,4 @@
+import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/repository/search_repository.dart';
 
 import '../models/house/house_model_update.dart';
@@ -12,10 +13,12 @@ class HouseListPresenter {
   List<HouseModelUpdate> housesLikingList = [];
   List<HouseModelUpdate> housesSearchingList = [];
   late HouseListView _backView= HouseListView();
-  HouseListPresenter() {
+  HouseListPresenter(String? userId, HouseSearchingModelUpdate? houseFilters) {
     getAllHouses();
-    getLikingHouses();
-    getSearchingHouses();
+    getLikingHouses(userId);
+    if(houseFilters != null) {
+      getFilteredHouses(houseFilters);
+    }
   }
 
   void getAllHouses() async {
@@ -30,9 +33,9 @@ class HouseListPresenter {
     }
   }
 
-  void getLikingHouses() async {
+  void getLikingHouses(String? userId) async {
     try {
-      final houses = await houseRepository.getSimilarLikingHouses("3rzGsju5Bznuyp7t1tla");
+      final houses = await houseRepository.getSimilarLikingHouses(userId!);
       if (houses.isNotEmpty) {
         housesLikingList = houses;
         _backView.refreshHouseListView(housesList,housesLikingList,housesSearchingList);
@@ -42,14 +45,11 @@ class HouseListPresenter {
     }
   }
 
-  void getSearchingHouses() async {
+  void getFilteredHouses(HouseSearchingModelUpdate? houseFilters) async {
     try {
-      final houses = await searchRepository.getSimilarSearchingHouses("3rzGsju5Bznuyp7t1tla");
-      print(houses);
-      if (houses.isNotEmpty) {
-        housesSearchingList = houses;
-        _backView.refreshHouseListView(housesList,housesLikingList,housesSearchingList);
-      }
+      final houses = await searchRepository.getSimilarFilteredHouses(houseFilters!);
+      housesSearchingList = houses;
+      _backView.refreshHouseListView(housesList,housesLikingList,housesSearchingList);
     } catch (error) {
       rethrow;
     }

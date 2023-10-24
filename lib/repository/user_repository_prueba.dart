@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:giusseppe_flut/models/user/query_likes_user.dart';
 
 import '../dao/user/dao_user_entity.dart';
@@ -15,9 +17,21 @@ class UserRepository {
     }
   }
 
+  Future<Uint8List?> getImage(String image) async {
+    return userDao.getImage(image);
+  }
+
   Future<UserModelUpdate?> validateUsernameAndPassword(String username, String password) async {
     try {
       return await userDao.validateUsernameAndPassword(username, password);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<UserModelUpdate?> createUser(String username, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
+    try {
+      return await userDao.createUser(username, password, fullname, age, phone, genero, city, locality);
     } catch (error) {
       rethrow;
     }
@@ -32,7 +46,7 @@ class UserRepository {
   }
   Future<List<UserModelUpdate>> getAllUsersByPreferences(UserPreferencesDTO userPreferences) async {
     try {
-      return await userDao.getHousesByLikings(userPreferences);
+      return await userDao.getUsersByPreferences(userPreferences);
     } catch (error) {
       rethrow;
     }

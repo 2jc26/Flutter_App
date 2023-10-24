@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/information_card.dart';
-import '../widgets/drawer.dart';
 
 class RatingRectangle extends StatelessWidget {
   final String imageUrl;

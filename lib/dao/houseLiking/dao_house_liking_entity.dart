@@ -21,8 +21,12 @@ class HouseLikingDaoFireStore extends HouseLikingDao {
     HouseLikingModelUpdate house;
     try {
       final querySnapshot = await _firestore.collection("HouseLiking").doc(id).get();
-      house = HouseLikingModelUpdate.fromJson(querySnapshot.data()!);
-      return house;
+      if (querySnapshot.data() == null) {
+        return null;
+      } else {
+        house = HouseLikingModelUpdate.fromJson(querySnapshot.data()!);
+        return house;
+      }
     } catch (error) {
       if (kDebugMode) {
         print("Error fetching house liking: $error");
