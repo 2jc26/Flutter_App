@@ -215,13 +215,13 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                     const SizedBox(height: 20),
                     _inputField("Stratum", stratumController, isNumber: true),
                     const SizedBox(height: 20),
-                    _inputField("Area", areaController, isNumber: true),
+                    _inputField("Area", areaController, isNumber: true, allowDecimal: true),
                     const SizedBox(height: 20),
                     _inputField("Floor Number", floorNumberController, isNumber: true),
                     const SizedBox(height: 20),
                     _inputField("Rooms Number", roomsNumberontroller, isNumber: true),
                     const SizedBox(height: 20),
-                    _inputField("Room Area", roomAreaController, isNumber: true),
+                    _inputField("Room Area", roomAreaController, isNumber: true, allowDecimal: true),
                     const SizedBox(height: 20),
                     _inputField("Bathrooms Area", bathroomAreaController, isNumber: true),
                   ],
@@ -329,43 +329,40 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
   }
 
   Widget _inputField(String hintText, TextEditingController controller,
-      {isNumber = false}) {
+    {bool isNumber = false, bool allowDecimal = false}) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
       borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
     );
+
+    TextInputType keyboardType = TextInputType.text;
+    List<TextInputFormatter> inputFormatters = [];
+
     if (isNumber) {
-      return TextField(
-        keyboardType: TextInputType.number,
-        inputFormatters: <TextInputFormatter>[
-          FilteringTextInputFormatter.digitsOnly,
-        ],
-        style: const TextStyle(color: Color(0XFF2C595B)),
-        controller: controller,
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: const TextStyle(color: Color(0xFF2C595B)),
-          enabledBorder: border,
-          focusedBorder: border,
-          filled: true,
-          fillColor: Colors.white,
-        )
-      );
-    } else {
-      return TextField(
-        style: const TextStyle(color: Color(0XFF2C595B)),
-        controller: controller,
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: const TextStyle(color: Color(0xFF2C595B)),
-          enabledBorder: border,
-          focusedBorder: border,
-          filled: true,
-          fillColor: Colors.white,
-        ),
-      );
+      keyboardType = TextInputType.number;
+      inputFormatters.add(FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')));
     }
+
+    if (allowDecimal) {
+      inputFormatters.add(FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')));
+    }
+
+    return TextField(
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
+      style: const TextStyle(color: Color(0XFF2C595B)),
+      controller: controller,
+      decoration: InputDecoration(
+        hintText: hintText,
+        hintStyle: const TextStyle(color: Color(0xFF2C595B)),
+        enabledBorder: border,
+        focusedBorder: border,
+        filled: true,
+        fillColor: Colors.white,
+      ),
+    );
   }
+  
 
   Widget createCustomCheckbox(String label, bool isSelected, Function onTap) {
     return Row(
