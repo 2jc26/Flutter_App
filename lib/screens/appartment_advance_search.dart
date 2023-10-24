@@ -436,7 +436,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
 
         // HouseSearchPresenter houseSearchPresenter = HouseSearchPresenter(widget.userId);
         HouseSearchPresenter houseSearchPresenter = HouseSearchPresenter();
-        houseSearchPresenter.updateHouseSearchingById(widget.userId,filter);
+        // houseSearchPresenter.updateHouseSearchingById(widget.userId,filter);
         houseSearchPresenter.updateHouseFilters(filter);
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => HouseList(userId: widget.userId, houseFilters: filter),

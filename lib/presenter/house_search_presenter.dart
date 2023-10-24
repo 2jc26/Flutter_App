@@ -11,13 +11,13 @@ class HouseSearchPresenter {
 
   HouseSearchingModelUpdate? houseSearching;
 
-  void updateHouseSearchingById(String id, HouseSearchingModelUpdate searchFilters) async {
-    try {
-      await searchRepository.updateHouseSearchingById(id, searchFilters);
-    } catch (error) {
-      rethrow;
-    }
-  }
+  // void updateHouseSearchingById(String id, HouseSearchingModelUpdate searchFilters) async {
+  //   try {
+  //     await searchRepository.updateHouseSearchingById(id, searchFilters);
+  //   } catch (error) {
+  //     rethrow;
+  //   }
+  // }
 
   Future<void> updateHouseFilters(HouseSearchingModelUpdate searchFilters) async {
     try {
