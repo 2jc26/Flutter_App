@@ -29,6 +29,14 @@ class UserRepository {
     }
   }
 
+  Future<UserModelUpdate?> createUser(String username, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
+    try {
+      return await userDao.createUser(username, password, fullname, age, phone, genero, city, locality);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<UserModelUpdate?> getUserById(String id) async {
     try {
       return await userDao.getUserById(id);
