@@ -28,10 +28,10 @@ class AppartmentAdvanceSearch extends StatefulWidget {
       _AppartmentAdvanceSearchState();
 }
 
-enum PropertyType { house, apartment }
+enum PropertyType { House, Apartment }
 
 class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
-  PropertyType _selectedPropertyType = PropertyType.house;
+  PropertyType _selectedPropertyType = PropertyType.House;
   TextEditingController cityController = TextEditingController();
   TextEditingController neighborhoodController = TextEditingController();
   TextEditingController stratumController = TextEditingController();
@@ -110,7 +110,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                             InkWell(
                               onTap: () {
                                 setState(() {
-                                  _selectedPropertyType = PropertyType.house;
+                                  _selectedPropertyType = PropertyType.House;
                                 });
                               },
                               child: Container(
@@ -122,7 +122,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                                     width: 2.0, // Border width
                                   ),
                                   color: _selectedPropertyType ==
-                                          PropertyType.house
+                                          PropertyType.House
                                       ? const Color(
                                           0xFF2c595b) // Background color when selected
                                       : Colors
@@ -132,7 +132,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                                 height: 24.0, // Adjust the size as needed
                                 child: Center(
                                   child: _selectedPropertyType ==
-                                          PropertyType.house
+                                          PropertyType.House
                                       ? const Icon(
                                           Icons.check,
                                           size: 16.0,
@@ -160,7 +160,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                               onTap: () {
                                 setState(() {
                                   _selectedPropertyType =
-                                      PropertyType.apartment;
+                                      PropertyType.Apartment;
                                 });
                               },
                               child: Container(
@@ -172,7 +172,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                                     width: 2.0, // Border width
                                   ),
                                   color: _selectedPropertyType ==
-                                          PropertyType.apartment
+                                          PropertyType.Apartment
                                       ? const Color(
                                           0xFF2c595b) // Background color when selected
                                       : Colors
@@ -182,7 +182,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                                 height: 24.0, // Adjust the size as needed
                                 child: Center(
                                   child: _selectedPropertyType ==
-                                          PropertyType.apartment
+                                          PropertyType.Apartment
                                       ? const Icon(
                                           Icons.check,
                                           size: 16.0,
@@ -413,7 +413,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
           city: cityController.text,
           neighborhood: neighborhoodController.text,
           address: widget.direction,
-          housingType: _selectedPropertyType.toString(),
+          housingType: _selectedPropertyType.toString().replaceAll("PropertyType", ""),
           rentPrice: widget.obPrice,
 
           stratum: stratumController.text.isEmpty ? 0 : int.parse(stratumController.text),
