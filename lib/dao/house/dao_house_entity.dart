@@ -64,7 +64,6 @@ class HouseDaoFireStore extends HouseDao {
   
   @override
   Future<List<HouseModelUpdate>> getHousesByLikings(HouseLikingModelUpdate likings) async {
-    List<HouseModelUpdate> houses = [];
     try {
       final querySnapshot = await _firestore
           .collection("Houses")
@@ -80,15 +79,20 @@ class HouseDaoFireStore extends HouseDao {
           .where("gymnasium", isEqualTo: likings.gymnasium)
           .where("reception", isEqualTo: likings.reception)
           .where("supermarkets", isEqualTo: likings.supermarkets)
-          .limit(2)
+          .limit(3)
           .get();
-      for (var house in querySnapshot.docs) {
-        final houseData = house.data();
-        final houseId = house.id;
-        final houseModel = HouseModelUpdate.fromJson({...houseData, 'id': houseId});
-        houses.add(houseModel);
+      if (querySnapshot.docs.isEmpty) {
+        return [];
+      } else {
+        List<HouseModelUpdate> houses = [];
+        for (var house in querySnapshot.docs) {
+          final houseData = house.data();
+          final houseId = house.id;
+          final houseModel = HouseModelUpdate.fromJson({...houseData, 'id': houseId});
+          houses.add(houseModel);
+        }
+        return houses;
       }
-      return houses;
     } catch (error) {
       if (kDebugMode) {
         print("Error fetching houses by likings: $error");
