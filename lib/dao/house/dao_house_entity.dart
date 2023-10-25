@@ -26,7 +26,7 @@ class HouseDaoFireStore extends HouseDao {
   Future<List<HouseModelUpdate>> getAllHouses() async {
     List<HouseModelUpdate> houses = [];
     try {
-      final querySnapshot = await _firestore.collection("Houses").get();
+      final querySnapshot = await _firestore.collection("HousesTest").get();
       for (var house in querySnapshot.docs) {
         final houseData = house.data();
         final houseId = house.id;
@@ -45,7 +45,7 @@ class HouseDaoFireStore extends HouseDao {
   @override
   Future<HouseModelUpdate> getHouseById(String id) async {
     try {
-      final querySnapshot = await _firestore.collection("Houses").doc(id).get();
+      final querySnapshot = await _firestore.collection("HousesTest").doc(id).get();
       final houseData = querySnapshot.data();
       final houseId = querySnapshot.id;
 
@@ -67,7 +67,7 @@ class HouseDaoFireStore extends HouseDao {
   Future<List<HouseModelUpdate>> getHousesByLikings(HouseLikingModelUpdate likings) async {
     try {
       final querySnapshot = await _firestore
-          .collection("Houses")
+          .collection("HousesTest")
           .where("city", isEqualTo: likings.city)
           .where("stratum", isEqualTo: likings.stratum)
           .where("roomsNumber", isEqualTo: likings.roomsNumber)
@@ -125,7 +125,7 @@ class HouseDaoFireStore extends HouseDao {
         return allHouses;
       }
 
-      final querySnapshot = await _firestore.collection("Houses").get();
+      final querySnapshot = await _firestore.collection("HousesTest").get();
 
       for (var house in querySnapshot.docs) {
         final houseData = house.data();
