@@ -1,11 +1,12 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:giusseppe_flut/models/houseLiking/house_liking_model_update.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 
 import '../../models/house/house_model_update.dart';
-
+final storageRef = FirebaseStorage.instance.ref();
 abstract class HouseDao {
 
   Future<List<HouseModelUpdate>> getAllHouses();
@@ -25,7 +26,7 @@ class HouseDaoFireStore extends HouseDao {
   Future<List<HouseModelUpdate>> getAllHouses() async {
     List<HouseModelUpdate> houses = [];
     try {
-      final querySnapshot = await _firestore.collection("Houses").get();
+      final querySnapshot = await _firestore.collection("HousesTest").get();
       for (var house in querySnapshot.docs) {
         final houseData = house.data();
         final houseId = house.id;
@@ -44,7 +45,7 @@ class HouseDaoFireStore extends HouseDao {
   @override
   Future<HouseModelUpdate> getHouseById(String id) async {
     try {
-      final querySnapshot = await _firestore.collection("Houses").doc(id).get();
+      final querySnapshot = await _firestore.collection("HousesTest").doc(id).get();
       final houseData = querySnapshot.data();
       final houseId = querySnapshot.id;
 
@@ -66,7 +67,7 @@ class HouseDaoFireStore extends HouseDao {
   Future<List<HouseModelUpdate>> getHousesByLikings(HouseLikingModelUpdate likings) async {
     try {
       final querySnapshot = await _firestore
-          .collection("Houses")
+          .collection("HousesTest")
           .where("city", isEqualTo: likings.city)
           .where("stratum", isEqualTo: likings.stratum)
           .where("roomsNumber", isEqualTo: likings.roomsNumber)
@@ -101,17 +102,30 @@ class HouseDaoFireStore extends HouseDao {
     }
   }
 
+  Future<Uint8List?> getImage(String image) async {
+    final ref = storageRef.child(image);
+    try {
+      const oneMegabyte = 1024 * 1024 * 10;
+      final Uint8List? data = await ref.getData(oneMegabyte);
+      return data;
+      // Data for "images/island.jpg" is returned, use this as needed.
+    } on FirebaseException catch (e) {
+      // Handle any errors.
+      throw Exception("No data found for image: $image");
+    }
+  }
+
   @override
   Future<List<HouseModelUpdate>> getHousesByFilters(HouseSearchingModelUpdate? filters) async {
     try {
-      print(filters!.toJson());
+      
       List<HouseModelUpdate> allHouses = [];
 
       if (filters == null) {
         return allHouses;
       }
 
-      final querySnapshot = await _firestore.collection("Houses").get();
+      final querySnapshot = await _firestore.collection("HousesTest").get();
 
       for (var house in querySnapshot.docs) {
         final houseData = house.data();

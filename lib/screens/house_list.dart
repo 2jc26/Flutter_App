@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
+import 'package:giusseppe_flut/screens/InformationCardUser.dart';
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
 import 'package:giusseppe_flut/screens/house_detail.dart';
 import 'package:giusseppe_flut/widgets/search_field.dart';
-import 'package:giusseppe_flut/widgets/information_card.dart';
 import '../widgets/drawer.dart';
 
 class HouseListView {
@@ -117,7 +117,8 @@ class _HouseListState extends State<HouseList> implements HouseListView {
                   housesList: _housesLikingList,
                   flex: 1,
                   filter: false,
-                  searchController: _searchController),
+                  searchController: _searchController,
+                  houseListPresenter: houseListPresenter),
             const SizedBox(height: 10),
             HouseSection(
                 userId: _userId,
@@ -125,7 +126,8 @@ class _HouseListState extends State<HouseList> implements HouseListView {
                 housesList: _filteredHousesList,
                 flex: 2,
                 filter: true,
-                searchController: _searchController),
+                searchController: _searchController,
+                houseListPresenter: houseListPresenter),
             const SizedBox(height: 10),
           ],
         ),
@@ -229,19 +231,21 @@ class HouseSection extends StatelessWidget {
     required int flex,
     required bool filter,
     required TextEditingController searchController,
+    required HouseListPresenter houseListPresenter,
   })  : _userId = userId,
         _title = title,
         _housesList = housesList,
         _flex = flex,
         _filter = filter,
-        _searchController = searchController;
-
+        _searchController = searchController,
+        _houseListPresenter = houseListPresenter;
   final String? _userId;
   final String _title;
   final List<HouseModelUpdate>? _housesList;
   final int _flex;
   final bool _filter;
   final TextEditingController _searchController;
+  final HouseListPresenter _houseListPresenter;
 
   @override
   Widget build(BuildContext context) {
@@ -258,7 +262,7 @@ class HouseSection extends StatelessWidget {
           if (_filter)
             FilterButton(userId: _userId!, searchController: _searchController),
           Expanded(
-            child: HouseElements(houseList: _housesList),
+            child: HouseElements(houseList: _housesList, houseListPresenter: _houseListPresenter),
           ),
         ],
       ),
@@ -270,9 +274,11 @@ class HouseElements extends StatelessWidget {
   const HouseElements({
     super.key,
     required List<HouseModelUpdate>? houseList,
-  }) : _houseList = houseList;
+    required HouseListPresenter houseListPresenter
+  }) : _houseList = houseList, _houseListPresenter = houseListPresenter;
 
   final List<HouseModelUpdate>? _houseList;
+  final HouseListPresenter _houseListPresenter;
 
   @override
   Widget build(BuildContext context) {
@@ -285,8 +291,8 @@ class HouseElements extends StatelessWidget {
               builder: (context) => HouseDetail(house: _houseList![index]),
             ));
           },
-          child: InformationCard(
-            path: 'assets/images/house1.jpg',
+          child: InformationCardUser(
+            getImageURL: () => _houseListPresenter.getImage(_houseList![index].images[0]), // Pasa una función que obtiene la imagen.
             stars: _houseList![index].rating,
             text: _houseList![index].name,
           ),

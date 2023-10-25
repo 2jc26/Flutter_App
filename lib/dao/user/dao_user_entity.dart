@@ -224,17 +224,20 @@ class UserDaoFireStore extends UserDao{
         'smoke': smoke,
         'lat': lat, 
         'long': long, 
-        'stars': star
+        'stars': star,
+        'locality':locality,
+        'city':city,
+        'image':'images_profile/Male/7.jpg'
       };
 
       // Check if a user with the given username exists in Firestore
       final querySnapshot = await _firestore
-          .collection("Users")
+          .collection("NewUsersTest")
           .where("username", isEqualTo: username)
           .get();
 
       if (querySnapshot.docs.isEmpty) {
-        final docRef = await _firestore.collection("Users").add(toJson());
+        final docRef = await _firestore.collection("NewUsersTest").add(toJson());
         final docSnapshot = await docRef.get();
         final userData = docSnapshot.data();
         final userId = docSnapshot.id;
