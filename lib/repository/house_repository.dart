@@ -27,7 +27,7 @@ class HouseRepository {
     try {
       HouseLikingModelUpdate? liking = await houseLikingDao.getHouseLikingById(id);
       if (liking == null) {
-        throw Exception("No house liking found");
+        return [];
       }
       return await houseDao.getHousesByLikings(liking);
     } catch (error) {
