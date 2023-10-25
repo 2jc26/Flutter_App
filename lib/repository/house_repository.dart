@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:giusseppe_flut/dao/house/dao_house_entity.dart';
 import 'package:giusseppe_flut/dao/houseLiking/dao_house_liking_entity.dart';
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
@@ -21,6 +23,10 @@ class HouseRepository {
     } catch (error) {
       rethrow;
     }
+  }
+
+  Future<Uint8List?> getImage(String image) async {
+    return houseDao.getImage(image);
   }
 
   Future<List<HouseModelUpdate>> getSimilarLikingHouses(String id) async {
