@@ -3,12 +3,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart'; // Importa geocoding para convertir direcciones en coordenadas
 
 import "package:giusseppe_flut/widgets/drawer.dart";
+import '../../models/user/query_filter_user.dart';
 import '../../models/user/query_likes_user.dart';
 import 'filter_users_other.dart';
 import 'package:csc_picker/csc_picker.dart';
-
-
-final List<String> country_list = <String>['One', 'Two', 'Three', 'Four'];
 
 class FilterUsersLocations extends StatefulWidget {
 
@@ -68,7 +66,6 @@ class _FilterUsersLocationsState extends State<FilterUsersLocations> with Restor
   }
 }
 class BodyLocation extends StatefulWidget {
-  UserPreferencesDTO userPrefs;
   FilterUsersOthers filterUsersOthers;
   RestorableTextEditingController cityController;
   RestorableTextEditingController neighborhoodController;
@@ -83,8 +80,7 @@ class BodyLocation extends StatefulWidget {
     required this.updateMarkerLocation,
     FilterUsersOthers? filterUsersOthers,
   }) :
-        userPrefs = UserPreferencesDTO(),
-        filterUsersOthers = filterUsersOthers ?? FilterUsersOthers(userPreferences: UserPreferencesDTO()),
+        filterUsersOthers = filterUsersOthers ?? FilterUsersOthers(),
         super(key: key);
 
   @override
@@ -163,15 +159,8 @@ class _BodyLocation extends State<BodyLocation> {
         const SizedBox(height: 16),
         ElevatedButton(
           onPressed: () {
-            if (ciudadValue!="Seleccione una opción"){
-              widget.filterUsersOthers.userPreferences.city=ciudadValue;
-            }
-            if (localidadValue!="Seleccione una opción"){
-              widget.filterUsersOthers.userPreferences.neighborhood=localidadValue;
-            }
-            else {
-              widget.userPrefs.neighborhood=null;
-            }
+            UserFilter().setCity(ciudadValue);
+            UserFilter().setNeighborhood(localidadValue);
             Navigator.push(
               context,
               MaterialPageRoute(

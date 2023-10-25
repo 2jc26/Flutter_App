@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:giusseppe_flut/models/user/query_filter_user.dart';
 import 'package:giusseppe_flut/models/user/query_likes_user.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -84,36 +85,52 @@ class UserDaoFireStore extends UserDao{
   }
 
   @override
-  Future<List<UserModelUpdate>> getUsersByPreferences(UserPreferencesDTO userPreferences) async {
+  Future<List<UserModelUpdate>> getUsersByPreferences() async {
     List<UserModelUpdate> users = [];
     try {
       Query query= _firestore.collection("NewUsersTest");
-      if (userPreferences.externalPeopleFrequency != null) {
-        query = query.where("bring_people", isEqualTo: userPreferences.externalPeopleFrequency);
+      String? userFilter= UserFilter().getCity();
+      String? cc = UserFilter().getNeighborhood();
+      bool? pet_did=UserFilter().getPetPreference();
+
+      String? intro=UserFilter().getIntrovertedPreference();
+
+      String? cle=UserFilter().getCleaningFrequency();
+
+      bool? vapee=UserFilter().getVapePreference();
+
+      bool? smokee=UserFilter().getSmokePreference();
+
+      bool? worrkk= UserFilter().getWorkFromHomePreference();
+
+      int? sleeep=UserFilter().getSleepTime();
+
+      if (UserFilter().getExternalPeopleFrequency() != null) {
+        query = query.where("bring_people", isEqualTo: UserFilter().getExternalPeopleFrequency());
       }
-      if (userPreferences.sleepTime != null) {
-        query = query.where("sleep", isEqualTo: userPreferences.sleepTime);
+      if (UserFilter().getSleepTime() != null) {
+        query = query.where("sleep", isEqualTo: UserFilter().getSleepTime());
       }
-      if (userPreferences.smokePreference != null) {
-        query = query.where("smoke", isEqualTo: userPreferences.smokePreference);
+      if (UserFilter().getSmokePreference() != null) {
+        query = query.where("smoke", isEqualTo: UserFilter().getSmokePreference());
       }
-      if (userPreferences.vapePreference != null) {
-        query = query.where("vape", isEqualTo: userPreferences.vapePreference);
+      if (UserFilter().getVapePreference() != null) {
+        query = query.where("vape", isEqualTo: UserFilter().getVapePreference());
       }
-      if (userPreferences.cleaningFrequency != null) {
-        query = query.where("clean", isEqualTo: userPreferences.cleaningFrequency);
+      if (UserFilter().getCleaningFrequency()!= null) {
+        query = query.where("clean", isEqualTo: UserFilter().getCleaningFrequency());
       }
-      if (userPreferences.introvertedPreference != null) {
-        query = query.where("personality", isEqualTo: userPreferences.introvertedPreference);
+      if (UserFilter().getIntrovertedPreference()!= null) {
+        query = query.where("personality", isEqualTo: UserFilter().getIntrovertedPreference());
       }
-      if (userPreferences.petPreference != null) {
-        query = query.where("likes_pets", isEqualTo: userPreferences.petPreference);
+      if (UserFilter().getPetPreference() != null) {
+        query = query.where("likes_pets", isEqualTo: UserFilter().getPetPreference());
       }
-      if (userPreferences.city != null) {
-        query = query.where("city", isEqualTo: userPreferences.city);
+      if (UserFilter().getCity() != null) {
+        query = query.where("city", isEqualTo: UserFilter().getCity());
       }
-      if (userPreferences.neighborhood != null) {
-        query = query.where("locality", isEqualTo: userPreferences.neighborhood);
+      if (UserFilter().getNeighborhood() != null) {
+        query = query.where("locality", isEqualTo: UserFilter().getNeighborhood());
       }
       final querySnapshot = await query.get();
 

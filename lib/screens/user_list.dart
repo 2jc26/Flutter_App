@@ -33,7 +33,7 @@ class _UserListState extends State<UserList> implements UserListView{
   @override
   void initState() {
     super.initState();
-    userListPresenter.setUserPreferences(widget.userPreferences);
+    userListPresenter.setUserPreferences();
     userListPresenter.backView = this;
   }
 
@@ -89,7 +89,7 @@ class _UserListState extends State<UserList> implements UserListView{
               itemCount: _userList?.length,
               itemBuilder: ((context, index) {
                 return InformationCardUser(
-                  getImageURL: () => userListPresenter.getImage(_userList![index].image), // Pasa una función que obtiene la imagen.
+                  getImageURL: () => userListPresenter.getImage(_userList![index].image),
                   stars: _userList![index].stars,
                   text: _userList![index].name,
                 );

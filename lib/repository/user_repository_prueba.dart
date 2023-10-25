@@ -44,9 +44,9 @@ class UserRepository {
       rethrow;
     }
   }
-  Future<List<UserModelUpdate>> getAllUsersByPreferences(UserPreferencesDTO userPreferences) async {
+  Future<List<UserModelUpdate>> getAllUsersByPreferences() async {
     try {
-      return await userDao.getUsersByPreferences(userPreferences);
+      return await userDao.getUsersByPreferences();
     } catch (error) {
       rethrow;
     }

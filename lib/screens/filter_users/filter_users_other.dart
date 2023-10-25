@@ -1,14 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../models/user/query_filter_user.dart';
 import '../../models/user/query_likes_user.dart';
 import '../../widgets/drawer.dart';
 import '../user_list.dart';
 
 class FilterUsersOthers extends StatefulWidget {
-  UserPreferencesDTO userPreferences;
 
   FilterUsersOthers({
     Key? key,
-    required this.userPreferences,
   }) : super(key: key);
 
   @override
@@ -26,7 +26,12 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
   RestorableTextEditingController sleepTimeController = RestorableTextEditingController();
   RestorableTextEditingController externalPeopleController = RestorableTextEditingController();
 
-  @override
+
+
+
+
+
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -184,64 +189,31 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
               ElevatedButton(
                 onPressed: () {
                   String pet = petController.value.text;
+                  UserFilter().setPetPreference(pet);
+                  bool? pet_did=UserFilter().getPetPreference();
                   String introverted=  introvertedController.value.text;
+                  UserFilter().setIntrovertedPreference(introverted);
+                  String? intro=UserFilter().getIntrovertedPreference();
                   String cleaning= cleaningController.value.text;
+                  UserFilter().setCleaningFrequency(cleaning);
+                  String? cle=UserFilter().getCleaningFrequency();
                   String vape=  vapeController.value.text;
+                  UserFilter().setVapePreference(vape);
+                  bool? vapee=UserFilter().getVapePreference();
                   String smoke= smokeController.value.text;
+                  UserFilter().setSmokePreference(smoke);
+                  bool? smokee=UserFilter().getSmokePreference();
                   String work=  workFromHomeController.value.text;
+                  UserFilter().setWorkFromHomePreference(work);
+                  bool? worrkk= UserFilter().getWorkFromHomePreference();
                   String sleep=  sleepTimeController.value.text;
+                  UserFilter().setSleepTime(sleep);
+                  int? sleeep=UserFilter().getSleepTime();
                   String external=  externalPeopleController.value.text;
-
-                  widget.userPreferences.petPreference = pet == "Yes"
-                      ? true
-                      : pet == "No"
-                      ? false
-                      : null;
-                  if (introverted.isEmpty) {
-                    widget.userPreferences.introvertedPreference = null;
-                  } else {
-                    widget.userPreferences.introvertedPreference = introverted;
-                  }
-                  if (cleaning.isEmpty || cleaning == "No aplica") {
-                    widget.userPreferences.cleaningFrequency = null;
-                  } else {
-                    widget.userPreferences.cleaningFrequency = cleaning;
-                  }
-                  widget.userPreferences.vapePreference = vape == "Yes"
-                      ? true
-                      : vape == "No"
-                      ? false
-                      : null;
-                  widget.userPreferences.smokePreference = smoke == "Yes"
-                      ? true
-                      : smoke == "No"
-                      ? false
-                      : null;
-                  widget.userPreferences.workFromHomePreference = (work == "Yes"
-                      ? true
-                      : work == "No"
-                      ? false
-                      : null);
-                  if (sleep.isEmpty || sleep!='No aplica'){
-                    int? parts = int.tryParse(sleep.split(":")[0]);
-                    widget.userPreferences.sleepTime = parts;
-                  }
-                  else{
-                    widget.userPreferences.sleepTime = null;
-                  }
-                  if ( external.isEmpty || external!='No aplica') {
-                    widget.userPreferences.externalPeopleFrequency = null;
-                  } else {
-                    widget.userPreferences.externalPeopleFrequency = external;
-                  }
-
-
-
-
-
+                  UserFilter().setExternalPeopleFrequency(external);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => UserList(userPreferences: widget.userPreferences)),
+                    MaterialPageRoute(builder: (context) => UserList()),
                   );
                 },
                 child: Text('Continuar'),
@@ -266,7 +238,14 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
     registerForRestoration(workFromHomeController, "from_home");
     registerForRestoration(sleepTimeController, "sleep");
     registerForRestoration(externalPeopleController, "externalPeople");
-
+    petController.value.text = "";
+    introvertedController.value.text = "";
+    cleaningController.value.text = "";
+    vapeController.value.text = "";
+    smokeController.value.text = "";
+    workFromHomeController.value.text = "";
+    sleepTimeController.value.text = "";
+    externalPeopleController.value.text = "";
   }
 }
 

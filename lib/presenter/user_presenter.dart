@@ -13,19 +13,14 @@ class UserListPresenter {
   final UserRepository userRepository = UserRepository();
   List<UserModelUpdate>? usersList = [];
   late UserListView _backView= UserListView();
-  UserPreferencesDTO? userPreferences;
 
-  UserListPresenter({this.userPreferences});
+  UserListPresenter();
 
   void getAllUsers() async {
     try {
       List<UserModelUpdate>? users = [];
-      if (userPreferences != null){
-        users = await userRepository.getAllUsersByPreferences(userPreferences!);
-      }
-      else{
-        users = await userRepository.getAllUsers();
-      }
+      users = await userRepository.getAllUsersByPreferences();
+
       if (users != null) {
         usersList = users;
         _backView.refreshUserListView(usersList!);
@@ -44,8 +39,7 @@ class UserListPresenter {
     _backView.refreshUserListView(usersList!);
   }
 
-  void setUserPreferences(UserPreferencesDTO? preferences) {
-    userPreferences = preferences;
+  void setUserPreferences() {
     getAllUsers();
   }
 }
