@@ -4,7 +4,7 @@ import '../../widgets/drawer.dart';
 import '../user_list.dart';
 
 class FilterUsersOthers extends StatefulWidget {
-  final UserPreferencesDTO userPreferences;
+  UserPreferencesDTO userPreferences;
 
   FilterUsersOthers({
     Key? key,
@@ -17,14 +17,14 @@ class FilterUsersOthers extends StatefulWidget {
 
 class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationMixin {
 
-  final RestorableTextEditingController petController = RestorableTextEditingController();
-  final RestorableTextEditingController introvertedController = RestorableTextEditingController();
-  final RestorableTextEditingController cleaningController = RestorableTextEditingController();
-  final RestorableTextEditingController vapeController = RestorableTextEditingController();
-  final RestorableTextEditingController smokeController = RestorableTextEditingController();
-  final RestorableTextEditingController workFromHomeController = RestorableTextEditingController();
-  final RestorableTextEditingController sleepTimeController = RestorableTextEditingController();
-  final RestorableTextEditingController externalPeopleController = RestorableTextEditingController();
+  RestorableTextEditingController petController = RestorableTextEditingController();
+  RestorableTextEditingController introvertedController = RestorableTextEditingController();
+  RestorableTextEditingController cleaningController = RestorableTextEditingController();
+  RestorableTextEditingController vapeController = RestorableTextEditingController();
+  RestorableTextEditingController smokeController = RestorableTextEditingController();
+  RestorableTextEditingController workFromHomeController = RestorableTextEditingController();
+  RestorableTextEditingController sleepTimeController = RestorableTextEditingController();
+  RestorableTextEditingController externalPeopleController = RestorableTextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -52,15 +52,15 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  RoundedButton(text: 'Location', onPressed: () {}),
-                  const SizedBox(width: 10),
-                  RoundedButton(text: 'Information', onPressed: () {}),
-                ],
-              ),
+              //const SizedBox(height: 16),
+              //Row(
+                //mainAxisAlignment: MainAxisAlignment.center,
+                //children: [
+                  //RoundedButton(text: 'Location', onPressed: () {}),
+                 // const SizedBox(width: 10),
+                  //RoundedButton(text: 'Information', onPressed: () {}),
+                //],
+              //),
               const SizedBox(height: 16),
               const Text(
                 'You have any problem having pets at the house?',
@@ -191,23 +191,22 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
                   String work=  workFromHomeController.value.text;
                   String sleep=  sleepTimeController.value.text;
                   String external=  externalPeopleController.value.text;
+
                   widget.userPreferences.petPreference = pet == "Yes"
                       ? true
                       : pet == "No"
                       ? false
                       : null;
-
                   if (introverted.isEmpty) {
                     widget.userPreferences.introvertedPreference = null;
                   } else {
                     widget.userPreferences.introvertedPreference = introverted;
                   }
-                  if (cleaning.isEmpty) {
+                  if (cleaning.isEmpty || cleaning == "No aplica") {
                     widget.userPreferences.cleaningFrequency = null;
                   } else {
                     widget.userPreferences.cleaningFrequency = cleaning;
                   }
-
                   widget.userPreferences.vapePreference = vape == "Yes"
                       ? true
                       : vape == "No"
@@ -223,14 +222,22 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
                       : work == "No"
                       ? false
                       : null);
-
-                  List<String> parts = sleep.split(":");
-                  widget.userPreferences.sleepTime = int.tryParse(parts[0]);
-                  if (external.isEmpty) {
+                  if (sleep.isEmpty || sleep!='No aplica'){
+                    int? parts = int.tryParse(sleep.split(":")[0]);
+                    widget.userPreferences.sleepTime = parts;
+                  }
+                  else{
+                    widget.userPreferences.sleepTime = null;
+                  }
+                  if ( external.isEmpty || external!='No aplica') {
                     widget.userPreferences.externalPeopleFrequency = null;
                   } else {
                     widget.userPreferences.externalPeopleFrequency = external;
                   }
+
+
+
+
 
                   Navigator.push(
                     context,

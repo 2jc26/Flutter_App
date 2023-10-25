@@ -109,14 +109,12 @@ class UserDaoFireStore extends UserDao{
       if (userPreferences.petPreference != null) {
         query = query.where("likes_pets", isEqualTo: userPreferences.petPreference);
       }
-      //if (userPreferences.petPreference != null) {
-        //query = query.where("city", isEqualTo: userPreferences.petPreference);
-      //}
-      //if (userPreferences.petPreference != null) {
-        //query = query.where("localizati", isEqualTo: userPreferences.petPreference);
-      //}
-
-
+      if (userPreferences.city != null) {
+        query = query.where("city", isEqualTo: userPreferences.city);
+      }
+      if (userPreferences.neighborhood != null) {
+        query = query.where("locality", isEqualTo: userPreferences.neighborhood);
+      }
       final querySnapshot = await query.get();
 
       for (var user in querySnapshot.docs) {

@@ -68,53 +68,52 @@ class _FilterUsersLocationsState extends State<FilterUsersLocations> with Restor
   }
 }
 class BodyLocation extends StatefulWidget {
-  final UserPreferencesDTO userPrefs = UserPreferencesDTO();
-  final FilterUsersOthers filterUsersOthers;
-  final RestorableTextEditingController cityController;
-  final RestorableTextEditingController neighborhoodController;
-  final LatLng markerLocation;
-  final Function(LatLng) updateMarkerLocation;
+  UserPreferencesDTO userPrefs;
+  FilterUsersOthers filterUsersOthers;
+  RestorableTextEditingController cityController;
+  RestorableTextEditingController neighborhoodController;
+  LatLng markerLocation;
+  Function(LatLng) updateMarkerLocation;
+
   BodyLocation({
-    super.key,
+    Key? key,
     required this.cityController,
     required this.neighborhoodController,
     required this.markerLocation,
     required this.updateMarkerLocation,
     FilterUsersOthers? filterUsersOthers,
-  }) : filterUsersOthers = filterUsersOthers ?? FilterUsersOthers(userPreferences: UserPreferencesDTO());
+  }) :
+        userPrefs = UserPreferencesDTO(),
+        filterUsersOthers = filterUsersOthers ?? FilterUsersOthers(userPreferences: UserPreferencesDTO()),
+        super(key: key);
+
   @override
   State<BodyLocation> createState() => _BodyLocation();
-
 }
 
 class _BodyLocation extends State<BodyLocation> {
-  String countryValue = "";
-  String stateValue = "";
-  String cityValue = "";
-  String address = "";
-  String dropdownValue = country_list.first;
   String localidadValue = "Seleccione una opción";
-  String ciudadValue = "Seleccione una opción";
+  String ciudadValue = "Bogotá";
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            RoundedButton(text: 'Location', onPressed: () {}),
-            const SizedBox(width: 10),
-            RoundedButton(text: 'Information', onPressed: () {}),
-          ],
-        ),
+        //const SizedBox(height: 16),
+        //Row(
+          //mainAxisAlignment: MainAxisAlignment.center,
+          //children: [
+            //RoundedButton(text: 'Location', onPressed: () {}),
+            //const SizedBox(width: 10),
+            //RoundedButton(text: 'Information', onPressed: () {}),
+          //],
+        //),
         const SizedBox(height: 20),
         CustomListField(
-          hintText: 'Selecciona una opción',
+          hintText: 'Bogotá',
           selectedValue: ciudadValue,
-          items: ["Seleccione una opción",'Bogotá'],
+          items: ['Bogotá'],
           onItemSelected: (String? value) {
             setState(() =>ciudadValue =value!);
           },
@@ -165,10 +164,13 @@ class _BodyLocation extends State<BodyLocation> {
         ElevatedButton(
           onPressed: () {
             if (ciudadValue!="Seleccione una opción"){
-              widget.userPrefs.city=ciudadValue;
+              widget.filterUsersOthers.userPreferences.city=ciudadValue;
             }
             if (localidadValue!="Seleccione una opción"){
-              widget.userPrefs.neighborhood=localidadValue;
+              widget.filterUsersOthers.userPreferences.neighborhood=localidadValue;
+            }
+            else {
+              widget.userPrefs.neighborhood=null;
             }
             Navigator.push(
               context,

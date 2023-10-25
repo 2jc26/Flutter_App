@@ -34,8 +34,8 @@ class UserPreferencesDTO {
     String? workFromHomeText,
     String? sleepTimeText,
     String? externalPeopleText,
-    this.city,
-    this.neighborhood,
+    String? city,
+    String? neighborhood,
   }) {
     petPreference = petText == "yes" ? true : (petText == "no" ? false : null);
     introvertedPreference = introvertedText;
