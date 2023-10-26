@@ -269,6 +269,7 @@ class _SignUpState extends State<SignUp> {
             fillColor: const Color(0XffEBEDF0),
             hintText: 'Username',
           ),
+          maxLength: 16,
           validator: (value) =>
               state.isValidUsername ? null : 'Username is invalid',
           onChanged: (value) {
@@ -301,6 +302,7 @@ class _SignUpState extends State<SignUp> {
           fillColor: const Color(0XffEBEDF0),
           hintText: 'Password',
         ),
+        maxLength: 50,
         validator: (value) =>
             state.isValidPassword ? null : 'Password is to short',
         onChanged: (value) {
@@ -332,6 +334,7 @@ class _SignUpState extends State<SignUp> {
             fillColor: const Color(0XffEBEDF0),
             hintText: 'Fullname',
           ),
+          maxLength: 50,
           validator: (value) =>
               state.isValidFullName ? null : 'Fullname is invalid',
           onChanged: (value) {
@@ -368,6 +371,7 @@ class _SignUpState extends State<SignUp> {
             fillColor: const Color(0XffEBEDF0),
             hintText: 'Age',
           ),
+          maxLength: 2,
           onChanged: (value) {
             context.read<SignUpBloc>().add(
                 SignUpAgeChanged(age: value.isEmpty ? 0 : int.parse(value)));
@@ -401,6 +405,7 @@ class _SignUpState extends State<SignUp> {
             fillColor: const Color(0XffEBEDF0),
             hintText: 'Phone Number',
           ),
+          maxLength: 10,
           validator: (value) => state.isValidPhone ? null : 'Phone is invalid',
           onChanged: (value) {
             context.read<SignUpBloc>().add(SignUpPhoneChanged(phone: value));
@@ -410,6 +415,7 @@ class _SignUpState extends State<SignUp> {
       },
     );
   }
+
 
   Widget _generoField() {
     return BlocBuilder<SignUpBloc, SignUpState>(
@@ -430,6 +436,7 @@ class _SignUpState extends State<SignUp> {
             fillColor: const Color(0XffEBEDF0),
             hintText: 'Genre',
           ),
+          maxLength: 20,
           onChanged: (value) {
             context.read<SignUpBloc>().add(SignUpGeneroChanged(genero: value));
             generoController.text = value;
@@ -458,6 +465,7 @@ class _SignUpState extends State<SignUp> {
             fillColor: const Color(0XffEBEDF0),
             hintText: 'city',
           ),
+          maxLength: 20,
           validator: (value) => state.isValidCity ? null : 'City is invalid',
           onChanged: (value) {
             context.read<SignUpBloc>().add(SignUpCityChanged(city: value));
@@ -487,6 +495,7 @@ class _SignUpState extends State<SignUp> {
             fillColor: const Color(0XffEBEDF0),
             hintText: 'Locality',
           ),
+          maxLength: 50,
           validator: (value) =>
               state.isValidLocality ? null : 'Locality is invalid',
           onChanged: (value) {

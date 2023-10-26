@@ -88,9 +88,9 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 20),
-                    _inputField("City/Municipality", cityController),
+                    _inputField("City/Municipality", cityController, 50),
                     const SizedBox(height: 20),
-                    _inputField("Neighborhood", neighborhoodController),
+                    _inputField("Neighborhood", neighborhoodController, 50),
                   ],
                 ),
               ),
@@ -99,6 +99,8 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: <Widget>[
+                  const Text("Type of House", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -213,17 +215,17 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 20),
-                    _inputField("Stratum", stratumController, isNumber: true),
+                    _inputField("Stratum", stratumController, 1, isNumber: true),
                     const SizedBox(height: 20),
-                    _inputField("Area", areaController, isNumber: true),
+                    _inputField("Area", areaController, 3,isNumber: true),
                     const SizedBox(height: 20),
-                    _inputField("Floor Number", floorNumberController, isNumber: true),
+                    _inputField("Floor Number", floorNumberController, 4,isNumber: true),
                     const SizedBox(height: 20),
-                    _inputField("Rooms Number", roomsNumberontroller, isNumber: true),
+                    _inputField("Rooms Number", roomsNumberontroller, 2,isNumber: true),
                     const SizedBox(height: 20),
-                    _inputField("Room Area", roomAreaController, isNumber: true),
+                    _inputField("Room Area", roomAreaController, 3,isNumber: true),
                     const SizedBox(height: 20),
-                    _inputField("Bathrooms Area", bathroomAreaController, isNumber: true),
+                    _inputField("Bathrooms Area", bathroomAreaController, 3,isNumber: true),
                   ],
                 ),
               ),
@@ -317,7 +319,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _loginButton(),
+                    _filterButton(),
                   ],
                 ),
               ),
@@ -328,7 +330,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
     );
   }
 
-  Widget _inputField(String hintText, TextEditingController controller,
+  Widget _inputField(String hintText, TextEditingController controller, int len, 
       {isNumber = false}) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
@@ -349,7 +351,8 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
           focusedBorder: border,
           filled: true,
           fillColor: Colors.white,
-        )
+        ),
+        maxLength: len,
       );
     } else {
       return TextField(
@@ -363,6 +366,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
           filled: true,
           fillColor: Colors.white,
         ),
+        maxLength: len,
       );
     }
   }
@@ -408,7 +412,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
   );
   }
 
-  Widget _loginButton() {
+  Widget _filterButton() {
     return ElevatedButton(
       onPressed: () {
         
