@@ -52,6 +52,8 @@ dependencies:
   csc_picker: ^0.2.7
   firebase_storage: ^11.3.1
   get: ^4.6.6
+  internet_connection_checker: ^1.0.0+1
+  connectivity_plus: ^5.0.1
   shared_preferences: ^2.2.2
 
 dev_dependencies:
