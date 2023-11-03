@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:giusseppe_flut/app_navigator.dart';
 import 'package:giusseppe_flut/auth/auth_repository.dart';
 import 'package:giusseppe_flut/session_cubit.dart';
+import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
@@ -20,6 +21,7 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+  ConnectivityManagerService().initialize();
   runApp(const MyApp());
 }
 
