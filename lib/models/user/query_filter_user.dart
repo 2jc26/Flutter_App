@@ -1,4 +1,5 @@
 class UserFilter {
+
   static final UserFilter _instance = UserFilter._internal();
 
   bool? petPreference;

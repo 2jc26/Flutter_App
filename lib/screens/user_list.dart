@@ -89,9 +89,9 @@ class _UserListState extends State<UserList> implements UserListView{
               itemCount: _userList?.length,
               itemBuilder: ((context, index) {
                 return InformationCardUser(
-                  getImageURL: () => userListPresenter.getImage(_userList![index].image),
+                  url: _userList![index].image,
                   stars: _userList![index].stars,
-                  text: _userList![index].name,
+                  text: _userList![index].full_name,
                 );
               }),
             ),

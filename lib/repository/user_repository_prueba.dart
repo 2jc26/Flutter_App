@@ -21,17 +21,17 @@ class UserRepository {
     return userDao.getImage(image);
   }
 
-  Future<UserModelUpdate?> validateUsernameAndPassword(String username, String password) async {
+  Future<UserModelUpdate?> validateUsernameAndPassword(String email, String password) async {
     try {
-      return await userDao.validateUsernameAndPassword(username, password);
+      return await userDao.validateEmailAndPassword(email, password);
     } catch (error) {
       rethrow;
     }
   }
 
-  Future<UserModelUpdate?> createUser(String username, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
+  Future<UserModelUpdate?> createUser(String email, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
     try {
-      return await userDao.createUser(username, password, fullname, age, phone, genero, city, locality);
+      return await userDao.createUser(email, password, fullname, age, phone, genero, city, locality);
     } catch (error) {
       rethrow;
     }

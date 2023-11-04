@@ -2,10 +2,10 @@ abstract class SignUpEvent {
 
 }
 
-class SignUpUsernameChanged extends SignUpEvent {
-  final String username;
+class SignUpEmailChanged extends SignUpEvent {
+  final String email;
 
-  SignUpUsernameChanged({required this.username});
+  SignUpEmailChanged({required this.email});
 
 }
 

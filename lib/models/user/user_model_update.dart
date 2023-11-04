@@ -5,15 +5,15 @@ part 'user_model_update.g.dart';
 @JsonSerializable()
 class UserModelUpdate {
   String image;
-  String username;
+  String email;
   String password;
-  String name;
+  String full_name;
   String? id;
   int age;
   String bring_people;
   int sleep;
   int phone;
-  //String role;
+  String rol;
   bool vape;
   String personality;
   bool likes_pets;
@@ -21,36 +21,36 @@ class UserModelUpdate {
   //String week;
   bool smoke;
   String gender;
-  double lat;
-  double long;
+  double latitude;
+  double longitude;
   int stars;
   String city;
   String locality;
 
   // Image
   UserModelUpdate({
-    required this.locality,
-    required this.city,
-    required this.image,
-    required this.username,
-    required this.password,
-    required this.name,
     this.id,
     required this.age,
+    required this.image,
+    required this.email,
+    required this.password,
+    required this.full_name,
     required this.bring_people,
     required this.sleep,
     required this.phone,
-    //required this.role,
+    required this.rol,
     required this.vape,
     required this.personality,
     required this.likes_pets,
     required this.clean,
-    //required this.week,
     required this.smoke,
     required this.gender,
-    required this.lat,
-    required this.long,
-    required this.stars
+    required this.latitude,
+    required this.longitude,
+    required this.stars,
+    required this.city,
+    required this.locality,
+
   });
 
   factory UserModelUpdate.fromJson(Map<String, dynamic> json) =>

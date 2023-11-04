@@ -1,5 +1,5 @@
 class AuthCredentials {
-  final String username;
+  final String email;
   final String? password;
   final String? fullname;
   final int? age;
@@ -10,7 +10,7 @@ class AuthCredentials {
   final String userId;
 
   AuthCredentials({
-    required this.username, 
+    required this.email,
     this.password,
     this.fullname,
     this.age,

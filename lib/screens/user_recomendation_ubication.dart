@@ -103,7 +103,7 @@ class _LocationPermissionViewState extends State<LocationPermissionView> impleme
                   return InformationCard(
                     path: 'assets/images/house1.jpg',
                     stars: _userList![index].stars,
-                    text: _userList![index].name,
+                    text: _userList![index].full_name,
                   );
                 }),
               ),
