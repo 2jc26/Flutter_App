@@ -12,8 +12,8 @@ abstract class UserDao {
 
   Future<UserModelUpdate?> getUserById(String id);
   Future<List<UserModelUpdate>> getAllUsers();
-  Future<UserModelUpdate?> validateUsernameAndPassword(String username, String password);
-  Future<UserModelUpdate?> createUser(String username, String password, String fullname, int age, String phone, String genero, String city, String locality);
+  Future<UserModelUpdate?> validateEmailAndPassword(String email, String password);
+  Future<UserModelUpdate?> createUser(String email, String password, String fullname, int age, String phone, String genero, String city, String locality);
   // Future<void> insertUser(UserModelUpdate user);
   // Future<void> updateUser(UserModelUpdate user);
   // Future<void> deleteUser(int id);
@@ -40,7 +40,7 @@ class UserDaoFireStore extends UserDao{
   Future<List<UserModelUpdate>> getAllUsers() async {
     List<UserModelUpdate> users = [];
     try {
-      final querySnapshot = await _firestore.collection("NewUsersTest").get();//Users
+      final querySnapshot = await _firestore.collection("Users").get();//Users
       for (var user in querySnapshot.docs) {
         final userData = user.data();
         final userId = user.id;
@@ -60,7 +60,7 @@ class UserDaoFireStore extends UserDao{
   @override
   Future<UserModelUpdate> getUserById(String id) async {
     try {
-      final querySnapshot = await _firestore.collection("NewUsersTest").doc(id).get();
+      final querySnapshot = await _firestore.collection("Users").doc(id).get();
       final userData = querySnapshot.data();
       final userId = querySnapshot.id;
 
@@ -88,7 +88,7 @@ class UserDaoFireStore extends UserDao{
   Future<List<UserModelUpdate>> getUsersByPreferences() async {
     List<UserModelUpdate> users = [];
     try {
-      Query query= _firestore.collection("NewUsersTest");
+      Query query= _firestore.collection("Users");
       String? userFilter= UserFilter().getCity();
       String? cc = UserFilter().getNeighborhood();
       bool? pet_did=UserFilter().getPetPreference();
@@ -142,7 +142,7 @@ class UserDaoFireStore extends UserDao{
       return users;
     } catch (error) {
       if (kDebugMode) {
-        print("Error fetching houses by likings: $error");
+        print("Error fetching users by filter: $error");
       }
       rethrow;
     }
@@ -158,7 +158,7 @@ class UserDaoFireStore extends UserDao{
     final double maxLon = longitude + radiusInDegrees;
 
     final QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('NewUsersTest')
+        .collection('Users')
         .where('lat', isGreaterThanOrEqualTo: minLat)
         .where('lat', isLessThanOrEqualTo: maxLat)
         .get();
@@ -176,17 +176,17 @@ class UserDaoFireStore extends UserDao{
   }
 
   @override
-  Future<UserModelUpdate?> validateUsernameAndPassword(
-      String username, String password) async {
+  Future<UserModelUpdate?> validateEmailAndPassword(
+      String email, String password) async {
     try {
-      // Check if a user with the given username exists in Firestore
+      // Check if a user with the given email exists in Firestore
       final querySnapshot = await _firestore
-          .collection("NewUsersTest")
-          .where("username", isEqualTo: username)
+          .collection("Users")
+          .where("email", isEqualTo: email)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // User with the given username exists
+        // User with the given email exists
         final userData = querySnapshot.docs.first.data();
         final userId = querySnapshot.docs.first.id;
         final storedPasswordHash = userData['password']; // Replace with the actual field name in Firestore
@@ -203,14 +203,14 @@ class UserDaoFireStore extends UserDao{
       return null;
     } catch (error) {
       if (kDebugMode) {
-        print("Error validating username and password: $error");
+        print("Error validating email and password: $error");
       }
       rethrow;
     }
   }
 
   @override
-  Future<UserModelUpdate?> createUser(String username, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
+  Future<UserModelUpdate?> createUser(String email, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
     try {
       // To Do In base of city and locality get lat and long
       String bringPeople = '';
@@ -226,7 +226,7 @@ class UserDaoFireStore extends UserDao{
       int star = 5;     
 
       Map<String, dynamic> toJson() => {
-        'username': username, 
+        'email': email,
         'password': password, 
         'name': fullname, 
         'age': age, 
@@ -247,14 +247,14 @@ class UserDaoFireStore extends UserDao{
         'image':'images_profile/Male/7.jpg'
       };
 
-      // Check if a user with the given username exists in Firestore
+      // Check if a user with the given email exists in Firestore
       final querySnapshot = await _firestore
-          .collection("NewUsersTest")
-          .where("username", isEqualTo: username)
+          .collection("Users")
+          .where("email", isEqualTo: email)
           .get();
 
       if (querySnapshot.docs.isEmpty) {
-        final docRef = await _firestore.collection("NewUsersTest").add(toJson());
+        final docRef = await _firestore.collection("Users").add(toJson());
         final docSnapshot = await docRef.get();
         final userData = docSnapshot.data();
         final userId = docSnapshot.id;

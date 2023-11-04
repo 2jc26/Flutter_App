@@ -2,7 +2,7 @@
 import 'package:giusseppe_flut/auth/form_submission_status.dart';
 
 class SignUpState {
-  final String username;
+  final String email;
   final String password;
   final String fullname;
   final int age;
@@ -11,7 +11,7 @@ class SignUpState {
   final String city;
   final String locality;
 
-  bool get isValidUsername => username.length > 3;
+  bool get isValidUsername => email.length > 3;
 
   bool get isValidPassword => password.length > 6;
   
@@ -26,7 +26,7 @@ class SignUpState {
   final FormSubmissionStatus formStatus;
 
   SignUpState({
-    this.username = '',
+    this.email = '',
     this.password = '',
     this.fullname = '',
     this.age = 0,
@@ -39,7 +39,7 @@ class SignUpState {
   );
 
   SignUpState copyWith({
-    String? username,
+    String? email,
     String? password,
     String? fullname,
     int? age,
@@ -50,7 +50,7 @@ class SignUpState {
     FormSubmissionStatus? formStatus,
   }) {
     return SignUpState(
-      username: username ?? this.username,
+      email: email ?? this.email,
       password: password ?? this.password,
       fullname: fullname ?? this.fullname,
       age: age ?? this.age,

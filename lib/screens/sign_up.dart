@@ -275,7 +275,7 @@ class _SignUpState extends State<SignUp> {
           onChanged: (value) {
             context
                 .read<SignUpBloc>()
-                .add(SignUpUsernameChanged(username: value));
+                .add(SignUpEmailChanged(email: value));
             usernameController.text = value;
           },
         );

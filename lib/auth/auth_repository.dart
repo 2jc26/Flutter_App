@@ -5,9 +5,9 @@ class AuthRepository {
     
   final UserRepository userRepository = UserRepository();
 
-  Future<UserModelUpdate?> login(String username, String password) async {
+  Future<UserModelUpdate?> login(String email, String password) async {
     try {
-      final user = await userRepository.validateUsernameAndPassword(username, password);
+      final user = await userRepository.validateUsernameAndPassword(email, password);
       if (user != null) {
         return user;
       } else {
@@ -18,9 +18,9 @@ class AuthRepository {
     }
   }
 
-  Future<UserModelUpdate?> signUp(String username, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
+  Future<UserModelUpdate?> signUp(String email, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
     try {
-      final user = await userRepository.createUser(username, password, fullname, age, phone, genero, city, locality);
+      final user = await userRepository.createUser(email, password, fullname, age, phone, genero, city, locality);
       if (user != null) {
         return user;
       } else {

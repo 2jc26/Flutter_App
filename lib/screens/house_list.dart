@@ -291,11 +291,11 @@ class HouseElements extends StatelessWidget {
               builder: (context) => HouseDetail(house: _houseList![index]),
             ));
           },
-          child: InformationCardUser(
+          /*child: InformationCardUser(
             getImageURL: () => _houseListPresenter.getImage(_houseList![index].images[0]), // Pasa una función que obtiene la imagen.
             stars: _houseList![index].rating,
             text: _houseList![index].name,
-          ),
+          ),*/
         );
       }),
     );
