@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:giusseppe_flut/storage/storage_adapters/file_manager.dart';
 
 import '../dao/user/dao_user_entity.dart';
@@ -29,6 +30,7 @@ class UserRepository {
       rethrow;
     }
   }
+
 
   Future<UserModelUpdate?> createUser(String email, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
     try {
@@ -65,6 +67,16 @@ class UserRepository {
     }
   }
 
+  double getAverage(List<UserModelUpdate> list){
+    double suma = 0;
+    for (var element in list){
+      suma+=element.stars;
+    }
+    return suma/list.length;
+  }
+
+
+
   Future<List<UserModelUpdate>> getDocumentsWithinRadius(double latitude, double longitude) async {
     try {
       return await userDao.getDocumentsWithinRadius(latitude,longitude);
@@ -72,5 +84,7 @@ class UserRepository {
       rethrow;
     }
   }
+
+
 
 }

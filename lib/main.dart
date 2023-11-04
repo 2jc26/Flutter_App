@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:giusseppe_flut/app_navigator.dart';
 import 'package:giusseppe_flut/auth/auth_repository.dart';
-import 'package:giusseppe_flut/screens/pruebas_mapa.dart';
 import 'package:giusseppe_flut/screens/user_list.dart';
-import 'package:giusseppe_flut/session_cubit.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 
 // Firebase
@@ -57,11 +54,11 @@ class MyApp extends StatelessWidget {
       home: RepositoryProvider(
         create: (context) => AuthRepository(),
         child: //const MapScreen(),
-        //UserList(),
-        BlocProvider(
+        UserList(),
+        /*BlocProvider(
           create: (context) => SessionCubit(authRepo: context.read<AuthRepository>()),
           child: AppNavigator(),
-        ),
+        ),*/
       ),
     );
   }
