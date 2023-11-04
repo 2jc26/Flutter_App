@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:giusseppe_flut/screens/views_abs.dart';
 
 import '../models/user/user_model_update.dart';
 import '../presenter/user_presenter_location.dart';
 import '../widgets/drawer.dart';
 import '../widgets/information_card.dart';
+import 'base_mvp/base_mvp_location.dart';
 
 class LocationPermissionView extends StatefulWidget {
   @override
   _LocationPermissionViewState createState() => _LocationPermissionViewState();
 }
 
-class _LocationPermissionViewState extends State<LocationPermissionView> implements UserListView{
+class _LocationPermissionViewState extends State<LocationPermissionView> implements UserListViewLocation{
   double? latitude ;
   double? longitude ;
   List<UserModelUpdate>? _userList=[];
@@ -59,6 +59,7 @@ class _LocationPermissionViewState extends State<LocationPermissionView> impleme
     });
     userListPresenter.getNearUsers(latitude! ,longitude!);
   }
+
   @override
   void refreshUserListView(List<UserModelUpdate> userList) {
     setState(() {
