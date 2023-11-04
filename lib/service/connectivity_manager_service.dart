@@ -12,14 +12,24 @@ class ConnectivityManagerService {
 
   ConnectivityManagerService._internal();
   
-  final StreamController<bool> _connectionStatusController = StreamController<bool>();
+  final StreamController<bool> _connectionStatusController = StreamController<bool>.broadcast();
 
   Stream<bool> get connectionStatus => _connectionStatusController.stream;
+
+  late bool connectivity;
 
   void initialize() {
     Connectivity().onConnectivityChanged.listen((result) async {
       final isDeviceConnected = await InternetConnectionChecker().hasConnection;
+      connectivity = isDeviceConnected;
       _connectionStatusController.add(isDeviceConnected);
+    });
+    emitStatus();
+  }
+
+  void emitStatus() {
+    InternetConnectionChecker().hasConnection.then((isConnected) {
+      connectivity = isConnected;
     });
   }
 }
