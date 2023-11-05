@@ -9,6 +9,6 @@ class PasswordProvider extends DefaultStorage {
 
   Future<void> setPassword(String password) async {
     final adapter = await this.adapter;
-    adapter.writeStr(key: 'Password', value: password);
+    adapter.writeStr(key: 'password', value: password);
   }
 }
