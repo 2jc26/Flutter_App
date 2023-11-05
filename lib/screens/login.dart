@@ -102,7 +102,7 @@ class _LoginState extends State<Login> {
                 const SizedBox(height: 50),
                 _loginButton(),
                 const SizedBox(height: 20),
-                _extraText(context),
+                _extraText(),
               ],
             ),
           ),
@@ -221,38 +221,62 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget _extraText(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        ElevatedButton(
-          onPressed: () {
-            context.read<AuthCubit>().showSignUp();
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            elevation: 0, // Remove button elevation
+  Widget _extraText() {
+    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              if (context.read<LoginBloc>().authRepo.connectivity) {
+                context.read<AuthCubit>().showSignUp();
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text("No hay Conexión a una red"),
+                      content: const Text(
+                        'En este momento no hay conexión a internet. Está función solo funciona con conexión a internet, intente de nuevo más tarde.'
+                      ),
+                      actions: <Widget>[
+                        TextButton (
+                          child: const Text('Cerrar'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              elevation: 0, // Remove button elevation
+            ),
+            child: const Text(
+              "Don't have an account?",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
-          child: const Text(
-            "Don't have an account?",
-            textAlign: TextAlign.left,
+          const Text(
+            "Forget Details?",
+            textAlign: TextAlign.right,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 10,
               color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
           ),
-        ),
-        const Text(
-          "Forget Details?",
-          textAlign: TextAlign.right,
-          style: TextStyle(
-            fontSize: 10,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 }

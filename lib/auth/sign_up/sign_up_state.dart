@@ -11,7 +11,13 @@ class SignUpState {
   final String city;
   final String locality;
 
-  bool get isValidUsername => email.length > 3;
+  bool get isValidUsername => email.length > 3 && _isEmailValid(email);
+
+  bool _isEmailValid(String email) {
+    // Utiliza una expresión regular para verificar si el email tiene un formato válido.
+    final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+    return emailRegex.hasMatch(email);
+  }
 
   bool get isValidPassword => password.length > 6;
   

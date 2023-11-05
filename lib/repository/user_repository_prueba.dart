@@ -1,7 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:giusseppe_flut/storage/storage_adapters/file_manager.dart';
 
 import '../dao/user/dao_user_entity.dart';
@@ -10,6 +10,12 @@ import '../models/user/user_model_update.dart';
 class UserRepository {
 
   final UserDaoFireStore userDao= UserDaoFireStore();
+  
+  FileManager fileManager = FileManager();
+
+  UserRepository() {
+    FileManager.initialFile();
+  }
 
   Future<List<UserModelUpdate>> getAllUsers() async {
     try {
@@ -40,13 +46,21 @@ class UserRepository {
     }
   }
 
-  Future<UserModelUpdate?> getUserLocalFile(String username, String password, String id, FileManager fileManager) async {
+  Future<UserModelUpdate?> getUserLocalFile(String username, String password, String id) async {
     try {
       final user = await fileManager.read(File('${FileManager.directory.path}/user.json'));
       if (user != null) {
         return UserModelUpdate.fromJson({...user, 'id': id, 'username': username, 'password': password});
       }
       return null;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<void> createFileUser(UserModelUpdate user) async {
+    try {
+      await fileManager.write(File('${FileManager.directory.path}/user.json'), json.encode(user.toJson()));
     } catch (error) {
       rethrow;
     }

@@ -291,7 +291,7 @@ class HouseElements extends StatelessWidget {
               builder: (context) => HouseDetail(house: _houseList![index]),
             ));
           },
-          child: const Text("asfsdf"),
+          child: const Text("Hello World!"),
           /*child: InformationCardUser(
             getImageURL: () => _houseListPresenter.getImage(_houseList![index].images[0]), // Pasa una función que obtiene la imagen.
             stars: _houseList![index].rating,

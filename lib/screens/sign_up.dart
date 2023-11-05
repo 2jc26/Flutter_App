@@ -269,7 +269,7 @@ class _SignUpState extends State<SignUp> {
             fillColor: const Color(0XffEBEDF0),
             hintText: 'Username',
           ),
-          maxLength: 16,
+          maxLength: 50,
           validator: (value) =>
               state.isValidUsername ? null : 'Username is invalid',
           onChanged: (value) {
@@ -526,7 +526,29 @@ class _SignUpState extends State<SignUp> {
               ),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  context.read<SignUpBloc>().add(SignUpSubmitted());
+                  if (context.read<SignUpBloc>().authRepo.connectivity) {
+                    context.read<SignUpBloc>().add(SignUpSubmitted());
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text("No hay Conexión a una red"),
+                          content: const Text(
+                            'En este momento no hay conexión a internet. Está función solo funciona con conexión a internet, intente de nuevo más tarde.'
+                          ),
+                          actions: <Widget>[
+                            TextButton (
+                              child: const Text('Cerrar'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 }
               },
               child: const Text('Sign Up'),
