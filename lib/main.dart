@@ -1,11 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:giusseppe_flut/app_navigator.dart';
 
 import 'package:giusseppe_flut/auth/auth_repository.dart';
-import 'package:giusseppe_flut/models/user/user_model.dart';
 import 'package:giusseppe_flut/screens/user_list.dart';
+
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 
 // Firebase
@@ -63,7 +64,7 @@ class MyApp extends StatelessWidget {
         child:
         BlocProvider(
           create: (context) => SessionCubit(authRepo: context.read<AuthRepository>()),
-          child: AppNavigator(),
+          child: UserList()//AppNavigator(),
         ),
       ),
     );

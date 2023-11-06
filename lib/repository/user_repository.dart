@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:giusseppe_flut/storage/storage_adapters/file_manager.dart';
 import '../models/user/user_model.dart';
+import '../service/connectivity_manager_service.dart';
 import '../service_adapter/user/dao_user_entity.dart';
 import '../storage/storage_adapters/Objectbox/ObjectBox.dart';
 
@@ -12,8 +14,18 @@ class UserRepository {
   ObjectBoxDao instancia= ObjectBoxDao();
   FileManager fileManager = FileManager();
 
+  late StreamSubscription<bool> connectionSubscription;
+  bool connectivity = ConnectivityManagerService().connectivity;
+
   UserRepository() {
     FileManager.initialFile();
+    initializeConnectivity();
+
+  }
+  Future<void> initializeConnectivity() async{
+    connectionSubscription = ConnectivityManagerService().connectionStatus.listen((isConnected) {
+      connectivity = isConnected;
+    });
   }
 
 
@@ -31,7 +43,24 @@ class UserRepository {
       rethrow;
     }
   }
-
+  Future<List<UserModel>> getAllUsersByPreferences() async {
+    try {
+      if (connectivity){
+        List<UserModel> lista= await userDao.getUsersByPreferences();
+        for (var usuario in lista){
+          bool condicion =instancia.verifyUserExist(usuario.id);
+          if (!condicion){
+            instancia.addUser(usuario);
+          }
+        }
+        return lista;
+      }else{
+        return instancia.getUsersByPreferences();
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
   Future<Uint8List?> getImage(String image) async {
     return userDao.getImage(image);
   }
@@ -80,20 +109,8 @@ class UserRepository {
       rethrow;
     }
   }
-  Future<List<UserModel>> getAllUsersByPreferences() async {
-    try {
-      List<UserModel> lista= await userDao.getUsersByPreferences();
-      for (var usuario in lista){
-        bool condicion =instancia.verifyUserExist(usuario.id);
-        if (!condicion){
-          instancia.addUser(usuario);
-        }
-      }
-      return lista;
-    } catch (error) {
-      rethrow;
-    }
-  }
+
+
 
   double getAverage(List<UserModel> list){
     double suma = 0;

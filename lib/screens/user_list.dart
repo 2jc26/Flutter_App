@@ -143,6 +143,18 @@ class _UserListState extends State<UserList> implements UserListView{
           )
         : Container(),
           Expanded(
+            child: ListView.builder(
+              itemCount: _userList?.length,
+              itemBuilder: ((context, index) {
+                return InformationCardUser(
+                  url: _userList![index].image, // Pasa una función que obtiene la imagen.
+                  stars: _userList![index].stars,
+                  text: _userList![index].full_name,
+                );
+              }),
+            ),
+          ),
+          /*Expanded(
             child: StreamBuilder<List<UserModel>>(
                 stream: userListPresenter.getUsersStreamByPreferences(),
                 builder: (context,snapshot){
@@ -157,7 +169,7 @@ class _UserListState extends State<UserList> implements UserListView{
                     }
                 },
             )
-          ),
+          ),*/
         ],
       ),
     );
