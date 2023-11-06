@@ -37,12 +37,6 @@ class ConnectivityManagerService {
     emitStatus();
   }
 
-  void emitStatus() {
-    InternetConnectionChecker().hasConnection.then((isConnected) {
-      connectivity = isConnected;
-    });
-  }
-
   void connectivitySnackbar() {
     if (!connectivity) {
         Get.rawSnackbar(
