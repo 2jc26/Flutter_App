@@ -160,4 +160,19 @@ class UserFilter {
     }
   }
 
+  Map<String, dynamic> toJson () {
+    return {
+      'likes_pet': petPreference ,
+      'personality': introvertedPreference,
+      'clean': cleaningFrequency,
+      'vape': vapePreference,
+      'smoke': smokePreference,
+      'work_home': workFromHomePreference,
+      'sleep_time': sleepTime,
+      'bring_people': externalPeopleFrequency,
+      'city': city,
+      'neighborhood': neighborhood,
+    };
+  }
+
 }
