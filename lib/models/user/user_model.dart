@@ -18,6 +18,7 @@ class UserModel {
   //@Transient()
   String password='';
   String full_name;
+
   @Index()
   @Unique(onConflict: ConflictStrategy.replace)
   String id;

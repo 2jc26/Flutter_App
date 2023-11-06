@@ -82,7 +82,14 @@ class UserRepository {
   }
   Future<List<UserModel>> getAllUsersByPreferences() async {
     try {
-      return await userDao.getUsersByPreferences();
+      List<UserModel> lista= await userDao.getUsersByPreferences();
+      for (var usuario in lista){
+        bool condicion =instancia.verifyUserExist(usuario.id);
+        if (!condicion){
+          instancia.addUser(usuario);
+        }
+      }
+      return lista;
     } catch (error) {
       rethrow;
     }
