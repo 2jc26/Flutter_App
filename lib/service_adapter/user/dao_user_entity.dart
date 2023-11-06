@@ -4,20 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:giusseppe_flut/models/user/query_filter_user.dart';
 import 'package:giusseppe_flut/models/user/query_likes_user.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:giusseppe_flut/storage/storage_adapters/Objectbox/ObjectBox.dart';
 
 
-import '../../models/user/user_model_update.dart';
+import '../../models/user/user_model.dart';
+import 'abstract/base_user_dao.dart';
 final storageRef = FirebaseStorage.instance.ref();
-abstract class UserDao {
 
-  Future<UserModelUpdate?> getUserById(String id);
-  Future<List<UserModelUpdate>> getAllUsers();
-  Future<UserModelUpdate?> validateEmailAndPassword(String email, String password);
-  Future<UserModelUpdate?> createUser(String email, String password, String fullname, int age, String phone, String genero, String city, String locality);
-  // Future<void> insertUser(UserModelUpdate user);
-  // Future<void> updateUser(UserModelUpdate user);
-  // Future<void> deleteUser(int id);
-}
 
 class UserDaoFireStore extends UserDao{
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -37,14 +30,14 @@ class UserDaoFireStore extends UserDao{
   }
 
   @override
-  Future<List<UserModelUpdate>> getAllUsers() async {
-    List<UserModelUpdate> users = [];
+  Future<List<UserModel>> getAllUsers() async {
+    List<UserModel> users = [];
     try {
       final querySnapshot = await _firestore.collection("Users").get();//Users
       for (var user in querySnapshot.docs) {
         final userData = user.data();
         final userId = user.id;
-        var userModel = UserModelUpdate.fromJson({...userData, 'id': userId});
+        var userModel = UserModel.fromJson({...userData, 'id': userId});
 
         users.add(userModel);
       }
@@ -58,14 +51,14 @@ class UserDaoFireStore extends UserDao{
   }
 
   @override
-  Future<UserModelUpdate> getUserById(String id) async {
+  Future<UserModel> getUserById(String id) async {
     try {
       final querySnapshot = await _firestore.collection("Users").doc(id).get();
       final userData = querySnapshot.data();
       final userId = querySnapshot.id;
 
       if (userData != null) {
-        final userModel = UserModelUpdate.fromJson({...userData, 'id': userId});
+        final userModel = UserModel.fromJson({...userData, 'id': userId});
         return userModel;
       } else {
         throw Exception("No data found for ID: $id");
@@ -78,15 +71,16 @@ class UserDaoFireStore extends UserDao{
     }
   }
 
-  Future<List<UserModelUpdate>> getAllUsersByPreferences(UserPreferencesDTO userPreferences) {
+  Future<List<UserModel>> getAllUsersByPreferences(UserPreferencesDTO userPreferences) {
 
     throw UnimplementedError();
 
   }
 
   @override
-  Future<List<UserModelUpdate>> getUsersByPreferences() async {
-    List<UserModelUpdate> users = [];
+  Future<List<UserModel>> getUsersByPreferences() async {
+    List<UserModel> users = [];
+
     try {
       Query query= _firestore.collection("Users");
       String? userFilter= UserFilter().getCity();
@@ -137,7 +131,8 @@ class UserDaoFireStore extends UserDao{
       for (var user in querySnapshot.docs) {
         final userData = user.data() as Map<String, dynamic>;
         final userId = user.id;
-        users.add(UserModelUpdate.fromJson({...userData, 'id': userId}));
+        UserModel nuevoUsuario=UserModel.fromJson({...userData, 'id': userId});
+        users.add(nuevoUsuario);
       }
       return users;
     } catch (error) {
@@ -147,8 +142,8 @@ class UserDaoFireStore extends UserDao{
       rethrow;
     }
   }
-  Future<List<UserModelUpdate>> getDocumentsWithinRadius(double latitude, double longitude) async {
-    List<UserModelUpdate> users=[];
+  Future<List<UserModel>> getDocumentsWithinRadius(double latitude, double longitude) async {
+    List<UserModel> users=[];
 
     const double radiusInDegrees = 20;
 
@@ -167,7 +162,7 @@ class UserDaoFireStore extends UserDao{
       final userData = user.data() as Map<String, dynamic>;
       if (userData["long"]>=minLon 	&& userData["long"]<=maxLon){
         final userId = user.id;
-        users.add(UserModelUpdate.fromJson({...userData, 'id': userId}));
+        users.add(UserModel.fromJson({...userData, 'id': userId}));
       }
 
     }
@@ -176,7 +171,7 @@ class UserDaoFireStore extends UserDao{
   }
 
   @override
-  Future<UserModelUpdate?> validateEmailAndPassword(
+  Future<UserModel?> validateEmailAndPassword(
       String email, String password) async {
     try {
       // Check if a user with the given email exists in Firestore
@@ -193,7 +188,7 @@ class UserDaoFireStore extends UserDao{
 
         if (password == storedPasswordHash) {
           if (userData != null) {
-            final userModel = UserModelUpdate.fromJson({...userData, "id": userId});
+            final userModel = UserModel.fromJson({...userData, "id": userId});
             return userModel;
           }
         }
@@ -210,7 +205,7 @@ class UserDaoFireStore extends UserDao{
   }
 
   @override
-  Future<UserModelUpdate?> createUser(String email, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
+  Future<UserModel?> createUser(String email, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
     try {
       // To Do In base of city and locality get lat and long
       String bringPeople = '';
@@ -259,7 +254,7 @@ class UserDaoFireStore extends UserDao{
         final userData = docSnapshot.data();
         final userId = docSnapshot.id;
         if (userData != null) {
-          final userModel = UserModelUpdate.fromJson({...userData, 'id': userId});
+          final userModel = UserModel.fromJson({...userData, 'id': userId});
           return userModel;
         } else {
           throw Exception("User not created");

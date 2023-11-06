@@ -1,14 +1,26 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:objectbox/objectbox.dart';
 
-part 'user_model_update.g.dart';
+part 'user_model.g.dart';
 
+
+@Entity()
 @JsonSerializable()
-class UserModelUpdate {
+class UserModel {
+
+  @Id(assignable: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  int id_int = 0;
+
   String image;
   String email;
-  String password;
+
+  //@Transient()
+  String password='';
   String full_name;
-  String? id;
+  @Index()
+  @Unique(onConflict: ConflictStrategy.replace)
+  String id;
   int age;
   String bring_people;
   int sleep;
@@ -28,8 +40,8 @@ class UserModelUpdate {
   String locality;
 
   // Image
-  UserModelUpdate({
-    this.id,
+  UserModel({
+    required this.id,
     required this.age,
     required this.image,
     required this.email,
@@ -50,11 +62,10 @@ class UserModelUpdate {
     required this.stars,
     required this.city,
     required this.locality,
-
   });
 
-  factory UserModelUpdate.fromJson(Map<String, dynamic> json) =>
-      _$UserModelUpdateFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UserModelUpdateToJson(this);
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 }

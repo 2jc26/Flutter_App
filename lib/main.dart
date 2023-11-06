@@ -4,15 +4,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:giusseppe_flut/app_navigator.dart';
 
 import 'package:giusseppe_flut/auth/auth_repository.dart';
+import 'package:giusseppe_flut/screens/user_list.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
 import 'package:giusseppe_flut/session_cubit.dart';
+import 'package:giusseppe_flut/storage/storage_adapters/Objectbox/ObjectBox.dart';
 import 'firebase_options.dart';
+import 'models/user/query_filter_user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  var objectbox = await ObjectBoxDao.initialize();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -54,11 +58,11 @@ class MyApp extends StatelessWidget {
 
       home: RepositoryProvider(
         create: (context) => AuthRepository(),
-        child:
-        BlocProvider(
+        child: UserList()
+        /*BlocProvider(
           create: (context) => SessionCubit(authRepo: context.read<AuthRepository>()),
           child: AppNavigator(),
-        ),
+        ),*/
       ),
     );
   }

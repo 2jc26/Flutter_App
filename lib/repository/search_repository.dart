@@ -1,8 +1,10 @@
 
-import 'package:giusseppe_flut/dao/house/dao_house_entity.dart';
-import 'package:giusseppe_flut/dao/houseSearching/dao_house_searching_entity.dart';
+
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
+
+import '../service_adapter/house/dao_house_entity.dart';
+import '../service_adapter/houseSearching/dao_house_searching_entity.dart';
 
 class SearchRepository {
 
