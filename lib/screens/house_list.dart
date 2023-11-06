@@ -77,12 +77,17 @@ class _HouseListState extends State<HouseList> implements HouseListView {
 
   @override
   void initState() {
-    super.initState();
+    // TODO: reemplazar por el id del usuario logueado del cache/local storage
     _userId = widget.userId;
+
     _houseFilters = widget.houseFilters;
+
     houseListPresenter = HouseListPresenter(widget.userId, widget.houseFilters);
+
     houseListPresenter.backView = this;
+    
     _searchController.addListener(_onSearchTextChanged);
+    super.initState();
   }
 
   @override
