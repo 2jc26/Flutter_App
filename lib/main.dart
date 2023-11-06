@@ -60,11 +60,11 @@ class MyApp extends StatelessWidget {
 
       home: RepositoryProvider(
         create: (context) => AuthRepository(),
-        child: UserList()
-        /*BlocProvider(
+        child:
+        BlocProvider(
           create: (context) => SessionCubit(authRepo: context.read<AuthRepository>()),
           child: AppNavigator(),
-        ),*/
+        ),
       ),
     );
   }
