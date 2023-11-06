@@ -37,19 +37,19 @@ class BackendService {
     }
   }
 
-  Future<void> post(String endPoint, object) async {
+  Future<List<dynamic>> post(String endPoint, object) async {
     final response = await http.post(Uri.parse(
-      '$baseUrl/houses'),
+      '$baseUrl/$endPoint'),
       headers: {
         "Content-Type": "application/json",
       },
       body: json.encode(object.toJson()),
     );
     if (response.statusCode == 200) {
-      print('Response data: ${response.body}');
+      return json.decode(response.body);
     } else {
       // Request failed
-      print('Request failed with status: ${response.statusCode}');
+      return [];
     }
   }
 

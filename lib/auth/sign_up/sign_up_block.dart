@@ -57,7 +57,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         final user = await authRepo.signUp(state.email, state.password, state.fullname, state.age, state.phone, state.genero, state.city, state.locality);
         yield state.copyWith(formStatus: FormSubmitting());
         if (user != null) {
-          String id = user.id ?? "";
+          String id = user.id;
           authCubit.launchSession(AuthCredentials(email: user.email, userId: id));
         }
       } catch(e) {
