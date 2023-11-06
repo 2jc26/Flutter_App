@@ -1,5 +1,5 @@
 
-import '../../models/user/user_model_update.dart';
+import '../../models/user/user_model.dart';
 class UserListViewLocation{
-  void refreshUserListView(List<UserModelUpdate> houseList) {}
+  void refreshUserListView(List<UserModel> houseList) {}
 }

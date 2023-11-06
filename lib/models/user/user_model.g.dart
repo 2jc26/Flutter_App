@@ -1,14 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_model_update.dart';
+part of 'user_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-UserModelUpdate _$UserModelUpdateFromJson(Map<String, dynamic> json) =>
-    UserModelUpdate(
-      id: json['id'] as String?,
+UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
+      id: json['id'] as String,
       age: json['age'] as int,
       image: json['image'] as String,
       email: json['email'] as String,
@@ -31,8 +30,7 @@ UserModelUpdate _$UserModelUpdateFromJson(Map<String, dynamic> json) =>
       locality: json['locality'] as String,
     );
 
-Map<String, dynamic> _$UserModelUpdateToJson(UserModelUpdate instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'image': instance.image,
       'email': instance.email,
       'password': instance.password,

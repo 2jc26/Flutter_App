@@ -1,9 +1,9 @@
 import 'dart:typed_data';
-
-import 'package:giusseppe_flut/dao/house/dao_house_entity.dart';
-import 'package:giusseppe_flut/dao/houseLiking/dao_house_liking_entity.dart';
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
 import 'package:giusseppe_flut/models/houseLiking/house_liking_model_update.dart';
+
+import '../service_adapter/house/dao_house_entity.dart';
+import '../service_adapter/houseLiking/dao_house_liking_entity.dart';
 
 class HouseRepository {
   final HouseDaoFireStore houseDao= HouseDaoFireStore();
