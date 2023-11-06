@@ -29,7 +29,7 @@ class AuthRepository {
     try {
       await nicknameProvider.setNickname(user.email);
       await passwordProvider.setPassword(user.password);
-      await idProvider.setId(user.id??'');
+      await idProvider.setId(user.id);
       await userRepository.createFileUser(user);
     } catch(e) {
       throw Exception(e);

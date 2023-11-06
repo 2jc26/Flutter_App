@@ -88,12 +88,7 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                   ),
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6.0),
-                  child: BigImage(
-                      getImageURL: () =>
-                          houseDetailPresenter.getImage(_house!.images[0])),
-                ),
+                child: const Text("Hola"),
               ),
             ),
             const SizedBox(height: 5),
@@ -117,10 +112,7 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                           return Padding(
                             padding: EdgeInsets.only(
                                 left: adjustedIndex == 1 ? 2 : 20.0),
-                            child: SmallImage(
-                              getImageURL: () => houseDetailPresenter
-                                  .getImage(_house!.images[adjustedIndex]),
-                            ),
+                            child: const Text("Hola"),
                           );
                         },
                       ),

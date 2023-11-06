@@ -14,10 +14,6 @@ class HouseDetailPresenter {
     _backView = HouseDetailView();
   }
 
-  Future<Uint8List?> getImage(String image) async {
-    return houseRepository.getImage(image);
-  }
-
   set backView(HouseDetailView value) {
     _backView = value;
     if (house != null) { // Check if house is not null before refreshing the view
