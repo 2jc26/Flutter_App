@@ -13,6 +13,7 @@ import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:giusseppe_flut/session_cubit.dart';
 import 'package:giusseppe_flut/storage/storage_adapters/Objectbox/ObjectBox.dart';
+import 'app_navigator.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -62,7 +63,7 @@ class MyApp extends StatelessWidget {
         child:
         BlocProvider(
           create: (context) => SessionCubit(authRepo: context.read<AuthRepository>()),
-          child: UserList()//AppNavigator(),
+          child: AppNavigator(),
         ),
       ),
     );
