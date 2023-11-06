@@ -105,7 +105,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                       child: GoogleMap(
                         mapType: MapType.hybrid,
                         initialCameraPosition: CameraPosition(
-                          target: LatLng(37.422131, -122.084801), // Cambia esto a las coordenadas deseadas
+                          target: LatLng(4.6097, -74.0817), // Cambia esto a las coordenadas deseadas
                           zoom: 3,
                         ),
                       ),

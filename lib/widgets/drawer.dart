@@ -4,14 +4,24 @@ import 'package:giusseppe_flut/auth/auth_cubit.dart';
 import 'package:giusseppe_flut/screens/house_list.dart';
 import 'package:giusseppe_flut/screens/user_list.dart';
 import 'package:giusseppe_flut/screens/user_recomendation_ubication.dart';
+import 'package:giusseppe_flut/storage/providers/nickname_provider.dart';
 
 class CustomDrawer extends StatelessWidget {
   final BuildContext customDrawerContext;
 
+  final NicknameProvider nicknameProvider = NicknameProvider();
+
+  String nickname = '';
+
   CustomDrawer({required this.customDrawerContext, Key? key}) : super(key: key);
 
+  getNickName() async {
+    nickname = await nicknameProvider.getNickname() ?? '';
+  }
+  
   @override
   Widget build(BuildContext context) {
+    getNickName();
     return Drawer(
       child: ListView(
         children: [
@@ -30,7 +40,7 @@ class CustomDrawer extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  const Text("Paco Martinez"),
+                  Text(nickname),
                 ],
               ),
             ),
