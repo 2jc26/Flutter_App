@@ -1,12 +1,12 @@
 
-import '../models/user/user_model_update.dart';
-import '../repository/user_repository_prueba.dart';
+import '../models/user/user_model.dart';
+import '../repository/user_repository.dart';
 import '../screens/base_mvp/base_mvp_location.dart';
 import '../screens/base_mvp/views_abs.dart';
 
 class UserListPresenterLocation {
   final UserRepository userRepository = UserRepository();
-  List<UserModelUpdate>? usersList = [];
+  List<UserModel>? usersList = [];
   late UserListViewLocation _backView= UserListViewLocation();
 
   UserListPresenterLocation();
@@ -14,7 +14,7 @@ class UserListPresenterLocation {
   void getNearUsers(double latitud, double longitud) async {
 
     try {
-      List<UserModelUpdate>? users = [];
+      List<UserModel>? users = [];
       users = await userRepository.getDocumentsWithinRadius(latitud!,longitud!);
       if (users != null) {
         usersList = users;

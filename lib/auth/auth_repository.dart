@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:giusseppe_flut/models/user/user_model_update.dart';
-import 'package:giusseppe_flut/repository/user_repository_prueba.dart';
+import 'package:giusseppe_flut/models/user/user_model.dart';
+import 'package:giusseppe_flut/repository/user_repository.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:giusseppe_flut/storage/providers/id_provider.dart';
 import 'package:giusseppe_flut/storage/providers/nickname_provider.dart';
@@ -25,7 +25,7 @@ class AuthRepository {
     });
   }
 
-  Future<void> saveLocalInfo(UserModelUpdate user) async {
+  Future<void> saveLocalInfo(UserModel user) async {
     try {
       await nicknameProvider.setNickname(user.email);
       await passwordProvider.setPassword(user.password);
@@ -37,9 +37,9 @@ class AuthRepository {
     }
   }
 
-  Future<UserModelUpdate?> login(String email, String password) async {
+  Future<UserModel?> login(String email, String password) async {
     try {
-      UserModelUpdate? user;
+      UserModel? user;
       if (!connectivity) {
         final uNameStorage = await nicknameProvider.getNickname();
         final passStorage = await passwordProvider.getPassword();
@@ -61,7 +61,7 @@ class AuthRepository {
     }
   }
 
-  Future<UserModelUpdate?> signUp(String email, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
+  Future<UserModel?> signUp(String email, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
     try {
       if (connectivity) {
         final user = await userRepository.createUser(email, password, fullname, age, phone, genero, city, locality);
