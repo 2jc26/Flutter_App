@@ -36,7 +36,7 @@ class UserModel {
   String gender;
   double latitude;
   double longitude;
-  int stars;
+  double stars;
   String city;
   String locality;
 

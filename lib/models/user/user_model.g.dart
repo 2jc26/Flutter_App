@@ -25,7 +25,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       gender: json['gender'] as String,
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
-      stars: json['stars'] as int,
+      stars: (json['stars'] as num).toDouble(),
       city: json['city'] as String,
       locality: json['locality'] as String,
     );

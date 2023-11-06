@@ -124,7 +124,7 @@ final _entities = <ModelEntity>[
         ModelProperty(
             id: const IdUid(20, 6586141486109144892),
             name: 'stars',
-            type: 6,
+            type: 8,
             flags: 0),
         ModelProperty(
             id: const IdUid(21, 7841518691433668281),
@@ -245,7 +245,7 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(16, genderOffset);
           fbb.addFloat64(17, object.latitude);
           fbb.addFloat64(18, object.longitude);
-          fbb.addInt64(19, object.stars);
+          fbb.addFloat64(19, object.stars);
           fbb.addOffset(20, cityOffset);
           fbb.addOffset(21, localityOffset);
           fbb.finish(fbb.endTable());
@@ -293,7 +293,7 @@ ModelDefinition getObjectBoxModel() {
           final longitudeParam =
               const fb.Float64Reader().vTableGet(buffer, rootOffset, 40, 0);
           final starsParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 42, 0);
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 42, 0);
           final cityParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 44, '');
           final localityParam = const fb.StringReader(asciiOptimization: true)
@@ -409,7 +409,7 @@ class UserModel_ {
 
   /// see [UserModel.stars]
   static final stars =
-      QueryIntegerProperty<UserModel>(_entities[0].properties[19]);
+      QueryDoubleProperty<UserModel>(_entities[0].properties[19]);
 
   /// see [UserModel.city]
   static final city =

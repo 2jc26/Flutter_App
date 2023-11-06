@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
+import 'package:giusseppe_flut/screens/InformationCardUser.dart';
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
 import 'package:giusseppe_flut/screens/house_detail.dart';
 import 'package:giusseppe_flut/widgets/search_field.dart';
@@ -295,12 +296,7 @@ class HouseElements extends StatelessWidget {
               builder: (context) => HouseDetail(house: _houseList![index]),
             ));
           },
-          child: const Text("Hello World!"),
-          /*child: InformationCardUser(
-            getImageURL: () => _houseListPresenter.getImage(_houseList![index].images[0]), // Pasa una función que obtiene la imagen.
-            stars: _houseList![index].rating,
-            text: _houseList![index].name,
-          ),*/
+          child: InformationCardUser(url: _houseList![index].images[0], stars: _houseList![index].rating, text: _houseList![index].name),
         );
       }),
     );
