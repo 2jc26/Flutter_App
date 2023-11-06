@@ -60,7 +60,7 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
           ),
           centerTitle: true,
         ),
-        drawer: const CustomDrawer(),
+        // drawer: CustomDrawer(customDrawerContext: context),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

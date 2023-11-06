@@ -85,7 +85,7 @@ class _LocationPermissionViewState extends State<LocationPermissionView> impleme
         ),
         centerTitle: true,
       ),
-      drawer: const CustomDrawer(),
+      // drawer: CustomDrawer(customDrawerContext: context),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

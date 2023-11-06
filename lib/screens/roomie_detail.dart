@@ -26,7 +26,7 @@ class RoommateDetail extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      drawer: const CustomDrawer(),
+      // drawer: CustomDrawer(customDrawerContext: context),
       body: SingleChildScrollView(
         child: Center(
           child: Column(

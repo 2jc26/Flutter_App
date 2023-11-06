@@ -17,6 +17,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool exception = true;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -84,8 +85,9 @@ class _LoginState extends State<Login> {
     return BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           final formStatus = state.formStatus;
-          if (formStatus is SubmissionFailed) {
+          if (formStatus is SubmissionFailed && exception) {
             _showSnackBar(context, formStatus.exception.toString());
+            exception = false;
           }
         },
         child: Form(
@@ -127,10 +129,10 @@ class _LoginState extends State<Login> {
             filled: true,
             fillColor: const Color(0XffEBEDF0),
             // icon: const Icon(Icons.person),
-            hintText: 'Username',
+            hintText: 'E-mail',
           ),
           validator: (value) =>
-              state.isValidUsername ? null : 'Username is invalid',
+              state.isValidUsername ? null : 'E-mail is invalid',
           onChanged: (value) {
             context.read<LoginBloc>().add(LoginUsernameChanged(username: value));
             usernameController.text = value;
@@ -187,6 +189,7 @@ class _LoginState extends State<Login> {
               ),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
+                  exception = true;
                   context.read<LoginBloc>().add(LoginSubmitted());
                 }
               },
@@ -196,11 +199,26 @@ class _LoginState extends State<Login> {
   }
 
   void _showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      dismissDirection: DismissDirection.down,
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Error in the Login"),
+          content: message.contains("Login fallido")
+              ? const Text(
+                  'It seems that the credentials you have entered are incorrect. Please review your data and try again')
+              : Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   Widget _begainText() {

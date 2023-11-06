@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:giusseppe_flut/auth/auth_cubit.dart';
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
@@ -105,7 +107,6 @@ class _HouseListState extends State<HouseList> implements HouseListView {
           ),
           centerTitle: true,
         ),
-        drawer: const CustomDrawer(),
         body: Column(
           children: [
             if (_houseFilters == null && _housesLikingList!.isNotEmpty)
@@ -118,7 +119,8 @@ class _HouseListState extends State<HouseList> implements HouseListView {
                   flex: 1,
                   filter: false,
                   searchController: _searchController,
-                  houseListPresenter: houseListPresenter),
+                  houseListPresenter: houseListPresenter,
+              ),
             const SizedBox(height: 10),
             HouseSection(
                 userId: _userId,
@@ -127,10 +129,12 @@ class _HouseListState extends State<HouseList> implements HouseListView {
                 flex: 2,
                 filter: true,
                 searchController: _searchController,
-                houseListPresenter: houseListPresenter),
+                houseListPresenter: houseListPresenter,
+            ),
             const SizedBox(height: 10),
           ],
         ),
+        drawer: CustomDrawer(customDrawerContext: context)
       );
     } else if (_housesList!.isEmpty && _houseFilters == null) {
       return const Scaffold(
@@ -176,7 +180,7 @@ class NoHousesSearch extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      drawer: const CustomDrawer(),
+      drawer: CustomDrawer(customDrawerContext: context),
       body: const Padding(
         padding: EdgeInsets.all(15),
         child: Text(

@@ -267,11 +267,11 @@ class _SignUpState extends State<SignUp> {
             ),
             filled: true,
             fillColor: const Color(0XffEBEDF0),
-            hintText: 'Username',
+            hintText: 'E-mail',
           ),
           maxLength: 50,
           validator: (value) =>
-              state.isValidUsername ? null : 'Username is invalid',
+              state.isValidUsername ? null : 'E-mail is invalid',
           onChanged: (value) {
             context
                 .read<SignUpBloc>()
@@ -434,7 +434,7 @@ class _SignUpState extends State<SignUp> {
             ),
             filled: true,
             fillColor: const Color(0XffEBEDF0),
-            hintText: 'Genre',
+            hintText: 'Gender',
           ),
           maxLength: 20,
           onChanged: (value) {
@@ -583,10 +583,22 @@ class _SignUpState extends State<SignUp> {
   }
 
   void _showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      dismissDirection: DismissDirection.down,
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Error in the Sign Up"),
+          content: Text(message.replaceAll("Exception: ", "")),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cerrar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

@@ -45,7 +45,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
         ),
         centerTitle: true,
       ),
-      drawer: const CustomDrawer(),
+      // drawer: CustomDrawer(customDrawerContext: context),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -28,36 +28,14 @@ class AppNavigator extends StatelessWidget {
         );
       }
       if (state is Authenticated) {
-        return HouseList(userId: state.userid, houseFilters: null);
+        return Material(
+          child: BlocProvider(
+            create: (context) => AuthCubit(sessionCubit: context.read<SessionCubit>()),
+            child: HouseList(userId: state.userid, houseFilters: null),
+          ),
+        );
       }
-      // Return a default widget (e.g., an empty Container) for unhandled cases.
       return Container();
     });
   }
 }
-
-
-
-      // return Navigator (
-      //   pages: [
-      //     if (state is UnkownSessionState) 
-      //       MaterialPage(
-      //         child: BlocProvider (
-      //           create: (context) => AuthCubit(sessionCubit: context.read<SessionCubit>()),
-      //           child: AuthNavigator(),
-      //           )
-      //         ),
-
-      //     if (state is Unauthenticated)
-      //       MaterialPage(
-      //         child: BlocProvider (
-      //           create: (context) => AuthCubit(sessionCubit: context.read<SessionCubit>()),
-      //           child: AuthNavigator(),
-      //           )
-      //         ),
-
-      //     if (state is Authenticated)
-      //       MaterialPage(child: HouseList(userId: state.userid, houseFilters: null)),
-      //   ],
-      //   onPopPage: (route, result) => route.didPop(result),
-      // );

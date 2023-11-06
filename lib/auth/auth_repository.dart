@@ -63,7 +63,7 @@ class AuthRepository {
 
   Future<UserModelUpdate?> signUp(String email, String password, String fullname, int age, String phone, String genero, String city, String locality) async {
     try {
-      if (!connectivity) {
+      if (connectivity) {
         final user = await userRepository.createUser(email, password, fullname, age, phone, genero, city, locality);
         if (user != null) {
           saveLocalInfo(user);
@@ -72,7 +72,7 @@ class AuthRepository {
           throw Exception("SignUp fallido");
         }
       } else {
-        throw Exception("No hay conexión a internet");
+        throw Exception("There is no internet connection");
       }
     } catch(e) {  
       throw Exception(e);

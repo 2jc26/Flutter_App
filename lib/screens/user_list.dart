@@ -57,7 +57,7 @@ class _UserListState extends State<UserList> implements UserListView{
         ),
         centerTitle: true,
       ),
-      drawer: const CustomDrawer(),
+      // drawer: CustomDrawer(customDrawerContext: context),
       body: Column(
         children: [
           Center(
