@@ -18,7 +18,7 @@ class ConnectivityManagerService {
 
   Stream<bool> get connectionStatus => _connectionStatusController.stream;
 
-  late bool connectivity;
+  late bool connectivity=true;
 
   void initialize() {
     Connectivity().onConnectivityChanged.listen((result) async {
@@ -34,7 +34,6 @@ class ConnectivityManagerService {
     InternetConnectionChecker().hasConnection.then((isConnected) {
       connectivity = isConnected;
     });
-    emitStatus();
   }
 
   void connectivitySnackbar() {
