@@ -310,7 +310,7 @@ class NoUsersSearch extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      drawer: const CustomDrawer(),
+      drawer: CustomDrawer(customDrawerContext: context),
       body: const Padding(
         padding: EdgeInsets.all(15),
         child: Text(
