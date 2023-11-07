@@ -19,7 +19,7 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var objectbox = await ObjectBoxDao.initialize();
-
+  ObjectBoxDao().deleteAllUsers();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
         child:
         BlocProvider(
           create: (context) => SessionCubit(authRepo: context.read<AuthRepository>()),
-          child: AppNavigator(),
+          child: UserList()//AppNavigator(),
         ),
       ),
     );
