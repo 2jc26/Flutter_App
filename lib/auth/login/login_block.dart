@@ -34,7 +34,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         final user = await authRepo.login(state.email, state.password);
         yield state.copyWith(formStatus: SubmissionSuccess());
         if (user != null) {
-          String id = user.id ?? "";
+          String id = user.id;
           authCubit.launchSession(AuthCredentials(email: user.email, userId: id));
         }
       } catch(e) {
