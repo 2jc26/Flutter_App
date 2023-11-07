@@ -7,6 +7,7 @@ import 'package:giusseppe_flut/models/user/query_filter_user.dart';
 import 'package:giusseppe_flut/models/user/query_likes_user.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:giusseppe_flut/storage/storage_adapters/Objectbox/ObjectBox.dart';
+import 'package:giusseppe_flut/service/backend_service.dart';
 
 
 import '../../models/user/user_model.dart';
@@ -113,6 +114,7 @@ class UserDaoFireStore extends UserDao{
     List<UserModel> users = [];
 
     try {
+      updateUserPreferencesStats();
       Query query= _firestore.collection("Users");
       String? userFilter= UserFilter().getCity();
       String? cc = UserFilter().getNeighborhood();
@@ -301,5 +303,17 @@ class UserDaoFireStore extends UserDao{
     }
   }
 
+  Future<void> updateUserPreferencesStats() async {
+    try {
+      print(UserFilter().toJson());
+      BackendService().putAll("stats/usersfilters", UserFilter());
+
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error updating preferences stats: $error");
+      }
+      rethrow;
+    }
+  }
   
 }

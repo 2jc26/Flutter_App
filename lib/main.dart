@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:giusseppe_flut/app_navigator.dart';
 import 'package:giusseppe_flut/auth/auth_repository.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 // Firebase
@@ -55,8 +56,7 @@ class MyApp extends StatelessWidget {
 
       home: RepositoryProvider(
         create: (context) => AuthRepository(),
-        child:
-        BlocProvider(
+        child: BlocProvider(
           create: (context) => SessionCubit(authRepo: context.read<AuthRepository>()),
           child: AppNavigator(),//UserList()
         ),

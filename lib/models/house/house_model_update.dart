@@ -10,7 +10,7 @@ class HouseModelUpdate {
   String neighborhood;
   String address;
   String housingType;
-  String rentPrice;
+  double rentPrice;
   int stratum;
   double area;
   int apartmentFloor;
@@ -26,11 +26,11 @@ class HouseModelUpdate {
   bool reception;
   bool supermarkets;
   String description;
-  int rating;
+  double rating;
   double longitude;
   double latitude;
   List<String> images;
-  // Image
+  
   HouseModelUpdate({
     required this.id,
     required this.name,

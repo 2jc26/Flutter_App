@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/repository/search_repository.dart';
 
@@ -55,10 +53,6 @@ class HouseListPresenter {
     } catch (error) {
       rethrow;
     }
-  }
-
-  Future<Uint8List?> getImage(String image) async {
-    return houseRepository.getImage(image);
   }
 
   set backView(HouseListView value) {

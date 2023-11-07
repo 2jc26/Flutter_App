@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
-import 'package:giusseppe_flut/screens/InformationCardUser.dart';
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
 import 'package:giusseppe_flut/screens/house_detail.dart';
 import 'package:giusseppe_flut/widgets/search_field.dart';
