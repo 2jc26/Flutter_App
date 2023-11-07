@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:giusseppe_flut/models/user/query_filter_user.dart';
@@ -70,6 +72,35 @@ class UserDaoFireStore extends UserDao{
       }
       rethrow;
     }
+  }
+  Stream<List<UserModel>> getUsersByPreferencesStream() {
+    final controller = StreamController<List<UserModel>>();
+
+    try {
+      Query query = _firestore.collection("Users");
+
+      final stream = query.snapshots();
+      stream.listen((querySnapshot) {
+        List<UserModel> users = [];
+
+        for (var user in querySnapshot.docs) {
+          final userData = user.data() as Map<String, dynamic>;
+          final userId = user.id;
+          UserModel nuevoUsuario = UserModel.fromJson({...userData, 'id': userId});
+          users.add(nuevoUsuario);
+        }
+
+        controller.add(users);
+      });
+
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error fetching users by filter: $error");
+      }
+      controller.addError(error);
+    }
+
+    return controller.stream;
   }
 
   Future<List<UserModel>> getAllUsersByPreferences(UserPreferencesDTO userPreferences) {

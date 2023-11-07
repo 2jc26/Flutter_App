@@ -32,7 +32,6 @@ class CustomCacheManager {
 
 }
 
-
 class IOFileSystem implements c.FileSystem {
   final Future<Directory> _fileDir;
 
