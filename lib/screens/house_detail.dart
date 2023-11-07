@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/presenter/house_detail_presenter.dart';
+import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
+import 'package:giusseppe_flut/widgets/cache_network_image.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/house/house_model_update.dart';
 import '../widgets/drawer.dart';
@@ -21,6 +23,7 @@ class HouseDetail extends StatefulWidget {
 
 class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
   HouseModelUpdate? _house;
+  String? _mainImg;
   final HouseDetailPresenter houseDetailPresenter = HouseDetailPresenter();
 
   @override
@@ -34,6 +37,7 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
   void initState() {
     super.initState();
     _house = widget.house;
+    _mainImg = widget.house.images[0];
   }
 
   @override
@@ -88,7 +92,12 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                   ),
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                child: const Text("Hola"),
+                child: ChNetworkImage(
+                    url: _mainImg!,
+                    height: 180,
+                    width: double.infinity,
+                    cacheheight: 150,
+                    cachewidth: 350),
               ),
             ),
             const SizedBox(height: 5),
@@ -106,13 +115,29 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                       height: 100,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: _house!.images.length-1,
+                        itemCount: _house!.images.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final adjustedIndex = index + 1;
+                          EdgeInsets padding = const EdgeInsets.only(left: 10.0);
+
+                          if (index == _house!.images.length - 1) {
+                            padding = padding.copyWith(right: 40.0);
+                          }
+                          
+
                           return Padding(
-                            padding: EdgeInsets.only(
-                                left: adjustedIndex == 1 ? 2 : 20.0),
-                            child: const Text("Hola"),
+                            padding: padding,
+                            child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _mainImg = _house!.images[index];
+                                  });
+                                },
+                                child: ChNetworkImage(
+                                    url: _house!.images[index],
+                                    height: 100,
+                                    width: 100,
+                                    cacheheight: 100,
+                                    cachewidth: 100)),
                           );
                         },
                       ),
@@ -141,7 +166,11 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                     if (index == 0) {
                       return DescriptionCard(house: _house);
                     } else if (index == 1) {
-                      return LocationCard(house: _house, newMarker: newMarker);
+                      if (ConnectivityManagerService().connectivity == true) {
+                        return LocationCard(house: _house, newMarker: newMarker);
+                      } else {
+                        return const SizedBox.shrink();
+                      }
                     } else {
                       return AmenitiesCard(house: _house);
                     }

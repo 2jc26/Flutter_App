@@ -49,7 +49,7 @@ class BackendService {
     }
   }
 
-  Future<List<dynamic>> putAll(String endPoint, object) async {
+  Future<void> putAll(String endPoint, object) async {
     final response = await http.put(Uri.parse(
       '$baseUrl/$endPoint'),
       headers: {
@@ -57,12 +57,6 @@ class BackendService {
       },
       body: json.encode(object.toJson()),
     );
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
-    } else {
-      // Request failed
-      return [];
-    }
   }
 
   Future<List<dynamic>> getOneAll (String endPoint, String id) async {
