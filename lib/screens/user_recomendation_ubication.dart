@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:giusseppe_flut/screens/views_abs.dart';
 
-import '../models/user/user_model_update.dart';
+import '../models/user/user_model.dart';
 import '../presenter/user_presenter_location.dart';
 import '../widgets/drawer.dart';
 import '../widgets/information_card.dart';
+import 'base_mvp/base_mvp_location.dart';
 
 class LocationPermissionView extends StatefulWidget {
   @override
   _LocationPermissionViewState createState() => _LocationPermissionViewState();
 }
 
-class _LocationPermissionViewState extends State<LocationPermissionView> implements UserListView{
+class _LocationPermissionViewState extends State<LocationPermissionView> implements UserListViewLocation{
   double? latitude ;
   double? longitude ;
-  List<UserModelUpdate>? _userList=[];
+  List<UserModel>? _userList=[];
   UserListPresenterLocation userListPresenter = UserListPresenterLocation();
 
   @override
@@ -59,8 +59,9 @@ class _LocationPermissionViewState extends State<LocationPermissionView> impleme
     });
     userListPresenter.getNearUsers(latitude! ,longitude!);
   }
+
   @override
-  void refreshUserListView(List<UserModelUpdate> userList) {
+  void refreshUserListView(List<UserModel> userList) {
     setState(() {
       _userList = userList;
     });
@@ -84,7 +85,7 @@ class _LocationPermissionViewState extends State<LocationPermissionView> impleme
         ),
         centerTitle: true,
       ),
-      drawer: const CustomDrawer(),
+      // drawer: CustomDrawer(customDrawerContext: context),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -103,7 +104,7 @@ class _LocationPermissionViewState extends State<LocationPermissionView> impleme
                   return InformationCard(
                     path: 'assets/images/house1.jpg',
                     stars: _userList![index].stars,
-                    text: _userList![index].name,
+                    text: _userList![index].full_name,
                   );
                 }),
               ),

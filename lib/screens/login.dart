@@ -17,6 +17,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool exception = true;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -84,8 +85,9 @@ class _LoginState extends State<Login> {
     return BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           final formStatus = state.formStatus;
-          if (formStatus is SubmissionFailed) {
+          if (formStatus is SubmissionFailed && exception) {
             _showSnackBar(context, formStatus.exception.toString());
+            exception = false;
           }
         },
         child: Form(
@@ -102,7 +104,7 @@ class _LoginState extends State<Login> {
                 const SizedBox(height: 50),
                 _loginButton(),
                 const SizedBox(height: 20),
-                _extraText(context),
+                _extraText(),
               ],
             ),
           ),
@@ -127,10 +129,10 @@ class _LoginState extends State<Login> {
             filled: true,
             fillColor: const Color(0XffEBEDF0),
             // icon: const Icon(Icons.person),
-            hintText: 'Username',
+            hintText: 'E-mail',
           ),
           validator: (value) =>
-              state.isValidUsername ? null : 'Username is invalid',
+              state.isValidUsername ? null : 'E-mail is invalid',
           onChanged: (value) {
             context.read<LoginBloc>().add(LoginUsernameChanged(username: value));
             usernameController.text = value;
@@ -187,6 +189,7 @@ class _LoginState extends State<Login> {
               ),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
+                  exception = true;
                   context.read<LoginBloc>().add(LoginSubmitted());
                 }
               },
@@ -196,11 +199,26 @@ class _LoginState extends State<Login> {
   }
 
   void _showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      dismissDirection: DismissDirection.down,
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Error in the Login"),
+          content: message.contains("Login fallido")
+              ? const Text(
+                  'It seems that the credentials you have entered are incorrect. Please review your data and try again')
+              : Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   Widget _begainText() {
@@ -221,38 +239,62 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget _extraText(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        ElevatedButton(
-          onPressed: () {
-            context.read<AuthCubit>().showSignUp();
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            elevation: 0, // Remove button elevation
+  Widget _extraText() {
+    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              if (context.read<LoginBloc>().authRepo.connectivity) {
+                context.read<AuthCubit>().showSignUp();
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text("No hay Conexión a una red"),
+                      content: const Text(
+                        'En este momento no hay conexión a internet. Está función solo funciona con conexión a internet, intente de nuevo más tarde.'
+                      ),
+                      actions: <Widget>[
+                        TextButton (
+                          child: const Text('Cerrar'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              elevation: 0, // Remove button elevation
+            ),
+            child: const Text(
+              "Don't have an account?",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
-          child: const Text(
-            "Don't have an account?",
-            textAlign: TextAlign.left,
+          const Text(
+            "Forget Details?",
+            textAlign: TextAlign.right,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 10,
               color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
           ),
-        ),
-        const Text(
-          "Forget Details?",
-          textAlign: TextAlign.right,
-          style: TextStyle(
-            fontSize: 10,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 }

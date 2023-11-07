@@ -45,7 +45,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
         ),
         centerTitle: true,
       ),
-      drawer: const CustomDrawer(),
+      // drawer: CustomDrawer(customDrawerContext: context),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -85,7 +85,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                       ),
                     ),
                     const SizedBox(height: 5.0),
-                    _inputField("\$ 500.000 to \$ 5.000.000", objectivePriceController, isNumber: true),
+                    _inputField("\$ 500.000 to \$ 5.000.000", objectivePriceController, 8, isNumber: true),
                     const SizedBox(height: 5.0),
                     const Text (
                       "Enter your location",
@@ -97,7 +97,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                       ),
                     ),
                     const SizedBox(height: 5.0),
-                    _inputField("Enter the temptative adress", directionController),
+                    _inputField("Enter the temptative adress", directionController, 50),
                     const SizedBox(height: 5.0),
                     const SizedBox(
                       height: 300,
@@ -105,14 +105,14 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                       child: GoogleMap(
                         mapType: MapType.hybrid,
                         initialCameraPosition: CameraPosition(
-                          target: LatLng(37.422131, -122.084801), // Cambia esto a las coordenadas deseadas
+                          target: LatLng(4.6097, -74.0817), // Cambia esto a las coordenadas deseadas
                           zoom: 3,
                         ),
                       ),
                     ),
                     const SizedBox(height: 5.0),
                     const Text(
-                      "Maximum radius in meters from your selected location",
+                      "Maximum radius in Km from your selected location",
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 16,
@@ -120,7 +120,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    _inputField("Enter distance", distanceController, isNumber: true),
+                    _inputField("Enter distance in Km", distanceController, 3, isNumber: true),
                   ],
                 ),
               ),
@@ -221,7 +221,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
     );
   }
 
-  Widget _inputField(String hintText, TextEditingController controller,
+  Widget _inputField(String hintText, TextEditingController controller, int len,
       {isNumber = false}) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
@@ -242,7 +242,8 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
           focusedBorder: border,
           filled: true,
           fillColor: Colors.white,
-        )
+        ),
+        maxLength: len,
       );
     } else {
       return TextField(
@@ -256,6 +257,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
           filled: true,
           fillColor: Colors.white,
         ),
+        maxLength: len,
       );
     }
   }

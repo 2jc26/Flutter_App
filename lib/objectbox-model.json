@@ -1,0 +1,164 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "2:7978175343267685913",
+      "lastPropertyId": "22:1004875386519133687",
+      "name": "UserModel",
+      "properties": [
+        {
+          "id": "1:7241913960046504967",
+          "name": "id_int",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:1729624160192286898",
+          "name": "image",
+          "type": 9
+        },
+        {
+          "id": "3:2227933166611381033",
+          "name": "email",
+          "type": 9
+        },
+        {
+          "id": "4:5894350899244370966",
+          "name": "password",
+          "type": 9
+        },
+        {
+          "id": "5:9182679177368754622",
+          "name": "full_name",
+          "type": 9
+        },
+        {
+          "id": "6:7117540742124666430",
+          "name": "id",
+          "type": 9,
+          "flags": 34848,
+          "indexId": "2:1404067293726374764"
+        },
+        {
+          "id": "7:1834206096169159859",
+          "name": "age",
+          "type": 6
+        },
+        {
+          "id": "8:3778482820188330131",
+          "name": "bring_people",
+          "type": 9
+        },
+        {
+          "id": "9:119491607264915930",
+          "name": "sleep",
+          "type": 6
+        },
+        {
+          "id": "10:915066745801260477",
+          "name": "phone",
+          "type": 6
+        },
+        {
+          "id": "11:1306479706843730677",
+          "name": "rol",
+          "type": 9
+        },
+        {
+          "id": "12:2996172509915017320",
+          "name": "vape",
+          "type": 1
+        },
+        {
+          "id": "13:923946700578415303",
+          "name": "personality",
+          "type": 9
+        },
+        {
+          "id": "14:7769126317878068040",
+          "name": "likes_pets",
+          "type": 1
+        },
+        {
+          "id": "15:3799933414373808501",
+          "name": "clean",
+          "type": 9
+        },
+        {
+          "id": "16:8952420283117857338",
+          "name": "smoke",
+          "type": 1
+        },
+        {
+          "id": "17:2984127726847011212",
+          "name": "gender",
+          "type": 9
+        },
+        {
+          "id": "18:6322318156307179557",
+          "name": "latitude",
+          "type": 8
+        },
+        {
+          "id": "19:2639618821254884365",
+          "name": "longitude",
+          "type": 8
+        },
+        {
+          "id": "20:6586141486109144892",
+          "name": "stars",
+          "type": 8
+        },
+        {
+          "id": "21:7841518691433668281",
+          "name": "city",
+          "type": 9
+        },
+        {
+          "id": "22:1004875386519133687",
+          "name": "locality",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "2:7978175343267685913",
+  "lastIndexId": "2:1404067293726374764",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [
+    5774503046238950327
+  ],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    7885223653836765980,
+    6959392598754021100,
+    4967792232607452566,
+    2302018427441185513,
+    7901061088323636018,
+    2770156853905174659,
+    2578856606350405108,
+    3526015666223382485,
+    8670033931061393199,
+    7822698492600478121,
+    646058187236278968,
+    453571979918866314,
+    7522170753390542928,
+    8114214129312188171,
+    7287917109056956785,
+    9054497999825322407,
+    6345485464311580930,
+    670235180059385577,
+    2999172074234913178,
+    668281750275672376,
+    3735554969042275254,
+    3158718228921966924
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}

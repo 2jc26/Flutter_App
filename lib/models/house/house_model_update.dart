@@ -10,7 +10,7 @@ class HouseModelUpdate {
   String neighborhood;
   String address;
   String housingType;
-  String rentPrice;
+  double rentPrice;
   int stratum;
   double area;
   int apartmentFloor;
@@ -26,10 +26,11 @@ class HouseModelUpdate {
   bool reception;
   bool supermarkets;
   String description;
-  int rating;
+  double rating;
   double longitude;
   double latitude;
-  // Image
+  List<String> images;
+  
   HouseModelUpdate({
     required this.id,
     required this.name,
@@ -56,6 +57,7 @@ class HouseModelUpdate {
     required this.rating,
     required this.longitude,
     required this.latitude,
+    required this.images,
   });
 
   factory HouseModelUpdate.fromJson(Map<String, dynamic> json) =>

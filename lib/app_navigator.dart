@@ -28,9 +28,13 @@ class AppNavigator extends StatelessWidget {
         );
       }
       if (state is Authenticated) {
-        return HouseList(userId: state.userid, houseFilters: null);
+        return Material(
+          child: BlocProvider(
+            create: (context) => AuthCubit(sessionCubit: context.read<SessionCubit>()),
+            child: HouseList(userId: state.userid, houseFilters: null),
+          ),
+        );
       }
-      // Return a default widget (e.g., an empty Container) for unhandled cases.
       return Container();
     });
   }

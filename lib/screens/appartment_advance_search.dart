@@ -45,7 +45,6 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
   bool _isLaundrySelected = false;
   bool _isInternetSelected = false;
   bool _isTvSelected = false;
-  bool _isFoodSelected = false;
   bool _isFurnishedSelected = false;
 
   // Others
@@ -76,7 +75,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
         ),
         centerTitle: true,
       ),
-      drawer: const CustomDrawer(),
+      // drawer: CustomDrawer(customDrawerContext: context),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -88,9 +87,9 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 20),
-                    _inputField("City/Municipality", cityController),
+                    _inputField("City/Municipality", cityController, 50),
                     const SizedBox(height: 20),
-                    _inputField("Neighborhood", neighborhoodController),
+                    _inputField("Neighborhood", neighborhoodController, 50),
                   ],
                 ),
               ),
@@ -99,6 +98,8 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: <Widget>[
+                  const Text("Type of House", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -213,17 +214,17 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 20),
-                    _inputField("Stratum", stratumController, isNumber: true),
+                    _inputField("Stratum", stratumController, 1, isNumber: true),
                     const SizedBox(height: 20),
-                    _inputField("Area", areaController, isNumber: true),
+                    _inputField("Area", areaController, 3,isNumber: true),
                     const SizedBox(height: 20),
-                    _inputField("Floor Number", floorNumberController, isNumber: true),
+                    _inputField("Floor Number", floorNumberController, 4,isNumber: true),
                     const SizedBox(height: 20),
-                    _inputField("Rooms Number", roomsNumberontroller, isNumber: true),
+                    _inputField("Rooms Number", roomsNumberontroller, 2,isNumber: true),
                     const SizedBox(height: 20),
-                    _inputField("Room Area", roomAreaController, isNumber: true),
+                    _inputField("Room Area", roomAreaController, 3,isNumber: true),
                     const SizedBox(height: 20),
-                    _inputField("Bathrooms Area", bathroomAreaController, isNumber: true),
+                    _inputField("Bathroom Numbers", bathroomAreaController, 3,isNumber: true),
                   ],
                 ),
               ),
@@ -243,24 +244,19 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text("Services", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                    createCustomCheckbox('Laundry Areas', _isLaundrySelected, () {
+                    createCustomCheckbox('Laundry Area', _isLaundrySelected, () {
                       setState(() {
                         _isLaundrySelected = !_isLaundrySelected;
                       });
                     }),
-                    createCustomCheckbox('Kitchen', _isInternetSelected, () {
+                    createCustomCheckbox('Internet', _isInternetSelected, () {
                       setState(() {
                         _isInternetSelected = !_isInternetSelected;
                       });
                     }),
-                    createCustomCheckbox('Bathroom', _isTvSelected, () {
+                    createCustomCheckbox('TV', _isTvSelected, () {
                       setState(() {
                         _isTvSelected = !_isTvSelected;
-                      });
-                    }),
-                    createCustomCheckbox('Food', _isFoodSelected, () {
-                      setState(() {
-                        _isFoodSelected = !_isFoodSelected;
                       });
                     }),
                     createCustomCheckbox('Furnished', _isFurnishedSelected, () {
@@ -297,7 +293,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                         _isGymSelected = !_isGymSelected;
                       });
                     }),
-                    createCustomCheckbox('Recption', _isReceptionSelected, () {
+                    createCustomCheckbox('Reception', _isReceptionSelected, () {
                       setState(() {
                         _isReceptionSelected = !_isReceptionSelected;
                       });
@@ -317,7 +313,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _loginButton(),
+                    _filterButton(),
                   ],
                 ),
               ),
@@ -328,7 +324,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
     );
   }
 
-  Widget _inputField(String hintText, TextEditingController controller,
+  Widget _inputField(String hintText, TextEditingController controller, int len, 
       {isNumber = false}) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
@@ -349,7 +345,8 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
           focusedBorder: border,
           filled: true,
           fillColor: Colors.white,
-        )
+        ),
+        maxLength: len,
       );
     } else {
       return TextField(
@@ -363,6 +360,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
           filled: true,
           fillColor: Colors.white,
         ),
+        maxLength: len,
       );
     }
   }
@@ -408,7 +406,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
   );
   }
 
-  Widget _loginButton() {
+  Widget _filterButton() {
     return ElevatedButton(
       onPressed: () {
         
@@ -418,7 +416,6 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
           address: widget.direction,
           housingType: _selectedPropertyType.toString().replaceAll("PropertyType.", ""),
           rentPrice: widget.obPrice,
-
           stratum: stratumController.text.isEmpty ? 0 : int.parse(stratumController.text),
           area: areaController.text.isEmpty ? 0.0 : double.parse(areaController.text),
           apartmentFloor: floorNumberController.text.isEmpty ? 0 : int.parse(floorNumberController.text),

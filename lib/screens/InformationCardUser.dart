@@ -1,12 +1,16 @@
+import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class InformationCardUser extends StatelessWidget {
-  const InformationCardUser({super.key, required this.getImageURL, required this.stars, required this.text});
+import '../storage/storage_adapters/custom_cache_manager.dart';
 
-  final Future<Uint8List?> Function() getImageURL;
-  final int stars;
+class InformationCardUser extends StatelessWidget {
+  const  InformationCardUser({super.key, required this.url, required this.stars, required this.text});
+
+  final String url;
+  final double stars;
   final String text;
 
   @override
@@ -21,25 +25,62 @@ class InformationCardUser extends StatelessWidget {
         ),
         child: Column(
           children: [
-            FutureBuilder<Uint8List?>(
-              future: getImageURL(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la imagen.
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else if (snapshot.hasData) {
-                  return Image.memory(
-                    snapshot.data!,
-                    width: double.infinity,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  );
-                } else {
-                  return Text('No image available'); // Mostrar algo si no hay imagen.
-                }
+            CachedNetworkImage(
+              imageUrl: url,
+              cacheManager: CustomCacheManager().getCacheManager(),
+              height:150,
+              fit: BoxFit.cover,
+              width: 350,
+              memCacheWidth: 350,
+              memCacheHeight: 150,
+              progressIndicatorBuilder: (context, url,progress) {
+                return ColoredBox(
+                    color: Colors.black,
+                    child:Center(child: CircularProgressIndicator(value: progress.progress))
+                );
               },
-            ),
+              errorWidget: (context,url,error){
+                if (error is SocketException) {
+                  return const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+                      child: Column(
+                              children: [
+                                Icon(
+                                  Icons.error,
+                                  size: 48.0,
+                                  color: Colors.blue,
+                                ),
+                                Text(
+                                  '¡Vaya! No tienes internet.',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 16.0,),
+                                ),
+                              ],
+                            )
+                          );
+                } else {
+                  return const Padding(
+                      padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.error,
+                            size: 48.0,
+                            color: Colors.blue,
+                          ),
+                          Text(
+                            '¡Vaya!Algo salió mal al cargar la imagen',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 16.0,),
+                          ),
+                        ],
+                      )
+                  );
+                }
+              }
+              ),
             Row(
               children: [
                 // Left side with star icons and location icon

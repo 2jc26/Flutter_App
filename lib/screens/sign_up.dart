@@ -223,9 +223,10 @@ class _SignUpState extends State<SignUp> {
                         const SizedBox(height: 20),
                         _generoField(),
                         const SizedBox(height: 20),
-                        _cityField(),
-                        const SizedBox(height: 20),
-                        _localityField(),
+                        _locationField(),
+                        // _cityField(),
+                        // const SizedBox(height: 20),
+                        // _localityField(),
                         const SizedBox(height: 20),
                       ],
                     ),
@@ -267,18 +268,347 @@ class _SignUpState extends State<SignUp> {
             ),
             filled: true,
             fillColor: const Color(0XffEBEDF0),
-            hintText: 'Username',
+            hintText: 'E-mail',
           ),
+          maxLength: 50,
           validator: (value) =>
-              state.isValidUsername ? null : 'Username is invalid',
+              state.isValidUsername ? null : 'E-mail is invalid',
           onChanged: (value) {
             context
                 .read<SignUpBloc>()
-                .add(SignUpUsernameChanged(username: value));
+                .add(SignUpEmailChanged(email: value));
             usernameController.text = value;
           },
         );
       },
+    );
+  }
+
+  Widget _passwordField() {
+    return BlocBuilder<SignUpBloc, SignUpState>(builder: (context, state) {
+      return TextFormField(
+        obscureText: true,
+        style: const TextStyle(color: Colors.black),
+        decoration: InputDecoration(
+          hintStyle: const TextStyle(color: Color(0xFFC4C4C4)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+          ),
+          filled: true,
+          fillColor: const Color(0XffEBEDF0),
+          hintText: 'Password',
+        ),
+        maxLength: 50,
+        validator: (value) =>
+            state.isValidPassword ? null : 'Password is to short',
+        onChanged: (value) {
+          context
+              .read<SignUpBloc>()
+              .add(SignUpPasswordChanged(password: value));
+          passwordController.text = value;
+        },
+      );
+    });
+  }
+
+  Widget _fullnameField() {
+    return BlocBuilder<SignUpBloc, SignUpState>(
+      builder: (context, state) {
+        return TextFormField(
+          style: const TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            hintStyle: const TextStyle(color: Color(0xFFC4C4C4)),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+            ),
+            filled: true,
+            fillColor: const Color(0XffEBEDF0),
+            hintText: 'Fullname',
+          ),
+          maxLength: 50,
+          validator: (value) =>
+              state.isValidFullName ? null : 'Fullname is invalid',
+          onChanged: (value) {
+            context
+                .read<SignUpBloc>()
+                .add(SignUpFullNameChanged(fullname: value));
+            fullnameController.text = value;
+          },
+        );
+      },
+    );
+  }
+
+  Widget _ageField() {
+    return BlocBuilder<SignUpBloc, SignUpState>(
+      builder: (context, state) {
+        return TextFormField(
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly,
+          ],
+          style: const TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            hintStyle: const TextStyle(color: Color(0xFFC4C4C4)),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+            ),
+            filled: true,
+            fillColor: const Color(0XffEBEDF0),
+            hintText: 'Age',
+          ),
+          maxLength: 2,
+          validator: (value) =>
+              state.isValidAge ? null : 'Age is invalid',
+          onChanged: (value) {
+            context.read<SignUpBloc>().add(
+                SignUpAgeChanged(age: value.isEmpty ? 0 : int.parse(value)));
+            ageController.text = value;
+          },
+        );
+      },
+    );
+  }
+
+  Widget _phoneField() {
+    return BlocBuilder<SignUpBloc, SignUpState>(
+      builder: (context, state) {
+        return TextFormField(
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly,
+          ],
+          style: const TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            hintStyle: const TextStyle(color: Color(0xFFC4C4C4)),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+            ),
+            filled: true,
+            fillColor: const Color(0XffEBEDF0),
+            hintText: 'Phone Number',
+          ),
+          maxLength: 10,
+          validator: (value) => state.isValidPhone ? null : 'Phone is invalid',
+          onChanged: (value) {
+            context.read<SignUpBloc>().add(SignUpPhoneChanged(phone: value));
+            phoneController.text = value;
+          },
+        );
+      },
+    );
+  }
+
+  Widget _generoField() {
+    return BlocBuilder<SignUpBloc, SignUpState>(
+      builder: (context, state) {
+        return TextFormField(
+          style: const TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            hintStyle: const TextStyle(color: Color(0xFFC4C4C4)),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+            ),
+            filled: true,
+            fillColor: const Color(0XffEBEDF0),
+            hintText: 'Gender',
+          ),
+          maxLength: 20,
+          onChanged: (value) {
+            context.read<SignUpBloc>().add(SignUpGeneroChanged(genero: value));
+            generoController.text = value;
+          },
+        );
+      },
+    );
+  }
+
+  Widget _locationField() {
+    cityController.text = 'Bogotá';
+    localityController.text = "Usaquén";
+    return BlocBuilder<SignUpBloc, SignUpState>(
+      builder: (context, state) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            CustomListField(
+              hintText: 'Bogotá',
+              selectedValue: cityController.text,
+              items: const ['Bogotá'],
+              onItemSelected: (String? value) {
+                context.read<SignUpBloc>().add(SignUpCityChanged(city: value??''));
+                cityController.text = value??'';
+              },
+            ),
+            const SizedBox(height: 20),
+            CustomListField(
+              hintText: 'Enter an option',
+              selectedValue: localityController.text,
+              items: const ["Usaquén", "Chapinero", "Santa Fe", "San Cristóbal", "Usme",
+                "Tunjuelito", "Bosa", "Kennedy", "Fontibón", "Engativá", "Suba",
+                "Barrios Unidos", "Teusaquillo", "Los Mártires", "Antonio Nariño",
+                "Puente Aranda", "La Candelaria", "Rafael Uribe Uribe",
+                "Ciudad Bolívar", "Sumapaz"],
+              onItemSelected: (value) {
+                context.read<SignUpBloc>().add(SignUpLocalityChanged(locality: value??''));
+                localityController.text = value??'';
+              }
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _signUpButton() {
+    return BlocBuilder<SignUpBloc, SignUpState>(builder: (context, state) {
+      return state.formStatus is FormSubmitting
+          ? const CircularProgressIndicator()
+          : ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                backgroundColor: const Color(0xFF2E5EAA),
+                foregroundColor: const Color(0xFFF2F4F6),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                elevation: 10,
+                shadowColor: Colors.black,
+              ),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  if (context.read<SignUpBloc>().authRepo.connectivity) {
+                    context.read<SignUpBloc>().add(SignUpSubmitted());
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text("No hay Conexión a una red"),
+                          content: const Text(
+                            'En este momento no hay conexión a internet. Está función solo funciona con conexión a internet, intente de nuevo más tarde.'
+                          ),
+                          actions: <Widget>[
+                            TextButton (
+                              child: const Text('Cerrar'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                }
+              },
+              child: const Text('Sign Up'),
+            );
+    });
+  }
+
+  Widget _extraText(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            context.read<AuthCubit>().showLogin();
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.transparent,
+            elevation: 0, // Remove button elevation
+          ),
+          child: const Text(
+            "Already have an account? Login",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Error in the Sign Up"),
+          content: Text(message.replaceAll("Exception: ", "")),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cerrar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class CustomListField extends StatelessWidget {
+  final String hintText;
+  final String selectedValue;
+  final List<String> items;
+  final Function(String?) onItemSelected;
+
+  const CustomListField({
+    Key? key,
+    required this.hintText,
+    required this.selectedValue,
+    required this.items,
+    required this.onItemSelected,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+      child: DropdownButton<String>(
+        value: selectedValue,
+        items: items.map((String item) {
+          return DropdownMenuItem<String>(
+            value: item,
+            child: Text(item),
+          );
+        }).toList(),
+        onChanged: onItemSelected,
+        hint: Text(hintText),
+        isExpanded: true,
+      ),
     );
   }
 

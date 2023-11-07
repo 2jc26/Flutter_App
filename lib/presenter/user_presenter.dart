@@ -1,51 +1,56 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 
-import '../dao/user/dao_user_entity.dart';
 import '../models/user/query_likes_user.dart';
-import '../models/user/user_model_update.dart';
-import '../repository/user_repository_prueba.dart';
+import '../models/user/user_model.dart';
+import '../repository/user_repository.dart';
 import '../screens/user_list.dart';
-import '../screens/views_abs.dart';
+import '../screens/base_mvp/views_abs.dart';
+import '../storage/storage_adapters/Objectbox/ObjectBox.dart';
 
 class UserListPresenter {
   final UserRepository userRepository = UserRepository();
-  List<UserModelUpdate>? usersList = [];
+  List<UserModel>? usersList = [];
   late UserListView _backView= UserListView();
-  UserPreferencesDTO? userPreferences;
+  double average=0.0;
 
-  UserListPresenter({this.userPreferences});
+  UserListPresenter(){
+  }
+
+
 
   void getAllUsers() async {
     try {
-      List<UserModelUpdate>? users = [];
-      if (userPreferences != null){
-        users = await userRepository.getAllUsersByPreferences(userPreferences!);
+      List<UserModel> users = [];
+      users = await userRepository.getAllUsersByPreferences();
+      usersList = users;
+      if (users.isNotEmpty) {
+        average= userRepository.getAverage(users);
+      } else {
+        average=0.0;
       }
-      else{
-        users = await userRepository.getAllUsers();
-      }
-      if (users != null) {
-        usersList = users;
-        _backView.refreshUserListView(usersList!);
-      }
-
+      _backView.refreshUserListView(usersList!, average);
     } catch (error) {
       rethrow;
     }
   }
+  Stream<List<UserModel>> getUsersStreamByPreferences() {
+    return ObjectBoxDao().getUsersStreamByPreferences();
+  }
+
   Future<Uint8List?> getImage(String image) async {
     return userRepository.getImage(image);
   }
 
   set backView(UserListView value) {
     _backView = value;
-    _backView.refreshUserListView(usersList!);
+    _backView.refreshUserListView(usersList!,average);
   }
 
-  void setUserPreferences(UserPreferencesDTO? preferences) {
-    userPreferences = preferences;
+  void setUserPreferences() {
     getAllUsers();
   }
 }

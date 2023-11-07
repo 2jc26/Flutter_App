@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:giusseppe_flut/app_navigator.dart';
+
 import 'package:giusseppe_flut/auth/auth_repository.dart';
-import 'package:giusseppe_flut/screens/filter_users/filter_users_location.dart';
-import 'package:giusseppe_flut/screens/pruebas_mapa.dart';
-import 'package:giusseppe_flut/screens/user_list.dart';
-import 'package:giusseppe_flut/session_cubit.dart';
+import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
+import 'package:giusseppe_flut/session_cubit.dart';
+import 'package:giusseppe_flut/storage/storage_adapters/Objectbox/ObjectBox.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  var objectbox = await ObjectBoxDao.initialize();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -23,6 +23,7 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+  ConnectivityManagerService().initialize();
   runApp(const MyApp());
 }
 
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
 
       home: RepositoryProvider(
         create: (context) => AuthRepository(),
-        child: //FilterUsersLocations(),
+        child:
         BlocProvider(
           create: (context) => SessionCubit(authRepo: context.read<AuthRepository>()),
           child: AppNavigator(),
@@ -64,3 +65,27 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+
+// import 'package:flutter/material.dart';
+// import 'package:giusseppe_flut/screens/review_list.dart';
+
+// void main() {
+//   runApp(MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Review List',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: const ReviewList(
+//         houseId: 'bNqJqQetOhT9RmYUaV9S',
+//       ),
+//     );
+//   }
+// }

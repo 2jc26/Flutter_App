@@ -1,8 +1,12 @@
 
-import 'package:giusseppe_flut/dao/house/dao_house_entity.dart';
-import 'package:giusseppe_flut/dao/houseSearching/dao_house_searching_entity.dart';
+
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
+import '../service/connectivity_manager_service.dart';
+import 'dart:async';
+
+import '../service_adapter/house/dao_house_entity.dart';
+import '../service_adapter/houseSearching/dao_house_searching_entity.dart';
 
 class SearchRepository {
 
@@ -10,17 +14,22 @@ class SearchRepository {
 
   final HouseDaoFireStore houseDao= HouseDaoFireStore();
 
-  Future<List<HouseModelUpdate>> getAllHouses() async {
-    try {
-      return await houseDao.getAllHouses();
-    } catch (error) {
-      rethrow;
-    }
+  late StreamSubscription<bool> connectionSubscription;
+  bool connectivity = ConnectivityManagerService().connectivity;
+
+  SearchRepository() {
+    connectionSubscription = ConnectivityManagerService().connectionStatus.listen((isConnected) {
+      connectivity = isConnected;
+    });
   }
 
   Future<List<HouseModelUpdate>> getSimilarFilteredHouses(HouseSearchingModelUpdate houseFilters) async {
     try {
-      return await houseDao.getHousesByFilters(houseFilters);
+      if(connectivity) {
+        return await houseDao.getHousesByFilters(houseFilters);
+      } else {
+        return []; // TODO: remove and add local/cache behavior
+      }
     } catch (error) {
       rethrow;
     }
@@ -28,7 +37,11 @@ class SearchRepository {
 
   Future<void> updateHouseSearchingById(String id, HouseSearchingModelUpdate searchFilters) async {
     try {
-      await houseSearchDao.updateHouseSearchingById(id, searchFilters);
+      if(connectivity) {
+        await houseSearchDao.updateHouseSearchingById(id, searchFilters);
+      } else {
+        await houseSearchDao.updateHouseSearchingById(id, searchFilters); // TODO: remove and add local/cache behavior
+      }
     } catch (error) {
       rethrow;
     }

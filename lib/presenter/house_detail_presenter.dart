@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import '../models/house/house_model_update.dart';
 import '../repository/house_repository.dart';
 import '../screens/house_detail.dart';
@@ -8,21 +10,8 @@ class HouseDetailPresenter {
   HouseModelUpdate? house;
   late HouseDetailView _backView;
 
-  HouseDetailPresenter(String id) {
+  HouseDetailPresenter() {
     _backView = HouseDetailView();
-    getHouseById(id);
-  }
-
-  void getHouseById(String id) async {
-    try {
-      final h = await houseRepository.getHouseById(id);
-      if (house != null) {
-        house = h;
-        _backView.refreshHouseDetailView(house!);
-      }
-    } catch (error) {
-      rethrow;
-    }
   }
 
   set backView(HouseDetailView value) {

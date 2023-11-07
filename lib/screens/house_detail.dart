@@ -1,4 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:giusseppe_flut/presenter/house_detail_presenter.dart';
+import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
+import 'package:giusseppe_flut/widgets/cache_network_image.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/house/house_model_update.dart';
 import '../widgets/drawer.dart';
@@ -7,19 +12,19 @@ class HouseDetailView {
   void refreshHouseDetailView(HouseModelUpdate house) {}
 }
 
-
 class HouseDetail extends StatefulWidget {
   const HouseDetail({Key? key, required this.house}) : super(key: key);
 
   final HouseModelUpdate house;
-  
+
   @override
   State<HouseDetail> createState() => _HouseDetailState();
 }
 
-
 class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
   HouseModelUpdate? _house;
+  String? _mainImg;
+  final HouseDetailPresenter houseDetailPresenter = HouseDetailPresenter();
 
   @override
   void refreshHouseDetailView(HouseModelUpdate house) {
@@ -32,11 +37,11 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
   void initState() {
     super.initState();
     _house = widget.house;
+    _mainImg = widget.house.images[0];
   }
 
   @override
   Widget build(BuildContext context) {
-
     Marker newMarker = Marker(
       markerId: const MarkerId('uniqueMarkerId'),
       position: LatLng(_house!.latitude, _house!.longitude),
@@ -59,7 +64,7 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
           ),
           centerTitle: true,
         ),
-        drawer: const CustomDrawer(),
+        // drawer: CustomDrawer(customDrawerContext: context),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -76,48 +81,67 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
             ),
             // Square Big Image
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                child: Container(
-                  width: double.infinity,
-                  height: 180,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      width: 6.0,
-                    ),
-                    borderRadius: BorderRadius.circular(12.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+              child: Container(
+                width: double.infinity,
+                height: 180,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    width: 6.0,
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(6.0),
-                    child: Image.asset(
-                      width: double.infinity,
-                      'assets/images/house1.jpg',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
+                child: ChNetworkImage(
+                    url: _mainImg!,
+                    height: 180,
+                    width: double.infinity,
+                    cacheheight: 150,
+                    cachewidth: 350),
+              ),
             ),
-            const  SizedBox(height: 5),
+            const SizedBox(height: 5),
             // Horizontal Scrollable Row of Images with padding
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    SmallImage(),
-                    SizedBox(width: 20),
-                    SmallImage(),
-                    SizedBox(width: 20),
-                    SmallImage(),
-                    SizedBox(width: 20),
-                    SmallImage(),
-                    SizedBox(width: 20),
-                    SmallImage(),
-                    SizedBox(width: 20),
-                    SmallImage(),
-                    SizedBox(width: 20),
-                    SmallImage(),
+                    Container(
+                      width: MediaQuery.of(context)
+                          .size
+                          .width, // Set the width to screen width
+                      height: 100,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _house!.images.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          EdgeInsets padding = const EdgeInsets.only(left: 10.0);
+
+                          if (index == _house!.images.length - 1) {
+                            padding = padding.copyWith(right: 40.0);
+                          }
+                          
+
+                          return Padding(
+                            padding: padding,
+                            child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _mainImg = _house!.images[index];
+                                  });
+                                },
+                                child: ChNetworkImage(
+                                    url: _house!.images[index],
+                                    height: 100,
+                                    width: 100,
+                                    cacheheight: 100,
+                                    cachewidth: 100)),
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -137,20 +161,26 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
             Flexible(
               flex: 1,
               child: ListView.builder(
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  if ( index == 0) {
-                    return DescriptionCard(house: _house);
-                  } else if ( index == 1) {
-                    return LocationCard(house: _house, newMarker: newMarker);
-                  } else {
-                    return AmenitiesCard(house: _house);
-                  }
-                }
-              ),
+                  itemCount: 3,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return DescriptionCard(house: _house);
+                    } else if (index == 1) {
+                      if (ConnectivityManagerService().connectivity == true) {
+                        return LocationCard(house: _house, newMarker: newMarker);
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    } else {
+                      return AmenitiesCard(house: _house);
+                    }
+                  }),
             ),
           ],
         ),
+
+        
+
         // Botón Abajo
         bottomNavigationBar: const Button(),
       );
@@ -161,6 +191,34 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
         ),
       );
     }
+  }
+}
+
+class BigImage extends StatelessWidget {
+  const BigImage({super.key, required this.getImageURL});
+
+  final Future<Uint8List?> Function() getImageURL;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Uint8List?>(
+      future: getImageURL(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la imagen.
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (snapshot.hasData) {
+          return Image.memory(
+            snapshot.data!,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          );
+        } else {
+          return Text('No image available'); // Mostrar algo si no hay imagen.
+        }
+      },
+    );
   }
 }
 
@@ -180,17 +238,21 @@ class DescriptionCard extends StatelessWidget {
         title: Text(
           'Description',
           style: TextStyle(
-            color: Theme.of(context).colorScheme.tertiary, // Set the text color here
+            color: Theme.of(context)
+                .colorScheme
+                .tertiary, // Set the text color here
           ),
         ),
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
-            child: Text(_house!.description,
+            child: Text(
+              _house!.description,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary, // Set the text color here
-                fontSize: 16.0
-              ),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .secondary, // Set the text color here
+                  fontSize: 16.0),
             ),
           )
         ],
@@ -212,16 +274,20 @@ class AmenitiesCard extends StatelessWidget {
     return Card(
       color: Theme.of(context).colorScheme.primary,
       child: ExpansionTile(
-        title: Text('Included Amenities',
+        title: Text(
+          'Included Amenities',
           style: TextStyle(
-            color: Theme.of(context).colorScheme.tertiary, // Set the text color here
+            color: Theme.of(context)
+                .colorScheme
+                .tertiary, // Set the text color here
           ),
         ),
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
-            child: FeatureTable(house: _house!,)
-          ),
+              padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
+              child: FeatureTable(
+                house: _house!,
+              )),
         ],
       ),
     );
@@ -243,24 +309,29 @@ class LocationCard extends StatelessWidget {
     return Card(
       color: Theme.of(context).colorScheme.primary,
       child: ExpansionTile(
-        title: Text('Location',
+        title: Text(
+          'Location',
           style: TextStyle(
-            color: Theme.of(context).colorScheme.tertiary, // Set the text color here
+            color: Theme.of(context)
+                .colorScheme
+                .tertiary, // Set the text color here
           ),
         ),
         children: <Widget>[
           SizedBox(
-            width: 250,
-            height: 250,
-            child: GoogleMap(
-              mapType: MapType.hybrid,
-              initialCameraPosition: CameraPosition(
-                target: LatLng(_house!.latitude, _house!.longitude), // Cambia esto a las coordenadas deseadas
-                zoom: 14,
-              ),
-              markers: {newMarker},
-            )
-          ),
+              width: 250,
+              height: 250,
+              child: GoogleMap(
+                mapType: MapType.hybrid,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                      _house!.latitude,
+                      _house!
+                          .longitude), // Cambia esto a las coordenadas deseadas
+                  zoom: 14,
+                ),
+                markers: {newMarker},
+              )),
         ],
       ),
     );
@@ -288,16 +359,21 @@ class Button extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary, // Set the button color here
+                  backgroundColor: Theme.of(context)
+                      .colorScheme
+                      .primary, // Set the button color here
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0), // Adjust the border radius as needed
+                    borderRadius: BorderRadius.circular(
+                        10.0), // Adjust the border radius as needed
                   ),
                 ),
-                child: Text("I'm Interested",
+                child: Text(
+                  "I'm Interested",
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.background, // Set the text color here
-                      fontSize: 16.0
-                  ),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .background, // Set the text color here
+                      fontSize: 16.0),
                 ),
               ),
             ),
@@ -311,7 +387,10 @@ class Button extends StatelessWidget {
 class SmallImage extends StatelessWidget {
   const SmallImage({
     super.key,
+    required this.getImageURL,
   });
+
+  final Future<Uint8List?> Function() getImageURL;
 
   @override
   Widget build(BuildContext context) {
@@ -323,13 +402,30 @@ class SmallImage extends StatelessWidget {
           color: Theme.of(context).colorScheme.onPrimary, // Color of the border
           width: 3.0,
         ),
-        borderRadius: BorderRadius.circular(12.0), // Radius of the border corners
+        borderRadius:
+            BorderRadius.circular(12.0), // Radius of the border corners
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(6.0),
-        child: Image.asset(
-          'assets/images/house1.jpg', // Replace with your image asset path
-          fit: BoxFit.cover,
+        child: FutureBuilder<Uint8List?>(
+          future: getImageURL(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la imagen.
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (snapshot.hasData) {
+              return Image.memory(
+                snapshot.data!,
+                width: double.infinity,
+                height: 150,
+                fit: BoxFit.cover,
+              );
+            } else {
+              return const Text(
+                  'No image available'); // Mostrar algo si no hay imagen.
+            }
+          },
         ),
       ),
     );
@@ -338,10 +434,43 @@ class SmallImage extends StatelessWidget {
 
 class FeatureTable extends StatelessWidget {
   final HouseModelUpdate house;
-  
-  final List<String> caracs = ["apartmentFloor","housingType","rentPrice","stratum","area","roomsNumber","roomArea","bathroomsNumber","laundryArea","internet","tv","furnished","elevator","gymnasium","reception","supermarkets"];
-  final List<String> texts = ["Apartment Floor","housing Type","Rent Price","Stratum","Area","Rooms Number","Room Area","Bathrooms Number","Laundry Area","Internet","TV","Furnished","Elevator","Gymnasium","Reception","Supermarkets"];
 
+  final List<String> caracs = [
+    "apartmentFloor",
+    "housingType",
+    "rentPrice",
+    "stratum",
+    "area",
+    "roomsNumber",
+    "roomArea",
+    "bathroomsNumber",
+    "laundryArea",
+    "internet",
+    "tv",
+    "furnished",
+    "elevator",
+    "gymnasium",
+    "reception",
+    "supermarkets"
+  ];
+  final List<String> texts = [
+    "Apartment Floor",
+    "housing Type",
+    "Rent Price",
+    "Stratum",
+    "Area",
+    "Rooms Number",
+    "Room Area",
+    "Bathrooms Number",
+    "Laundry Area",
+    "Internet",
+    "TV",
+    "Furnished",
+    "Elevator",
+    "Gymnasium",
+    "Reception",
+    "Supermarkets"
+  ];
 
   FeatureTable({Key? key, required this.house}) : super(key: key);
 
@@ -350,61 +479,61 @@ class FeatureTable extends StatelessWidget {
     List<TableRow> tableRows = [];
 
     Map<String, String> caracValues = {
-    "apartmentFloor": house.apartmentFloor.toString(),
-    "housingType": house.housingType.toString(),
-    "rentPrice": house.rentPrice.toString(),
-    "stratum": house.stratum.toString(),
-    "area": house.area.toString(),
-    "roomsNumber": house.roomsNumber.toString(),
-    "roomArea": house.roomArea.toString(),
-    "bathroomsNumber": house.bathroomsNumber.toString(),
-    "laundryArea": house.laundryArea.toString(),
-    "internet": house.internet.toString(),
-    "tv": house.tv.toString(),
-    "furnished": house.furnished.toString(),
-    "elevator": house.elevator.toString(),
-    "gymnasium": house.gymnasium.toString(),
-    "reception": house.reception.toString(),
-    "supermarkets": house.supermarkets.toString(),
-  };
+      "apartmentFloor": house.apartmentFloor.toString(),
+      "housingType": house.housingType.toString(),
+      "rentPrice": house.rentPrice.toString(),
+      "stratum": house.stratum.toString(),
+      "area": house.area.toString(),
+      "roomsNumber": house.roomsNumber.toString(),
+      "roomArea": house.roomArea.toString(),
+      "bathroomsNumber": house.bathroomsNumber.toString(),
+      "laundryArea": house.laundryArea.toString(),
+      "internet": house.internet.toString(),
+      "tv": house.tv.toString(),
+      "furnished": house.furnished.toString(),
+      "elevator": house.elevator.toString(),
+      "gymnasium": house.gymnasium.toString(),
+      "reception": house.reception.toString(),
+      "supermarkets": house.supermarkets.toString(),
+    };
 
-  // Iterate through the caracs list and add rows to the tableRows list
-  for (int i = 0; i < caracs.length; i++) {
-    var caracName = caracs[i];
-    var caracValue = caracValues[caracName];
-    caracName = texts[i];
-    if (caracValue == "true") {
-      caracValue = "Yes";
-    } else if (caracValue == "false") {
-      caracValue = "No";
+    // Iterate through the caracs list and add rows to the tableRows list
+    for (int i = 0; i < caracs.length; i++) {
+      var caracName = caracs[i];
+      var caracValue = caracValues[caracName];
+      caracName = texts[i];
+      if (caracValue == "true") {
+        caracValue = "Yes";
+      } else if (caracValue == "false") {
+        caracValue = "No";
+      }
+      tableRows.add(
+        TableRow(
+          children: [
+            TableCell(
+              child: Center(
+                child: Text(
+                  caracName,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+              ),
+            ),
+            TableCell(
+              child: Center(
+                child: Text(
+                  caracValue!,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
     }
-    tableRows.add(
-      TableRow(
-        children: [
-          TableCell(
-            child: Center(
-              child: Text(
-                caracName,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              ),
-            ),
-          ),
-          TableCell(
-             child: Center(
-               child: Text(
-                caracValue!,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
     return Table(
       border: TableBorder.all(

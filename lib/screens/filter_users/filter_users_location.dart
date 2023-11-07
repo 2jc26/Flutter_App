@@ -3,12 +3,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart'; // Importa geocoding para convertir direcciones en coordenadas
 
 import "package:giusseppe_flut/widgets/drawer.dart";
+import '../../models/user/query_filter_user.dart';
 import '../../models/user/query_likes_user.dart';
 import 'filter_users_other.dart';
 import 'package:csc_picker/csc_picker.dart';
-
-
-final List<String> country_list = <String>['One', 'Two', 'Three', 'Four'];
 
 class FilterUsersLocations extends StatefulWidget {
 
@@ -43,7 +41,7 @@ class _FilterUsersLocationsState extends State<FilterUsersLocations> with Restor
         ),
         centerTitle: true,
       ),
-      drawer: const CustomDrawer(),
+      drawer: CustomDrawer(customDrawerContext: context),
       body: SingleChildScrollView( child:BodyLocation(
         cityController: cityController,
         neighborhoodController: neighborhoodController,
@@ -68,53 +66,50 @@ class _FilterUsersLocationsState extends State<FilterUsersLocations> with Restor
   }
 }
 class BodyLocation extends StatefulWidget {
-  final UserPreferencesDTO userPrefs = UserPreferencesDTO();
-  final FilterUsersOthers filterUsersOthers;
-  final RestorableTextEditingController cityController;
-  final RestorableTextEditingController neighborhoodController;
-  final LatLng markerLocation;
-  final Function(LatLng) updateMarkerLocation;
+  FilterUsersOthers filterUsersOthers;
+  RestorableTextEditingController cityController;
+  RestorableTextEditingController neighborhoodController;
+  LatLng markerLocation;
+  Function(LatLng) updateMarkerLocation;
+
   BodyLocation({
-    super.key,
+    Key? key,
     required this.cityController,
     required this.neighborhoodController,
     required this.markerLocation,
     required this.updateMarkerLocation,
     FilterUsersOthers? filterUsersOthers,
-  }) : filterUsersOthers = filterUsersOthers ?? FilterUsersOthers(userPreferences: UserPreferencesDTO());
+  }) :
+        filterUsersOthers = filterUsersOthers ?? FilterUsersOthers(),
+        super(key: key);
+
   @override
   State<BodyLocation> createState() => _BodyLocation();
-
 }
 
 class _BodyLocation extends State<BodyLocation> {
-  String countryValue = "";
-  String stateValue = "";
-  String cityValue = "";
-  String address = "";
-  String dropdownValue = country_list.first;
   String localidadValue = "Seleccione una opción";
-  String ciudadValue = "Seleccione una opción";
+  String ciudadValue = "Bogotá";
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            RoundedButton(text: 'Location', onPressed: () {}),
-            const SizedBox(width: 10),
-            RoundedButton(text: 'Information', onPressed: () {}),
-          ],
-        ),
+        //const SizedBox(height: 16),
+        //Row(
+          //mainAxisAlignment: MainAxisAlignment.center,
+          //children: [
+            //RoundedButton(text: 'Location', onPressed: () {}),
+            //const SizedBox(width: 10),
+            //RoundedButton(text: 'Information', onPressed: () {}),
+          //],
+        //),
         const SizedBox(height: 20),
         CustomListField(
-          hintText: 'Selecciona una opción',
+          hintText: 'Bogotá',
           selectedValue: ciudadValue,
-          items: ["Seleccione una opción",'Bogotá'],
+          items: ['Bogotá'],
           onItemSelected: (String? value) {
             setState(() =>ciudadValue =value!);
           },
@@ -164,12 +159,8 @@ class _BodyLocation extends State<BodyLocation> {
         const SizedBox(height: 16),
         ElevatedButton(
           onPressed: () {
-            if (ciudadValue!="Seleccione una opción"){
-              widget.userPrefs.city=ciudadValue;
-            }
-            if (localidadValue!="Seleccione una opción"){
-              widget.userPrefs.neighborhood=localidadValue;
-            }
+            UserFilter().setCity(ciudadValue);
+            UserFilter().setNeighborhood(localidadValue);
             Navigator.push(
               context,
               MaterialPageRoute(
