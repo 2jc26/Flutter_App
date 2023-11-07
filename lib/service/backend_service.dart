@@ -58,7 +58,11 @@ class BackendService {
       body: json.encode(object.toJson()),
     );
     if (response.statusCode == 200) {
-      return json.decode(response.body);
+      if (response.body != "null") {
+        return json.decode(response.body);
+      } else {
+        return [];
+      }
     } else {
       // Request failed
       return [];
