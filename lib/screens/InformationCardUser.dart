@@ -10,7 +10,7 @@ class InformationCardUser extends StatelessWidget {
   const  InformationCardUser({super.key, required this.url, required this.stars, required this.text});
 
   final String url;
-  final int stars;
+  final double stars;
   final String text;
 
   @override
