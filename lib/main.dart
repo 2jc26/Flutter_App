@@ -69,61 +69,23 @@
 
 
 import 'package:flutter/material.dart';
-
-class ReviewCard {
-  final String name;
-  final int rating;
-  final String comment;
-
-  ReviewCard({required this.name, required this.rating, required this.comment});
-}
-
-class ReviewsList extends StatelessWidget {
-  final List<ReviewCard> reviews;
-
-  ReviewsList({required this.reviews});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: reviews.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Card(
-          margin: EdgeInsets.all(10.0),
-          child: ListTile(
-            title: Text(reviews[index].name),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Calificación: ${reviews[index].rating}'),
-                Text('Comentario: ${reviews[index].comment}'),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
+import 'package:giusseppe_flut/screens/review_list.dart';
 
 void main() {
-  runApp(MaterialApp(
-    home: Scaffold(
-      body: ReviewsList(
-        reviews: [
-          ReviewCard(
-            name: 'Cliente 1',
-            rating: 5,
-            comment: '¡Muy buen servicio!',
-          ),
-          ReviewCard(
-            name: 'Cliente 2',
-            rating: 4,
-            comment: 'Buena experiencia en general.',
-          ),
-          // Agrega más reseñas según sea necesario
-        ],
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Review List',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
-    ),
-  ));
+      home: const ReviewList(
+        houseId: 'bNqJqQetOhT9RmYUaV9S',
+      ),
+    );
+  }
 }

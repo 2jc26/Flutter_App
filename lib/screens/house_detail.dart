@@ -149,6 +149,9 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
             ),
           ],
         ),
+
+        
+
         // Botón Abajo
         bottomNavigationBar: const Button(),
       );

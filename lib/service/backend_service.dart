@@ -75,20 +75,24 @@ class BackendService {
     }
   }
 
-  Future<dynamic> put(String endPoint, object, String id) async {
-    final response = await http.put(Uri.parse('$baseUrl/$endPoint/$id'),
+  Future<dynamic> put(String endPoint, Map<String, dynamic> object, String id) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/$endPoint/$id'),
       headers: {
         "Content-Type": "application/json",
       },
-      body: object == null ? json.encode(object.toJson()) : {},
+      body: object != null ? json.encode(object) : null,
     );
+
     if (response.statusCode == 200) {
-      return json.decode(response.body);
+      return response.body;
     } else {
       // Request failed
       return null;
     }
   }
+
+
 
   Future<dynamic> post(String endPoint, object) async {
     final response = await http.post(Uri.parse('$baseUrl/$endPoint'),
