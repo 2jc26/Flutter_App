@@ -13,6 +13,7 @@ class SessionCubit extends Cubit<SessionState> {
   final UserRepository dataRepo = UserRepository();
 
   void showAuth() => emit(Unauthenticated());
+  
   void showSession(AuthCredentials credentials) {
     final userId = credentials.userId;
     if (userId != null) {

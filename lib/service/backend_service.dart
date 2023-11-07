@@ -49,7 +49,7 @@ class BackendService {
     }
   }
 
-  Future<void> putAll(String endPoint, object) async {
+  Future<List<dynamic>> putAll(String endPoint, object) async {
     final response = await http.put(Uri.parse(
       '$baseUrl/$endPoint'),
       headers: {
@@ -57,6 +57,16 @@ class BackendService {
       },
       body: json.encode(object.toJson()),
     );
+    if (response.statusCode == 200) {
+      if (response.body != "null") {
+        return json.decode(response.body);
+      } else {
+        return [];
+      }
+    } else {
+      // Request failed
+      return [];
+    }
   }
 
   Future<List<dynamic>> getOneAll (String endPoint, String id) async {
@@ -69,8 +79,27 @@ class BackendService {
     }
   }
 
-  Future<dynamic> put(String endPoint, object, String id) async {
-    final response = await http.put(Uri.parse('$baseUrl/$endPoint/$id'),
+  Future<dynamic> put(String endPoint, Map<String, dynamic> object, String id) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/$endPoint/$id'),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: object != null ? json.encode(object) : null,
+    );
+
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      // Request failed
+      return null;
+    }
+  }
+
+
+
+  Future<dynamic> post(String endPoint, object) async {
+    final response = await http.post(Uri.parse('$baseUrl/$endPoint'),
       headers: {
         "Content-Type": "application/json",
       },

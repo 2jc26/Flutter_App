@@ -223,9 +223,10 @@ class _SignUpState extends State<SignUp> {
                         const SizedBox(height: 20),
                         _generoField(),
                         const SizedBox(height: 20),
-                        _cityField(),
-                        const SizedBox(height: 20),
-                        _localityField(),
+                        _locationField(),
+                        // _cityField(),
+                        // const SizedBox(height: 20),
+                        // _localityField(),
                         const SizedBox(height: 20),
                       ],
                     ),
@@ -267,11 +268,11 @@ class _SignUpState extends State<SignUp> {
             ),
             filled: true,
             fillColor: const Color(0XffEBEDF0),
-            hintText: 'Username',
+            hintText: 'E-mail',
           ),
           maxLength: 50,
           validator: (value) =>
-              state.isValidUsername ? null : 'Username is invalid',
+              state.isValidUsername ? null : 'E-mail is invalid',
           onChanged: (value) {
             context
                 .read<SignUpBloc>()
@@ -372,6 +373,8 @@ class _SignUpState extends State<SignUp> {
             hintText: 'Age',
           ),
           maxLength: 2,
+          validator: (value) =>
+              state.isValidAge ? null : 'Age is invalid',
           onChanged: (value) {
             context.read<SignUpBloc>().add(
                 SignUpAgeChanged(age: value.isEmpty ? 0 : int.parse(value)));
@@ -416,7 +419,6 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-
   Widget _generoField() {
     return BlocBuilder<SignUpBloc, SignUpState>(
       builder: (context, state) {
@@ -434,7 +436,7 @@ class _SignUpState extends State<SignUp> {
             ),
             filled: true,
             fillColor: const Color(0XffEBEDF0),
-            hintText: 'Genre',
+            hintText: 'Gender',
           ),
           maxLength: 20,
           onChanged: (value) {
@@ -446,64 +448,38 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  Widget _cityField() {
+  Widget _locationField() {
+    cityController.text = 'Bogotá';
+    localityController.text = "Usaquén";
     return BlocBuilder<SignUpBloc, SignUpState>(
       builder: (context, state) {
-        return TextFormField(
-          style: const TextStyle(color: Colors.black),
-          decoration: InputDecoration(
-            hintStyle: const TextStyle(color: Color(0xFFC4C4C4)),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            CustomListField(
+              hintText: 'Bogotá',
+              selectedValue: cityController.text,
+              items: const ['Bogotá'],
+              onItemSelected: (String? value) {
+                context.read<SignUpBloc>().add(SignUpCityChanged(city: value??''));
+                cityController.text = value??'';
+              },
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
-            ),
-            filled: true,
-            fillColor: const Color(0XffEBEDF0),
-            hintText: 'city',
-          ),
-          maxLength: 20,
-          validator: (value) => state.isValidCity ? null : 'City is invalid',
-          onChanged: (value) {
-            context.read<SignUpBloc>().add(SignUpCityChanged(city: value));
-            cityController.text = value;
-          },
-        );
-      },
-    );
-  }
-
-  Widget _localityField() {
-    return BlocBuilder<SignUpBloc, SignUpState>(
-      builder: (context, state) {
-        return TextFormField(
-          style: const TextStyle(color: Colors.black),
-          decoration: InputDecoration(
-            hintStyle: const TextStyle(color: Color(0xFFC4C4C4)),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
-            ),
-            filled: true,
-            fillColor: const Color(0XffEBEDF0),
-            hintText: 'Locality',
-          ),
-          maxLength: 50,
-          validator: (value) =>
-              state.isValidLocality ? null : 'Locality is invalid',
-          onChanged: (value) {
-            context
-                .read<SignUpBloc>()
-                .add(SignUpLocalityChanged(locality: value));
-            localityController.text = value;
-          },
+            const SizedBox(height: 20),
+            CustomListField(
+              hintText: 'Enter an option',
+              selectedValue: localityController.text,
+              items: const ["Usaquén", "Chapinero", "Santa Fe", "San Cristóbal", "Usme",
+                "Tunjuelito", "Bosa", "Kennedy", "Fontibón", "Engativá", "Suba",
+                "Barrios Unidos", "Teusaquillo", "Los Mártires", "Antonio Nariño",
+                "Puente Aranda", "La Candelaria", "Rafael Uribe Uribe",
+                "Ciudad Bolívar", "Sumapaz"],
+              onItemSelected: (value) {
+                context.read<SignUpBloc>().add(SignUpLocalityChanged(locality: value??''));
+                localityController.text = value??'';
+              }
+            )
+          ],
         );
       },
     );
@@ -583,10 +559,56 @@ class _SignUpState extends State<SignUp> {
   }
 
   void _showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      dismissDirection: DismissDirection.down,
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Error in the Sign Up"),
+          content: Text(message.replaceAll("Exception: ", "")),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cerrar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+}
+
+class CustomListField extends StatelessWidget {
+  final String hintText;
+  final String selectedValue;
+  final List<String> items;
+  final Function(String?) onItemSelected;
+
+  const CustomListField({
+    Key? key,
+    required this.hintText,
+    required this.selectedValue,
+    required this.items,
+    required this.onItemSelected,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+      child: DropdownButton<String>(
+        value: selectedValue,
+        items: items.map((String item) {
+          return DropdownMenuItem<String>(
+            value: item,
+            child: Text(item),
+          );
+        }).toList(),
+        onChanged: onItemSelected,
+        hint: Text(hintText),
+        isExpanded: true,
+      ),
+    );
   }
 }

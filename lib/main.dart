@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:giusseppe_flut/app_navigator.dart';
 
 import 'package:giusseppe_flut/auth/auth_repository.dart';
@@ -16,7 +15,6 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var objectbox = await ObjectBoxDao.initialize();
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -34,8 +32,9 @@ class MyApp extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
+      restorationScopeId: "root",
       title: 'Flutter Demo',
       theme: ThemeData(
         useMaterial3: true,
@@ -57,7 +56,8 @@ class MyApp extends StatelessWidget {
 
       home: RepositoryProvider(
         create: (context) => AuthRepository(),
-        child: BlocProvider(
+        child:
+        BlocProvider(
           create: (context) => SessionCubit(authRepo: context.read<AuthRepository>()),
           child: AppNavigator(),
         ),
@@ -65,3 +65,27 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+
+// import 'package:flutter/material.dart';
+// import 'package:giusseppe_flut/screens/review_list.dart';
+
+// void main() {
+//   runApp(MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Review List',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: const ReviewList(
+//         houseId: 'bNqJqQetOhT9RmYUaV9S',
+//       ),
+//     );
+//   }
+// }

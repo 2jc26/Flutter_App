@@ -29,6 +29,8 @@ class SignUpState {
 
   bool get isValidLocality => locality.length > 3;
 
+  bool get isValidAge => age > 16;
+
   final FormSubmissionStatus formStatus;
 
   SignUpState({
