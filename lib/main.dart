@@ -15,7 +15,6 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var objectbox = await ObjectBoxDao.initialize();
-  ObjectBoxDao().deleteAllUsers();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
