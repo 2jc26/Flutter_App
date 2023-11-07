@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 
 import '../models/user/query_likes_user.dart';
 import '../models/user/user_model.dart';
@@ -15,7 +17,10 @@ class UserListPresenter {
   late UserListView _backView= UserListView();
   double average=0.0;
 
-  UserListPresenter();
+  UserListPresenter(){
+  }
+
+
 
   void getAllUsers() async {
     try {
