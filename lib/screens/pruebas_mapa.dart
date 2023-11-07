@@ -47,7 +47,7 @@ class _MapScreenState extends State<MapScreen> {
         ),
         centerTitle: true,
       ),
-      drawer: const CustomDrawer(),
+      // drawer: CustomDrawer(customDrawerContext: context),
       body: Column(
         children: [
           //const SizedBox(

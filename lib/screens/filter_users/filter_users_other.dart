@@ -50,7 +50,7 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
         ),
         centerTitle: true,
       ),
-      drawer: const CustomDrawer(),
+      drawer: CustomDrawer(customDrawerContext: context),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

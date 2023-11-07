@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'; // Importar Flutter Bloc
+import 'package:giusseppe_flut/auth/auth_cubit.dart';
 import 'package:giusseppe_flut/screens/house_list.dart';
 import 'package:giusseppe_flut/screens/user_list.dart';
 import 'package:giusseppe_flut/screens/user_recomendation_ubication.dart';
-
+import 'package:giusseppe_flut/storage/providers/nickname_provider.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+  final BuildContext customDrawerContext;
 
+  final NicknameProvider nicknameProvider = NicknameProvider();
+
+  String nickname = '';
+
+  CustomDrawer({required this.customDrawerContext, Key? key}) : super(key: key);
+
+  getNickName() async {
+    nickname = await nicknameProvider.getNickname() ?? '';
+  }
+  
   @override
   Widget build(BuildContext context) {
+    getNickName();
     return Drawer(
       child: ListView(
         children: [
@@ -27,7 +40,7 @@ class CustomDrawer extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  const Text("Paco Martinez"),
+                  Text(nickname),
                 ],
               ),
             ),
@@ -35,16 +48,15 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             title: const Text("Publish"),
             onTap: () {
-
+              // Puedes acceder al contexto personalizado customDrawerContext aquí
             },
           ),
           ListTile(
             title: const Text("Houses"),
             onTap: () {
               Navigator.push(
-                context,
-                // TODO: Cambiar el userId por el que se obtenga del login
-                MaterialPageRoute(builder: (context) => const HouseList(userId: '', houseFilters: null)),
+                customDrawerContext, // Usar el contexto personalizado
+                MaterialPageRoute(builder: (customDrawerContext) => const HouseList(userId: '', houseFilters: null)),
               );
             },
           ),
@@ -52,8 +64,8 @@ class CustomDrawer extends StatelessWidget {
             title: const Text("Users"),
             onTap: () {
               Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => UserList()),
+                customDrawerContext, // Usar el contexto personalizado
+                MaterialPageRoute(builder: (customDrawerContext) => UserList()),
               );
             },
           ),
@@ -61,7 +73,7 @@ class CustomDrawer extends StatelessWidget {
             title: Text("Discover Near"),
             onTap: () {
               Navigator.push(
-                context,
+                customDrawerContext, // Usar el contexto personalizado
                 MaterialPageRoute(builder: (context) => LocationPermissionView()),
               );
             },
@@ -73,6 +85,13 @@ class CustomDrawer extends StatelessWidget {
           const ListTile(
             title: Text("Help"),
             // Agregar más elementos del Drawer según tus necesidades
+          ),
+          ListTile(
+            title: Text("Log Out"),
+            onTap: () {
+              // Agregar lógica para cerrar sesión aquí
+              customDrawerContext.read<AuthCubit>().logOut();
+            },
           ),
           // Puedes agregar más elementos del Drawer aquí
         ],
