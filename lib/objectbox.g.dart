@@ -22,7 +22,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(2, 7978175343267685913),
       name: 'UserModel',
-      lastPropertyId: const IdUid(22, 1004875386519133687),
+      lastPropertyId: const IdUid(23, 4731438569821677448),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -122,11 +122,6 @@ final _entities = <ModelEntity>[
             type: 8,
             flags: 0),
         ModelProperty(
-            id: const IdUid(20, 6586141486109144892),
-            name: 'stars',
-            type: 8,
-            flags: 0),
-        ModelProperty(
             id: const IdUid(21, 7841518691433668281),
             name: 'city',
             type: 9,
@@ -135,6 +130,11 @@ final _entities = <ModelEntity>[
             id: const IdUid(22, 1004875386519133687),
             name: 'locality',
             type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(23, 4731438569821677448),
+            name: 'stars',
+            type: 8,
             flags: 0)
       ],
       relations: <ModelRelation>[],
@@ -196,7 +196,8 @@ ModelDefinition getObjectBoxModel() {
         2999172074234913178,
         668281750275672376,
         3735554969042275254,
-        3158718228921966924
+        3158718228921966924,
+        6586141486109144892
       ],
       retiredRelationUids: const [],
       modelVersion: 5,
@@ -225,7 +226,7 @@ ModelDefinition getObjectBoxModel() {
           final genderOffset = fbb.writeString(object.gender);
           final cityOffset = fbb.writeString(object.city);
           final localityOffset = fbb.writeString(object.locality);
-          fbb.startTable(23);
+          fbb.startTable(24);
           fbb.addInt64(0, object.id_int);
           fbb.addOffset(1, imageOffset);
           fbb.addOffset(2, emailOffset);
@@ -245,9 +246,9 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(16, genderOffset);
           fbb.addFloat64(17, object.latitude);
           fbb.addFloat64(18, object.longitude);
-          fbb.addFloat64(19, object.stars);
           fbb.addOffset(20, cityOffset);
           fbb.addOffset(21, localityOffset);
+          fbb.addFloat64(22, object.stars);
           fbb.finish(fbb.endTable());
           return object.id_int;
         },
@@ -293,7 +294,7 @@ ModelDefinition getObjectBoxModel() {
           final longitudeParam =
               const fb.Float64Reader().vTableGet(buffer, rootOffset, 40, 0);
           final starsParam =
-              const fb.Float64Reader().vTableGet(buffer, rootOffset, 42, 0);
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 48, 0);
           final cityParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 44, '');
           final localityParam = const fb.StringReader(asciiOptimization: true)
@@ -407,15 +408,15 @@ class UserModel_ {
   static final longitude =
       QueryDoubleProperty<UserModel>(_entities[0].properties[18]);
 
-  /// see [UserModel.stars]
-  static final stars =
-      QueryDoubleProperty<UserModel>(_entities[0].properties[19]);
-
   /// see [UserModel.city]
   static final city =
-      QueryStringProperty<UserModel>(_entities[0].properties[20]);
+      QueryStringProperty<UserModel>(_entities[0].properties[19]);
 
   /// see [UserModel.locality]
   static final locality =
-      QueryStringProperty<UserModel>(_entities[0].properties[21]);
+      QueryStringProperty<UserModel>(_entities[0].properties[20]);
+
+  /// see [UserModel.stars]
+  static final stars =
+      QueryDoubleProperty<UserModel>(_entities[0].properties[21]);
 }
