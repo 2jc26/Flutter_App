@@ -5,7 +5,7 @@ class InformationCard extends StatelessWidget {
       {super.key, required this.path, required this.stars, required this.text});
 
   final String path;
-  final int stars;
+  final double stars;
   final String text;
 
   @override
