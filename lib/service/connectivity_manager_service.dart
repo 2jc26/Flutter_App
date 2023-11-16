@@ -27,12 +27,17 @@ class ConnectivityManagerService {
       _connectionStatusController.add(isDeviceConnected);
       connectivitySnackbar();
     });
-    emitStatus();
+
+    // Add a post-frame callback to ensure the context is available
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      emitStatus();
+    });
   }
 
   void emitStatus() {
     InternetConnectionChecker().hasConnection.then((isConnected) {
       connectivity = isConnected;
+      connectivitySnackbar();
     });
   }
 
