@@ -7,6 +7,8 @@ import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
 import 'package:giusseppe_flut/screens/InformationCardUser.dart';
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
 import 'package:giusseppe_flut/screens/house_detail.dart';
+import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
+import 'package:giusseppe_flut/screens/no_connectivity.dart';
 import 'package:giusseppe_flut/widgets/search_field.dart';
 import '../widgets/drawer.dart';
 
@@ -29,6 +31,7 @@ class HouseList extends StatefulWidget {
 }
 
 class _HouseListState extends State<HouseList> implements HouseListView {
+  
   late HouseListPresenter houseListPresenter;
 
   String? _userId;
@@ -94,8 +97,8 @@ class _HouseListState extends State<HouseList> implements HouseListView {
 
   @override
   Widget build(BuildContext context) {
-    if ((_housesList!.isNotEmpty && _houseFilters == null) ||
-        (_housesSearchingList!.isNotEmpty && _houseFilters != null)) {
+    
+    if ((_housesList!.isNotEmpty && _houseFilters == null) || (_housesSearchingList!.isNotEmpty && _houseFilters != null)) {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xFF2E5EAA),
@@ -141,14 +144,20 @@ class _HouseListState extends State<HouseList> implements HouseListView {
         ),
         drawer: CustomDrawer(customDrawerContext: context)
       );
-    } else if (_housesList!.isEmpty && _houseFilters == null) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
     } else {
-      return const NoHousesSearch();
+      if(ConnectivityManagerService().connectivity) {
+        if(_housesList!.isEmpty && _houseFilters == null) {
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else {
+          return const NoHousesSearch();
+        }
+      } else {
+        return const NoConnectivity();
+      }
     }
   }
 
