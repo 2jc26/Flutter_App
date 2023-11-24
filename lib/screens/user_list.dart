@@ -27,7 +27,7 @@ class _UserListState extends State<UserList> implements UserListView{
 
   final UserListPresenter userListPresenter = UserListPresenter();
   List<UserModel> _userList= [];
-  double average= 0.0;
+  double average = 0.0;
   InformationCardUser Function(BuildContext, int) _itemBuilder(List<UserModel> users){
     return (BuildContext context, int index) =>
         InformationCardUser(
@@ -86,10 +86,18 @@ class _UserListState extends State<UserList> implements UserListView{
       ),
       // drawer: CustomDrawer(customDrawerContext: context),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const Text(
+            'Filtro',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18.0,
+            ),
+          ),
           Center(
             child: Padding(
-              padding: const EdgeInsets.only(top: 15.0, bottom: 15.0,),
+              padding: const EdgeInsets.only(top: 4.0, bottom: 15.0,),
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(
