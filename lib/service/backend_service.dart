@@ -34,6 +34,7 @@ class BackendService {
   }
 
   Future<List<dynamic>> postAll(String endPoint, object) async {
+    var waos =object.toJson();
     final response = await http.post(Uri.parse(
       '$baseUrl/$endPoint'),
       headers: {

@@ -1,22 +1,21 @@
 
 import 'dart:async';
-
+import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:giusseppe_flut/models/user/query_filter_user.dart';
 import 'package:giusseppe_flut/models/user/query_likes_user.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:giusseppe_flut/storage/storage_adapters/Objectbox/ObjectBox.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:giusseppe_flut/service/backend_service.dart';
 
 
 import '../../models/user/user_model.dart';
 import 'abstract/base_user_dao.dart';
 final storageRef = FirebaseStorage.instance.ref();
-
+final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 class UserDaoFireStore extends UserDao{
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   //final storage = FirebaseStorage.instance;
   //final storageRef = FirebaseStorage.instance.ref();
 
@@ -36,7 +35,7 @@ class UserDaoFireStore extends UserDao{
   Future<List<UserModel>> getAllUsers() async {
     List<UserModel> users = [];
     try {
-      final querySnapshot = await _firestore.collection("Users").get();//Users
+      final querySnapshot = await firestore.collection("Users").get();//Users
       for (var user in querySnapshot.docs) {
         final userData = user.data();
         final userId = user.id;
@@ -56,7 +55,7 @@ class UserDaoFireStore extends UserDao{
   @override
   Future<UserModel> getUserById(String id) async {
     try {
-      final querySnapshot = await _firestore.collection("Users").doc(id).get();
+      final querySnapshot = await firestore.collection("Users").doc(id).get();
       final userData = querySnapshot.data();
       final userId = querySnapshot.id;
 
@@ -77,7 +76,7 @@ class UserDaoFireStore extends UserDao{
     final controller = StreamController<List<UserModel>>();
 
     try {
-      Query query = _firestore.collection("Users");
+      Query query = firestore.collection("Users");
 
       final stream = query.snapshots();
       stream.listen((querySnapshot) {
@@ -109,72 +108,24 @@ class UserDaoFireStore extends UserDao{
 
   }
 
-  @override
   Future<List<UserModel>> getUsersByPreferences() async {
-    List<UserModel> users = [];
-
     try {
-      updateUserPreferencesStats();
-      Query query= _firestore.collection("Users");
-      String? userFilter= UserFilter().getCity();
-      String? cc = UserFilter().getNeighborhood();
-      bool? pet_did=UserFilter().getPetPreference();
-
-      String? intro=UserFilter().getIntrovertedPreference();
-
-      String? cle=UserFilter().getCleaningFrequency();
-
-      bool? vapee=UserFilter().getVapePreference();
-
-      bool? smokee=UserFilter().getSmokePreference();
-
-      bool? worrkk= UserFilter().getWorkFromHomePreference();
-
-      int? sleeep=UserFilter().getSleepTime();
-
-      if (UserFilter().getExternalPeopleFrequency() != null) {
-        query = query.where("bring_people", isEqualTo: UserFilter().getExternalPeopleFrequency());
-      }
-      if (UserFilter().getSleepTime() != null) {
-        query = query.where("sleep", isEqualTo: UserFilter().getSleepTime());
-      }
-      if (UserFilter().getSmokePreference() != null) {
-        query = query.where("smoke", isEqualTo: UserFilter().getSmokePreference());
-      }
-      if (UserFilter().getVapePreference() != null) {
-        query = query.where("vape", isEqualTo: UserFilter().getVapePreference());
-      }
-      if (UserFilter().getCleaningFrequency()!= null) {
-        query = query.where("clean", isEqualTo: UserFilter().getCleaningFrequency());
-      }
-      if (UserFilter().getIntrovertedPreference()!= null) {
-        query = query.where("personality", isEqualTo: UserFilter().getIntrovertedPreference());
-      }
-      if (UserFilter().getPetPreference() != null) {
-        query = query.where("likes_pets", isEqualTo: UserFilter().getPetPreference());
-      }
-      if (UserFilter().getCity() != null) {
-        query = query.where("city", isEqualTo: UserFilter().getCity());
-      }
-      if (UserFilter().getNeighborhood() != null) {
-        query = query.where("locality", isEqualTo: UserFilter().getNeighborhood());
-      }
-      final querySnapshot = await query.get();
-
-      for (var user in querySnapshot.docs) {
-        final userData = user.data() as Map<String, dynamic>;
-        final userId = user.id;
-        UserModel nuevoUsuario=UserModel.fromJson({...userData, 'id': userId});
-        users.add(nuevoUsuario);
+      List<UserModel> users = [];
+      var x = UserFilter().toJson();
+      var y = x["likes_pet"];
+      final querySnapshot = await BackendService().postAll("users/filtered", UserFilter());
+      if (querySnapshot.isNotEmpty) {
+        users = await compute(parseObjects, querySnapshot);
       }
       return users;
     } catch (error) {
       if (kDebugMode) {
-        print("Error fetching users by filter: $error");
+        print("Error fetching users by searching: $error");
       }
       rethrow;
     }
   }
+
   Future<List<UserModel>> getDocumentsWithinRadius(double latitude, double longitude) async {
     List<UserModel> users=[];
 
@@ -187,18 +138,15 @@ class UserDaoFireStore extends UserDao{
 
     final QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('Users')
-        .where('lat', isGreaterThanOrEqualTo: minLat)
-        .where('lat', isLessThanOrEqualTo: maxLat)
+        .where('latitude', isGreaterThanOrEqualTo: minLat)
+        .where('latitude', isLessThanOrEqualTo: maxLat)
         .get();
+    Map map = Map();
+    map['snapshot'] = snapshot.docs;
+    map['minLon'] = minLon;
+    map['maxLon'] = maxLon;
+    users = await compute(parseObjectsLocation, map);
 
-    for (var user in snapshot.docs) {
-      final userData = user.data() as Map<String, dynamic>;
-      if (userData["long"]>=minLon 	&& userData["long"]<=maxLon){
-        final userId = user.id;
-        users.add(UserModel.fromJson({...userData, 'id': userId}));
-      }
-
-    }
     return users;
 
   }
@@ -208,7 +156,7 @@ class UserDaoFireStore extends UserDao{
       String email, String password) async {
     try {
       // Check if a user with the given email exists in Firestore
-      final querySnapshot = await _firestore
+      final querySnapshot = await firestore
           .collection("Users")
           .where("email", isEqualTo: email)
           .get();
@@ -277,13 +225,13 @@ class UserDaoFireStore extends UserDao{
       };
 
       // Check if a user with the given email exists in Firestore
-      final querySnapshot = await _firestore
+      final querySnapshot = await firestore
           .collection("Users")
           .where("email", isEqualTo: email)
           .get();
 
       if (querySnapshot.docs.isEmpty) {
-        final docRef = await _firestore.collection("Users").add(toJson());
+        final docRef = await firestore.collection("Users").add(toJson());
         final docSnapshot = await docRef.get();
         final userData = docSnapshot.data();
         final userId = docSnapshot.id;
@@ -318,3 +266,24 @@ class UserDaoFireStore extends UserDao{
   }
   
 }
+
+Future<List<UserModel>> parseObjects(List<dynamic> querySnapshot) async {
+  List<UserModel> users=[];
+  for (var user in querySnapshot) {
+    //final userData = user.data() as Map<String, dynamic>;
+    UserModel nuevoUsuario=UserModel.fromJson({...user});
+    users.add(nuevoUsuario);
+  }
+  return users;
+}
+
+Future<List<UserModel>> parseObjectsLocation(Map<dynamic, dynamic> variables) async {
+  List<UserModel> users=[];
+  for (var user in variables['snapshot']) {
+    if (user["longitude"]>=variables['minLon']	&& user['maxLon']<=variables){
+      users.add(UserModel.fromJson({...user}));
+    }
+  }
+  return users;
+}
+//--Init of isolate

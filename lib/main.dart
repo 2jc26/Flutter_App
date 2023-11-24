@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:giusseppe_flut/app_navigator.dart';
 
 import 'package:giusseppe_flut/auth/auth_repository.dart';
+import 'package:giusseppe_flut/screens/user_list.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:get/get.dart';
 
@@ -24,8 +25,8 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  runApp(const MyApp());
   ConnectivityManagerService().initialize();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
           tertiary: Color(0xFFEDF9B9)
         ),
       ),
+
       home: RepositoryProvider(
         create: (context) => AuthRepository(),
         child:

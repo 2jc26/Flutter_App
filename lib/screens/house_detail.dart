@@ -7,7 +7,6 @@ import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:giusseppe_flut/widgets/cache_network_image.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/house/house_model_update.dart';
-import '../widgets/drawer.dart';
 
 class HouseDetailView {
   void refreshHouseDetailView(HouseModelUpdate house) {}
@@ -124,6 +123,10 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                           if (index == _house!.images.length - 1) {
                             padding = padding.copyWith(right: 40.0);
                           }
+                          if (index == 0) {
+                            padding = padding.copyWith(left: 0);
+                          }
+                          
 
                           return Padding(
                             padding: padding,
@@ -133,12 +136,8 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                                     _mainImg = _house!.images[index];
                                   });
                                 },
-                                child: ChNetworkImage(
-                                    url: _house!.images[index],
-                                    height: 100,
-                                    width: 100,
-                                    cacheheight: 100,
-                                    cachewidth: 100)),
+                                child: SmallImage(url: _house!.images[index],)
+                            )
                           );
                         },
                       ),
@@ -240,8 +239,15 @@ class DescriptionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Theme.of(context).colorScheme.primary,
-      child: ExpansionTile(
-        title: Text(
+      child: Theme(
+        // Use Theme widget to set the iconTheme property
+        data: ThemeData(
+          iconTheme: const IconThemeData(
+            color: Color.fromARGB(255, 255, 0, 0), // Change this to your desired color
+          ),
+        ),
+        child: ExpansionTile(
+        title: Text(  
           'Description',
           style: TextStyle(
             color: Theme.of(context)
@@ -263,6 +269,7 @@ class DescriptionCard extends StatelessWidget {
           )
         ],
       ),
+      ),
     );
   }
 }
@@ -279,7 +286,14 @@ class AmenitiesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Theme.of(context).colorScheme.primary,
-      child: ExpansionTile(
+      child: Theme(
+        // Use Theme widget to set the iconTheme property
+        data: ThemeData(
+          iconTheme: const IconThemeData(
+            color: Color.fromARGB(255, 255, 0, 0), // Change this to your desired color
+          ),
+        ),
+        child: ExpansionTile(
         title: Text(
           'Included Amenities',
           style: TextStyle(
@@ -295,6 +309,7 @@ class AmenitiesCard extends StatelessWidget {
                 house: _house!,
               )),
         ],
+        )
       ),
     );
   }
@@ -312,35 +327,65 @@ class LocationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Theme.of(context).colorScheme.primary,
-      child: ExpansionTile(
-        title: Text(
-          'Location',
-          style: TextStyle(
-            color: Theme.of(context)
-                .colorScheme
-                .tertiary, // Set the text color here
+    if (ConnectivityManagerService().connectivity == true) {
+      return Card(
+        color: Theme.of(context).colorScheme.primary,
+        child: Theme(
+        // Use Theme widget to set the iconTheme property
+        data: ThemeData(
+          iconTheme: const IconThemeData(
+            color: Color.fromARGB(255, 255, 0, 0), // Change this to your desired color
           ),
         ),
-        children: <Widget>[
-          SizedBox(
-              width: 250,
-              height: 250,
-              child: GoogleMap(
-                mapType: MapType.hybrid,
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(
-                      _house!.latitude,
-                      _house!
-                          .longitude), // Cambia esto a las coordenadas deseadas
-                  zoom: 14,
-                ),
-                markers: {newMarker},
-              )),
-        ],
-      ),
-    );
+        child: ExpansionTile(
+          title: Text(
+            'Location',
+            style: TextStyle(
+              color: Theme.of(context)
+                  .colorScheme
+                  .tertiary, // Set the text color here
+            ),
+          ),
+          children: <Widget>[
+            SizedBox(
+                width: 250,
+                height: 250,
+                child: GoogleMap(
+                  mapType: MapType.hybrid,
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(
+                        _house!.latitude,
+                        _house!
+                            .longitude), // Cambia esto a las coordenadas deseadas
+                    zoom: 14,
+                  ),
+                  markers: {newMarker},
+                )),
+          ],
+        )
+        ),
+      );
+    } else {
+      return Card(
+        color: Theme.of(context).colorScheme.primary,
+        child: ExpansionTile(
+          title: Text(
+            'Location',
+            style: TextStyle(
+              color: Theme.of(context)
+                  .colorScheme
+                  .tertiary, // Set the text color here
+            ),
+          ),
+          children: <Widget>[
+            Text(_house!.address,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary, // Set the text color here
+            ),)
+          ],
+        ),
+      );
+    }
   }
 }
 
@@ -426,10 +471,10 @@ class Button extends StatelessWidget {
 class SmallImage extends StatelessWidget {
   const SmallImage({
     super.key,
-    required this.getImageURL,
+    required this.url,
   });
 
-  final Future<Uint8List?> Function() getImageURL;
+  final String url;
 
   @override
   Widget build(BuildContext context) {
@@ -439,33 +484,19 @@ class SmallImage extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(
           color: Theme.of(context).colorScheme.onPrimary, // Color of the border
-          width: 3.0,
+          width: 4.0,
         ),
         borderRadius:
             BorderRadius.circular(12.0), // Radius of the border corners
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(6.0),
-        child: FutureBuilder<Uint8List?>(
-          future: getImageURL(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la imagen.
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (snapshot.hasData) {
-              return Image.memory(
-                snapshot.data!,
-                width: double.infinity,
-                height: 150,
-                fit: BoxFit.cover,
-              );
-            } else {
-              return const Text(
-                  'No image available'); // Mostrar algo si no hay imagen.
-            }
-          },
-        ),
+        child: ChNetworkImage(
+                                    url: url,
+                                    height: 100,
+                                    width: 100,
+                                    cacheheight: 100,
+                                    cachewidth: 100),
       ),
     );
   }

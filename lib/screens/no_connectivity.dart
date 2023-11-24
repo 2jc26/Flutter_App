@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
+import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
 import 'package:giusseppe_flut/widgets/drawer.dart';
 
 class NoConnectivity extends StatelessWidget {
+  final String? userId;
+  final HouseSearchingModelUpdate? houseFilters;
+  final HouseListPresenter presenter;
+  
   const NoConnectivity({
     super.key,
+    required this.presenter,
+    required this.userId,
+    required this.houseFilters
   });
 
   @override
@@ -42,7 +51,7 @@ class NoConnectivity extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               ElevatedButton(
-                onPressed: () => (),
+                onPressed: () => presenter.refreshData(userId, houseFilters),
                 child: const Text("Retry"),
               ),
             ],

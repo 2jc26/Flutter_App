@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+import 'package:giusseppe_flut/models/user/query_filter_user.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 
 import '../models/user/query_likes_user.dart';
@@ -17,18 +19,17 @@ class UserListPresenter {
   late UserListView _backView= UserListView();
   double average=0.0;
 
-  UserListPresenter(){
-  }
-
-
+  UserListPresenter();
 
   void getAllUsers() async {
     try {
+      var aaa= UserFilter().toJson();
+      var aws=aaa["lies_pett"];
       List<UserModel> users = [];
       users = await userRepository.getAllUsersByPreferences();
       usersList = users;
       if (users.isNotEmpty) {
-        average= userRepository.getAverage(users);
+        average= await compute(getAverage, users);
       } else {
         average=0.0;
       }
@@ -53,4 +54,13 @@ class UserListPresenter {
   void setUserPreferences() {
     getAllUsers();
   }
+}
+
+
+double getAverage(List<UserModel>list){
+  double suma = 0;
+  for (var element in list){
+    suma+=element.stars;
+  }
+  return suma/list.length;
 }

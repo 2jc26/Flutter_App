@@ -253,13 +253,13 @@ class _LoginState extends State<Login> {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: const Text("No hay Conexión a una red"),
+                      title: const Text("There is no Internet Connection"),
                       content: const Text(
-                        'En este momento no hay conexión a internet. Está función solo funciona con conexión a internet, intente de nuevo más tarde.'
+                        'This function only works with an internet connection, please try again later.'
                       ),
                       actions: <Widget>[
                         TextButton (
-                          child: const Text('Cerrar'),
+                          child: const Text('Close'),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
