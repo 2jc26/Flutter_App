@@ -4,16 +4,20 @@ import 'package:giusseppe_flut/models/review/review_model.dart';
 import 'package:giusseppe_flut/presenter/review_list_presenter.dart';
 
 class ReviewsListView {
-  void refreshReviewListView(
-      List<ReviewModel> reviewsList) {}
+  void refreshReviewListView(List<ReviewModel> reviewsList) {}
 
   void refreshRaiting(String raiting) {}
 }
 
 class ReviewList extends StatefulWidget {
-  const ReviewList({super.key, required this.houseId});
+  const ReviewList({
+    Key? key,
+    required this.houseId,
+    required this.userId,
+  }) : super(key: key);
 
   final String houseId;
+  final String userId;
 
   @override
   State<ReviewList> createState() => _ReviewListState();
@@ -57,9 +61,9 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
     if (_formKey.currentState?.validate() ?? false) {
       double rating = double.parse(_manualRating!);
       String comment = _commentController.text;
-      reviewListPresenter.postReview(widget.houseId, 'Mpat7dK8qrOtuyl0cynM', comment, rating);
+      reviewListPresenter.postReview(
+          widget.houseId, widget.userId, comment, rating);
       _commentController.clear();
-
     }
   }
 
@@ -67,76 +71,90 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Comments'),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text('Rating: $_raiting'),
+        backgroundColor: const Color(0xFF2E5EAA),
+        title: const Text(
+          'Reviews',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
-          Form(
-            key: _formKey,
-            child: Padding(
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Rating (0-5)',
+              child: Text('Rating: $_raiting'),
+            ),
+            Form(
+              key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: 'Rating (0-5)',
+                      ),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d+\.?\d{0,1}$')),
+                      ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a rating';
+                        }
+                        double rating = double.tryParse(value) ?? -1;
+                        if (rating < 0 || rating > 5) {
+                          return 'Please enter a valid rating between 0 and 5';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          _manualRating = value;
+                        });
+                      },
                     ),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,1}$')), // Acepta solo números y un punto decimal opcional
-                    ],
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a rating';
-                      }
-                      double rating = double.tryParse(value) ?? -1;
-                      if (rating < 0 || rating > 5) {
-                        return 'Please enter a valid rating between 0 and 5';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        _manualRating = value;
-                      });
-                    },
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Comment (max 2000 characters)',
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: 'Comment (max 2000 characters)',
+                      ),
+                      controller: _commentController,
+                      maxLines: 5,
+                      maxLength: 2000,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a comment';
+                        }
+                        return null;
+                      },
                     ),
-                    controller: _commentController,
-                    maxLines: 5,
-                    maxLength: 2000,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a comment';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _submitReview,
-                    child: const Text('Submit Review'),
-                  ),
-                  const SizedBox(height: 8),
-                  Text('Manual Rating: $_manualRating'),
-                ],
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _submitReview,
+                      child: const Text('Submit Review'),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: _reviewsList == null
+            _reviewsList == null
                 ? const Center(child: CircularProgressIndicator())
                 : _reviewsList!.isEmpty
                     ? const Center(child: Text('No comments'))
                     : ListView.builder(
+                        shrinkWrap: true, // Use shrinkWrap to avoid the error
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: _reviewsList!.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Card(
@@ -146,16 +164,18 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Rating: ${_reviewsList![index].rating}'),
-                                  Text('Comment: ${_reviewsList![index].comment}'),
+                                  Text(
+                                      'Rating: ${_reviewsList![index].rating}'),
+                                  Text(
+                                      'Comment: ${_reviewsList![index].comment}'),
                                 ],
                               ),
                             ),
                           );
                         },
                       ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

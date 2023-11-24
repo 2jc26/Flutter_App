@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/presenter/house_detail_presenter.dart';
+import 'package:giusseppe_flut/screens/review_list.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:giusseppe_flut/widgets/cache_network_image.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -117,12 +118,12 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                         scrollDirection: Axis.horizontal,
                         itemCount: _house!.images.length,
                         itemBuilder: (BuildContext context, int index) {
-                          EdgeInsets padding = const EdgeInsets.only(left: 10.0);
+                          EdgeInsets padding =
+                              const EdgeInsets.only(left: 10.0);
 
                           if (index == _house!.images.length - 1) {
                             padding = padding.copyWith(right: 40.0);
                           }
-                          
 
                           return Padding(
                             padding: padding,
@@ -159,7 +160,7 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
             ),
             // Expansions
             Flexible(
-              flex: 1,
+              flex: 2,
               child: ListView.builder(
                   itemCount: 3,
                   itemBuilder: (context, index) {
@@ -167,7 +168,8 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                       return DescriptionCard(house: _house);
                     } else if (index == 1) {
                       if (ConnectivityManagerService().connectivity == true) {
-                        return LocationCard(house: _house, newMarker: newMarker);
+                        return LocationCard(
+                            house: _house, newMarker: newMarker);
                       } else {
                         return const SizedBox.shrink();
                       }
@@ -176,13 +178,17 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                     }
                   }),
             ),
+            Flexible(
+              flex: 1,
+              child: Row(
+              children: [
+                Button(title: 'Reviews', houseId: widget.house.id),
+                const Button(title: "I'm Interested"),
+              ],
+            ),
+            ),
           ],
         ),
-
-        
-
-        // Botón Abajo
-        bottomNavigationBar: const Button(),
       );
     } else {
       return const Scaffold(
@@ -339,9 +345,11 @@ class LocationCard extends StatelessWidget {
 }
 
 class Button extends StatelessWidget {
-  const Button({
-    super.key,
-  });
+  const Button({super.key, required this.title, this.houseId});
+
+  final String title;
+
+  final String? houseId;
 
   @override
   Widget build(BuildContext context) {
@@ -352,11 +360,42 @@ class Button extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
-              width: 300.0,
+              width: 175.0,
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  if (title == "I'm Interested") {
+                    Navigator.of(context).pop();
+                  } else if (title == "Reviews") {
+                    if (ConnectivityManagerService().connectivity == true) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ReviewList(
+                                  houseId: houseId ?? '',
+                                  userId: 'Mpat7dK8qrOtuyl0cynM')));
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title:
+                                const Text("There is no Internet Connection"),
+                            content: const Text(
+                                'This function only works with an internet connection. Please try again later.'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('Cerrar'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context)
@@ -368,7 +407,7 @@ class Button extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  "I'm Interested",
+                  title,
                   style: TextStyle(
                       color: Theme.of(context)
                           .colorScheme

@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:giusseppe_flut/screens/appartment_advance_search.dart";
 import "package:giusseppe_flut/screens/roomie_detail.dart";
-import "package:giusseppe_flut/widgets/drawer.dart";
 import "package:flutter_rating_bar/flutter_rating_bar.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 
