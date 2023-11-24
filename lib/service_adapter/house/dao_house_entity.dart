@@ -24,9 +24,10 @@ class HouseDaoFireStore extends HouseDao {
     List<HouseModelUpdate> houses = [];
     try {
       final querySnapshot = await BackendService().getAll("houses");
-      for (var house in querySnapshot) {
-        final houseModel = HouseModelUpdate.fromJson(house);
-        houses.add(houseModel);
+      if (querySnapshot.isEmpty) {
+        return [];
+      } else {
+        houses = await compute(parseObjects,querySnapshot);
       }
       return houses;
     } catch (error) {
@@ -40,18 +41,15 @@ class HouseDaoFireStore extends HouseDao {
   @override
   Future<List<HouseModelUpdate>> getHouseLikingByUserId(String userId) async {
     try {
+      List<HouseModelUpdate> houses = [];
+
       final querySnapshot = await BackendService().getAll("users/$userId/houseliking");
       if (querySnapshot.isEmpty) {
         return [];
       } else {
-        List<HouseModelUpdate> houses = [];
-        for (var house in querySnapshot) {
-          print(house.toString());
-          final houseModel = HouseModelUpdate.fromJson(house);
-          houses.add(houseModel);
-        }
-        return houses;
+        houses = await compute(parseObjects,querySnapshot);
       }
+      return houses;
     } catch (error) {
       if (kDebugMode) {
         print("Error fetching houses by likings: $error");
@@ -71,9 +69,8 @@ class HouseDaoFireStore extends HouseDao {
       }
 
       final querySnapshot = await BackendService().postAll("houses/filtered", filters);
-      for (var house in querySnapshot) {
-        final houseModel = HouseModelUpdate.fromJson(house);
-        filteredHouses.add(houseModel);
+      if (querySnapshot.isNotEmpty) {
+        filteredHouses = await compute(parseObjects,querySnapshot);
       }
 
       return filteredHouses;
@@ -84,4 +81,14 @@ class HouseDaoFireStore extends HouseDao {
       rethrow;
     }
   }
+}
+
+Future<List<HouseModelUpdate>> parseObjects(List<dynamic> querySnapshot) async {
+  List<HouseModelUpdate> houses=[];
+  for (var house in querySnapshot) {
+    //final userData = user.data() as Map<String, dynamic>;
+    HouseModelUpdate newHouse=HouseModelUpdate.fromJson({...house});
+    houses.add(newHouse);
+  }
+  return houses;
 }
