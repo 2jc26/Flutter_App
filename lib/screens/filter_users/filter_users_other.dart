@@ -26,11 +26,6 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
   RestorableTextEditingController sleepTimeController = RestorableTextEditingController();
   RestorableTextEditingController externalPeopleController = RestorableTextEditingController();
 
-
-
-
-
-
 @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -375,6 +370,9 @@ class _CleaningFrequencySliderState extends State<CleaningFrequencySlider> {
     return SliderTheme(
       data: SliderTheme.of(context).copyWith(
         overlayColor: Colors.white.withOpacity(0.4),
+        inactiveTrackColor: const Color(0xFF809cc8),
+        inactiveTickMarkColor: Colors.white,
+        activeTickMarkColor: Colors.white,
         valueIndicatorTextStyle: const TextStyle(
           color: Colors.white,
         ),
@@ -413,6 +411,9 @@ class _SleepHourFrequencySlider extends State<SleepHourFrequencySlider> {
     return SliderTheme(
       data: SliderTheme.of(context).copyWith(
         overlayColor: Colors.white.withOpacity(0.4),
+        inactiveTrackColor: const Color(0xFF809cc8),
+        inactiveTickMarkColor: Colors.white,
+        activeTickMarkColor: Colors.white,
         valueIndicatorTextStyle: const TextStyle(
           color: Colors.white,
         ),
@@ -455,6 +456,9 @@ class _FrequencyOfExternalPeople extends State<FrequencyOfExternalPeople> {
     return SliderTheme(
       data: SliderTheme.of(context).copyWith(
         overlayColor: Colors.white.withOpacity(0.4),
+        inactiveTrackColor: const Color(0xFF809cc8),
+        inactiveTickMarkColor: Colors.white,
+        activeTickMarkColor: Colors.white,
         valueIndicatorTextStyle: const TextStyle(
           color: Colors.white,
         ),
