@@ -18,7 +18,7 @@ class ConnectivityManagerService {
 
   Stream<bool> get connectionStatus => _connectionStatusController.stream;
 
-  late bool connectivity=true;
+  late bool connectivity=false;
 
   void initialize() {
     Connectivity().onConnectivityChanged.listen((result) async {

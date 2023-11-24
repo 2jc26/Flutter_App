@@ -276,7 +276,14 @@ class AmenitiesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Theme.of(context).colorScheme.primary,
-      child: ExpansionTile(
+      child: Theme(
+        // Use Theme widget to set the iconTheme property
+        data: ThemeData(
+          iconTheme: const IconThemeData(
+            color: Color.fromARGB(255, 255, 0, 0), // Change this to your desired color
+          ),
+        ),
+        child: ExpansionTile(
         title: Text(
           'Included Amenities',
           style: TextStyle(
@@ -292,6 +299,7 @@ class AmenitiesCard extends StatelessWidget {
                 house: _house!,
               )),
         ],
+        )
       ),
     );
   }
@@ -312,6 +320,13 @@ class LocationCard extends StatelessWidget {
     if (ConnectivityManagerService().connectivity == true) {
       return Card(
         color: Theme.of(context).colorScheme.primary,
+        child: Theme(
+        // Use Theme widget to set the iconTheme property
+        data: ThemeData(
+          iconTheme: const IconThemeData(
+            color: Color.fromARGB(255, 255, 0, 0), // Change this to your desired color
+          ),
+        ),
         child: ExpansionTile(
           title: Text(
             'Location',
@@ -337,6 +352,7 @@ class LocationCard extends StatelessWidget {
                   markers: {newMarker},
                 )),
           ],
+        )
         ),
       );
     } else {
