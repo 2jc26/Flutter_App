@@ -98,12 +98,13 @@ class BackendService {
 
 
 
-  Future<dynamic> post(String endPoint, object) async {
-    final response = await http.post(Uri.parse('$baseUrl/$endPoint'),
+  Future<dynamic> post(String endPoint, dynamic object) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/$endPoint'),
       headers: {
         "Content-Type": "application/json",
       },
-      body: object == null ? json.encode(object.toJson()) : {},
+      body: object != null ? json.encode(object) : null,
     );
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -112,5 +113,6 @@ class BackendService {
       return null;
     }
   }
+
 
 }

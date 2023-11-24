@@ -12,7 +12,7 @@ class ReviewRepository {
     }
   }
 
-  Future<ReviewModel> insertReview(String houseId, String userId, String comment, double rating) {
+  Future<void> insertReview(String houseId, String userId, String comment, double rating) {
     try {
       return reviewApi.insertReview(houseId, userId, comment, rating);
     } catch (error) {
@@ -20,7 +20,7 @@ class ReviewRepository {
     }
   }
 
-  Future<String> updateRaiting(String houseId){
+  Future<double> updateRaiting(String houseId){
     try {
       return reviewApi.updateRaiting(houseId);
     } catch (error) {

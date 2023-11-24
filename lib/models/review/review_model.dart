@@ -20,7 +20,7 @@ class ReviewModel {
 
   String comment;
 
-  int rating;
+  double rating;
 
   ReviewModel({
     required this.id,

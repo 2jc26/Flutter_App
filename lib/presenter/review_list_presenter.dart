@@ -32,9 +32,8 @@ class ReviewListPresenter {
 
   void postReview(String houseId, String userId, String comment, double rating) async {
     try {
-      final review = await reviewRepository.insertReview(houseId, userId, comment, rating);
-      reviewsList.add(review);
-      _view.refreshReviewListView(reviewsList);
+      await reviewRepository.insertReview(houseId, userId, comment, rating);
+      getAllReviews(houseId);
     } catch (error) {
       rethrow;
     }
@@ -43,8 +42,8 @@ class ReviewListPresenter {
   void putReview(String houseId) async {
     try {
       final responsRaiting = await reviewRepository.updateRaiting(houseId);
-      if (responsRaiting.isNotEmpty) {
-        _raiting = responsRaiting;
+      if (responsRaiting != null) {
+        _raiting = responsRaiting.toString();
         _view.refreshRaiting(_raiting);
       }
     } catch (error) {
