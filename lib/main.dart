@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:giusseppe_flut/app_navigator.dart';
 
 import 'package:giusseppe_flut/auth/auth_repository.dart';
+import 'package:giusseppe_flut/screens/user_list.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
+import 'package:get/get.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
@@ -23,8 +25,8 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  ConnectivityManagerService().initialize();
   runApp(const MyApp());
+  ConnectivityManagerService().initialize();
 }
 
 class MyApp extends StatelessWidget {
@@ -32,9 +34,8 @@ class MyApp extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      restorationScopeId: "root",
       title: 'Flutter Demo',
       theme: ThemeData(
         useMaterial3: true,
@@ -68,24 +69,25 @@ class MyApp extends StatelessWidget {
 
 
 
-// import 'package:flutter/material.dart';
-// import 'package:giusseppe_flut/screens/review_list.dart';
+/*
+import 'package:flutter/material.dart';
+import 'package:giusseppe_flut/screens/review_list.dart';
 
-// void main() {
-//   runApp(MyApp());
-// }
+void main() {
+  runApp(MyApp());
+}
 
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Review List',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       home: const ReviewList(
-//         houseId: 'bNqJqQetOhT9RmYUaV9S',
-//       ),
-//     );
-//   }
-// }
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Review List',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const ReviewList(
+        houseId: 'bNqJqQetOhT9RmYUaV9S',
+      ),
+    );
+  }
+}*/

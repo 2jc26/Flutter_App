@@ -11,7 +11,7 @@ ReviewModel _$ReviewModelFromJson(Map<String, dynamic> json) => ReviewModel(
       userId: json['userId'] as String,
       houseId: json['houseId'] as String,
       comment: json['comment'] as String,
-      rating: json['rating'] as int,
+      rating: json['rating'] as double,
     );
 
 Map<String, dynamic> _$ReviewModelToJson(ReviewModel instance) =>

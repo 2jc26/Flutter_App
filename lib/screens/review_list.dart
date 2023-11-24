@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:giusseppe_flut/models/review/review_model.dart';
 import 'package:giusseppe_flut/presenter/review_list_presenter.dart';
 
@@ -10,29 +11,28 @@ class ReviewsListView {
 }
 
 class ReviewList extends StatefulWidget {
-  const ReviewList(
-      {super.key, required this.houseId});
+  const ReviewList({super.key, required this.houseId});
 
-  
   final String houseId;
 
   @override
   State<ReviewList> createState() => _ReviewListState();
 }
 
-class _ReviewListState extends State<ReviewList> implements ReviewsListView{
-
+class _ReviewListState extends State<ReviewList> implements ReviewsListView {
   late ReviewListPresenter reviewListPresenter;
 
   String? _raiting = '0';
+  String? _manualRating = '0';
 
   final TextEditingController _commentController = TextEditingController();
 
   List<ReviewModel>? _reviewsList;
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
-  void refreshReviewListView(
-      List<ReviewModel> reviewsList) {
+  void refreshReviewListView(List<ReviewModel> reviewsList) {
     setState(() {
       _reviewsList = reviewsList;
     });
@@ -53,6 +53,16 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView{
     reviewListPresenter.putReview(widget.houseId);
   }
 
+  void _submitReview() {
+    if (_formKey.currentState?.validate() ?? false) {
+      double rating = double.parse(_manualRating!);
+      String comment = _commentController.text;
+      reviewListPresenter.postReview(widget.houseId, 'Mpat7dK8qrOtuyl0cynM', comment, rating);
+      _commentController.clear();
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,6 +75,61 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView{
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text('Rating: $_raiting'),
+          ),
+          Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Rating (0-5)',
+                    ),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,1}$')), // Acepta solo números y un punto decimal opcional
+                    ],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a rating';
+                      }
+                      double rating = double.tryParse(value) ?? -1;
+                      if (rating < 0 || rating > 5) {
+                        return 'Please enter a valid rating between 0 and 5';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        _manualRating = value;
+                      });
+                    },
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Comment (max 2000 characters)',
+                    ),
+                    controller: _commentController,
+                    maxLines: 5,
+                    maxLength: 2000,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a comment';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _submitReview,
+                    child: const Text('Submit Review'),
+                  ),
+                  const SizedBox(height: 8),
+                  Text('Manual Rating: $_manualRating'),
+                ],
+              ),
+            ),
           ),
           Expanded(
             child: _reviewsList == null
@@ -81,7 +146,7 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView{
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Raiting: ${_reviewsList![index].rating}'),
+                                  Text('Rating: ${_reviewsList![index].rating}'),
                                   Text('Comment: ${_reviewsList![index].comment}'),
                                 ],
                               ),
@@ -94,5 +159,4 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView{
       ),
     );
   }
-
 }
