@@ -156,7 +156,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
           return const NoHousesSearch();
         }
       } else {
-        return const NoConnectivity();
+        return NoConnectivity(presenter: houseListPresenter, userId:_userId, houseFilters: _houseFilters);
       }
     }
   }

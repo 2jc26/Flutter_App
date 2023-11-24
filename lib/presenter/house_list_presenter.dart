@@ -21,6 +21,15 @@ class HouseListPresenter {
     }
   }
 
+
+  void refreshData(String? userId, HouseSearchingModelUpdate? houseFilters) {
+    getAllHouses();
+    getLikingHouses(userId);
+    if(houseFilters != null) {
+      getFilteredHouses(houseFilters);
+    }
+  }
+
   void getAllHouses() async {
     try {
       final houses = await houseRepository.getAllHouses();
