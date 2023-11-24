@@ -103,7 +103,7 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
             const SizedBox(height: 5),
             // Horizontal Scrollable Row of Images with padding
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 28),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -405,7 +405,7 @@ class Button extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
-              width: 175.0,
+              width: 160.0,
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
@@ -585,7 +585,7 @@ class FeatureTable extends StatelessWidget {
                 child: Text(
                   caracName,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -595,7 +595,7 @@ class FeatureTable extends StatelessWidget {
                 child: Text(
                   caracValue!,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -607,7 +607,7 @@ class FeatureTable extends StatelessWidget {
 
     return Table(
       border: TableBorder.all(
-        color: Theme.of(context).colorScheme.tertiary,
+        color: Colors.white,
       ),
       children: tableRows,
     );
