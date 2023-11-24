@@ -165,11 +165,7 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                     if (index == 0) {
                       return DescriptionCard(house: _house);
                     } else if (index == 1) {
-                      if (ConnectivityManagerService().connectivity == true) {
                         return LocationCard(house: _house, newMarker: newMarker);
-                      } else {
-                        return const SizedBox.shrink();
-                      }
                     } else {
                       return AmenitiesCard(house: _house);
                     }
@@ -313,35 +309,57 @@ class LocationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Theme.of(context).colorScheme.primary,
-      child: ExpansionTile(
-        title: Text(
-          'Location',
-          style: TextStyle(
-            color: Theme.of(context)
-                .colorScheme
-                .tertiary, // Set the text color here
+    if (ConnectivityManagerService().connectivity == true) {
+      return Card(
+        color: Theme.of(context).colorScheme.primary,
+        child: ExpansionTile(
+          title: Text(
+            'Location',
+            style: TextStyle(
+              color: Theme.of(context)
+                  .colorScheme
+                  .tertiary, // Set the text color here
+            ),
           ),
+          children: <Widget>[
+            SizedBox(
+                width: 250,
+                height: 250,
+                child: GoogleMap(
+                  mapType: MapType.hybrid,
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(
+                        _house!.latitude,
+                        _house!
+                            .longitude), // Cambia esto a las coordenadas deseadas
+                    zoom: 14,
+                  ),
+                  markers: {newMarker},
+                )),
+          ],
         ),
-        children: <Widget>[
-          SizedBox(
-              width: 250,
-              height: 250,
-              child: GoogleMap(
-                mapType: MapType.hybrid,
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(
-                      _house!.latitude,
-                      _house!
-                          .longitude), // Cambia esto a las coordenadas deseadas
-                  zoom: 14,
-                ),
-                markers: {newMarker},
-              )),
-        ],
-      ),
-    );
+      );
+    } else {
+      return Card(
+        color: Theme.of(context).colorScheme.primary,
+        child: ExpansionTile(
+          title: Text(
+            'Location',
+            style: TextStyle(
+              color: Theme.of(context)
+                  .colorScheme
+                  .tertiary, // Set the text color here
+            ),
+          ),
+          children: <Widget>[
+            Text(_house!.address,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary, // Set the text color here
+            ),)
+          ],
+        ),
+      );
+    }
   }
 }
 
