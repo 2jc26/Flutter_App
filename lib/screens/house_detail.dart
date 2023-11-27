@@ -170,7 +170,13 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                         return LocationCard(
                             house: _house, newMarker: newMarker);
                       } else {
-                        return const SizedBox.shrink();
+                        return Text(
+                          _house!.address,
+                          style: const TextStyle(
+                            fontSize: 10, // Adjust font size as needed
+                            color: Colors.white,
+                          ),
+                        );
                       }
                     } else {
                       return AmenitiesCard(house: _house);
