@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:giusseppe_flut/widgets/image_selector.dart';
 
 class HouseCreation extends StatefulWidget {
   @override
@@ -63,10 +66,12 @@ class _HouseCreationState extends State<HouseCreation> {
     // print('Checkbox: $checkBoxValue');
     // print('ComboBox: $selectedComboBoxValue');
     // Lógica adicional...
-
+    // print('ALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO: ${_images.length}');
     // Luego de obtener los valores, puedes llamar a otra función
     // E.g., createApartmentFunction(textValue, checkBoxValue, selectedComboBoxValue);
   }
+
+  final List<File> _images = [];
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +118,8 @@ class _HouseCreationState extends State<HouseCreation> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      _inputField("Housing Name", housingNameController, 30, isNumber: false),
+                      _inputField("Housing Name", housingNameController, 30,
+                          isNumber: false),
                       const SizedBox(height: 16),
                       const Text('Housing Type:'),
                       Row(
@@ -149,9 +155,11 @@ class _HouseCreationState extends State<HouseCreation> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      _inputField("Rent Price", rentPriceController, 7, isNumber: true),
+                      _inputField("Rent Price", rentPriceController, 7,
+                          isNumber: true),
                       const SizedBox(height: 20),
-                      _inputField("Description", descriptionController, 100, isNumber: false),
+                      _inputField("Description", descriptionController, 100,
+                          isNumber: false),
                     ],
                   ),
                 ),
@@ -219,7 +227,8 @@ class _HouseCreationState extends State<HouseCreation> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      _inputField("Address", addressController, 30, isNumber: false),
+                      _inputField("Address", addressController, 30,
+                          isNumber: false),
                     ],
                   ),
                 ),
@@ -247,15 +256,21 @@ class _HouseCreationState extends State<HouseCreation> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      _inputField("Appartment Floor", floorController, 2, isNumber: true),
+                      _inputField("Appartment Floor", floorController, 2,
+                          isNumber: true),
                       const SizedBox(height: 20),
-                      _inputField("Appartment Area", appartmentAreaController, 3, isNumber: true),
+                      _inputField(
+                          "Appartment Area", appartmentAreaController, 3,
+                          isNumber: true),
                       const SizedBox(height: 20),
-                      _inputField("Rooms Number", roomsNumberController, 1, isNumber: true),
+                      _inputField("Rooms Number", roomsNumberController, 1,
+                          isNumber: true),
                       const SizedBox(height: 20),
-                      _inputField("Rooms Area", roomAreaController, 2, isNumber: true),
+                      _inputField("Rooms Area", roomAreaController, 2,
+                          isNumber: true),
                       const SizedBox(height: 20),
-                      _inputField("Stratum", stratumController, 1, isNumber: true),
+                      _inputField("Stratum", stratumController, 1,
+                          isNumber: true),
                     ],
                   ),
                 ),
@@ -441,10 +456,39 @@ class _HouseCreationState extends State<HouseCreation> {
                   ),
                 ),
               ),
+              // Images
+              const SizedBox(height: 20),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Text(
+                          'Images',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      ImageSelector(images: _images),
+                    ],
+                  ),
+                ),
+              ),
               const SizedBox(height: 10),
+              // Create Button
               ElevatedButton(
                 onPressed: createApartment,
-                child: Text('Crear Apartamento'),
+                child: const Text('Publish'),
               ),
               const SizedBox(height: 45),
             ],
@@ -455,43 +499,43 @@ class _HouseCreationState extends State<HouseCreation> {
   }
 }
 
-Widget _inputField(String hintText, TextEditingController controller, int len, 
-      {isNumber = false}) {
-    var border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+Widget _inputField(String hintText, TextEditingController controller, int len,
+    {isNumber = false}) {
+  var border = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(10),
+    borderSide: const BorderSide(color: Color(0xFFC4C4C4)),
+  );
+  if (isNumber) {
+    return TextField(
+      keyboardType: TextInputType.number,
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.digitsOnly,
+      ],
+      style: const TextStyle(color: Color(0XFF2C595B)),
+      controller: controller,
+      decoration: InputDecoration(
+        hintText: hintText,
+        hintStyle: const TextStyle(color: Color(0xFF2C595B)),
+        enabledBorder: border,
+        focusedBorder: border,
+        filled: true,
+        fillColor: Colors.white,
+      ),
+      maxLength: len,
     );
-    if (isNumber) {
-      return TextField(
-        keyboardType: TextInputType.number,
-        inputFormatters: <TextInputFormatter>[
-          FilteringTextInputFormatter.digitsOnly,
-        ],
-        style: const TextStyle(color: Color(0XFF2C595B)),
-        controller: controller,
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: const TextStyle(color: Color(0xFF2C595B)),
-          enabledBorder: border,
-          focusedBorder: border,
-          filled: true,
-          fillColor: Colors.white,
-        ),
-        maxLength: len,
-      );
-    } else {
-      return TextField(
-        style: const TextStyle(color: Color(0XFF2C595B)),
-        controller: controller,
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: const TextStyle(color: Color(0xFF2C595B)),
-          enabledBorder: border,
-          focusedBorder: border,
-          filled: true,
-          fillColor: Colors.white,
-        ),
-        maxLength: len,
-      );
-    }
+  } else {
+    return TextField(
+      style: const TextStyle(color: Color(0XFF2C595B)),
+      controller: controller,
+      decoration: InputDecoration(
+        hintText: hintText,
+        hintStyle: const TextStyle(color: Color(0xFF2C595B)),
+        enabledBorder: border,
+        focusedBorder: border,
+        filled: true,
+        fillColor: Colors.white,
+      ),
+      maxLength: len,
+    );
   }
+}
