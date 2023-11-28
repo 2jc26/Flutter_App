@@ -1,15 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:giusseppe_flut/presenter/house_creation_presenter.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:giusseppe_flut/widgets/image_selector.dart';
 
+class HouseCreationView {
+  
+}
+
 class HouseCreation extends StatefulWidget {
+  
+  final String userId;
+
+  const HouseCreation({super.key, required this.userId});
+
   @override
   _HouseCreationState createState() => _HouseCreationState();
 }
 
-class _HouseCreationState extends State<HouseCreation> {
+class _HouseCreationState extends State<HouseCreation> implements HouseCreationView {
+
+  late HouseCreationPresenter houseCreationPresenter;
+
+  String? _userId;
+
   TextEditingController housingNameController = TextEditingController();
   TextEditingController rentPriceController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -19,6 +34,7 @@ class _HouseCreationState extends State<HouseCreation> {
   TextEditingController roomsNumberController = TextEditingController();
   TextEditingController roomAreaController = TextEditingController();
   TextEditingController stratumController = TextEditingController();
+  TextEditingController bathroomNumberController = TextEditingController();
 
   String housingType = 'House';
   String citySelectedComboBoxValue = 'Bogotá';
@@ -62,16 +78,21 @@ class _HouseCreationState extends State<HouseCreation> {
   ];
 
   void createApartment() {
-    // Aquí puedes implementar la lógica para crear el apartamento
-    // print('Checkbox: $checkBoxValue');
-    // print('ComboBox: $selectedComboBoxValue');
-    // Lógica adicional...
-    // print('ALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO: ${_images.length}');
-    // Luego de obtener los valores, puedes llamar a otra función
-    // E.g., createApartmentFunction(textValue, checkBoxValue, selectedComboBoxValue);
+    houseCreationPresenter.createHouse(_userId!,housingNameController.text, housingType, rentPriceController.text, descriptionController.text, citySelectedComboBoxValue, neighborhoodSelectedComboBoxValue, addressController.text, floorController.text, appartmentAreaController.text, roomsNumberController.text, roomAreaController.text, bathroomNumberController.text, stratumController.text, elevator, furnished, gymnasium, internet, laundryArea, pets, reception, smoke, supermarkets, tv, vape, _images);
   }
 
   final List<File> _images = [];
+
+  @override
+  void initState() {
+
+    _userId = widget.userId;
+    houseCreationPresenter = HouseCreationPresenter();
+
+    houseCreationPresenter.backView = this;
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -256,6 +277,9 @@ class _HouseCreationState extends State<HouseCreation> {
                         ),
                       ),
                       const SizedBox(height: 20),
+                      _inputField("Stratum", stratumController, 1,
+                          isNumber: true),
+                      const SizedBox(height: 20),
                       _inputField("Appartment Floor", floorController, 2,
                           isNumber: true),
                       const SizedBox(height: 20),
@@ -269,7 +293,7 @@ class _HouseCreationState extends State<HouseCreation> {
                       _inputField("Rooms Area", roomAreaController, 2,
                           isNumber: true),
                       const SizedBox(height: 20),
-                      _inputField("Stratum", stratumController, 1,
+                      _inputField("Bathrooms Number", bathroomNumberController, 1,
                           isNumber: true),
                     ],
                   ),

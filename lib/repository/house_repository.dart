@@ -29,6 +29,18 @@ class HouseRepository {
     }
   }
 
+  Future<void> createHouse(HouseModelUpdate house) async {
+    try {
+      if(connectivity) {
+        houseDao.createHouse(house);
+      } else {
+        // Save in FIles
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<List<HouseModelUpdate>> getSimilarLikingHouses(String id) async {
     try {
       if(connectivity) {

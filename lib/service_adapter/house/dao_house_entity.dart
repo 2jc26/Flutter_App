@@ -20,6 +20,18 @@ abstract class HouseDao {
 class HouseDaoFireStore extends HouseDao {
 
   @override
+  Future<void> createHouse(HouseModelUpdate house) async {
+    try {
+      BackendService().post("houses", house);
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error fetching houses: $error");
+      }
+      rethrow;
+    }
+  }
+  
+  @override
   Future<List<HouseModelUpdate>> getAllHouses() async {
     List<HouseModelUpdate> houses = [];
     try {
