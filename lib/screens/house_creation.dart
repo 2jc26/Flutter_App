@@ -24,6 +24,8 @@ class _HouseCreationState extends State<HouseCreation> implements HouseCreationV
   late HouseCreationPresenter houseCreationPresenter;
 
   String? _userId;
+  List<String> _descriptionsList = [];
+  bool _help = false;
 
   TextEditingController housingNameController = TextEditingController();
   TextEditingController rentPriceController = TextEditingController();
@@ -87,11 +89,19 @@ class _HouseCreationState extends State<HouseCreation> implements HouseCreationV
   void initState() {
 
     _userId = widget.userId;
+    _help = false;
+    _descriptionsList = ["dshjkhdakjhdkj dsahfskjahfkjahdfkljhk afhlk afkshakj fal sdhajfhasdkjfhlhakjfh kslj", "dshjkhdakjhdkj dsahfskjahfkjahdfkljhk afhlk afkshakj fal sdhajfhasdkjfhlhakjfh kslj", "dshjkhdakjhdkj dsahfskjahfkjahdfkljhk afhlk afkshakj fal sdhajfhasdkjfhlhakjfh kslj"];
     houseCreationPresenter = HouseCreationPresenter();
 
     houseCreationPresenter.backView = this;
 
     super.initState();
+  }
+
+  void _showDescriptionHelpModal() {
+    setState(() {
+      _help = !_help;
+    });
   }
 
   @override
@@ -181,6 +191,54 @@ class _HouseCreationState extends State<HouseCreation> implements HouseCreationV
                       const SizedBox(height: 20),
                       _inputField("Description", descriptionController, 100,
                           isNumber: false),
+                      GestureDetector(
+                        onTap: () {
+                          _showDescriptionHelpModal();
+                        },
+                        child: Row(
+                            children: [
+                              Icon(Icons.help, color: Theme.of(context).colorScheme.primary),
+                              Text(
+                                "What's a good description?",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ],
+                          ),
+                      ),
+                      Visibility(
+                        visible: _help,
+                        child: SizedBox(
+                          width: 280,
+                          height: 150,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: List.generate(
+                                _descriptionsList.length,
+                                (index) => Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    width: 220,
+                                    height: 100,
+                                    padding: const EdgeInsets.all(8.0),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.vertical,
+                                      child: Text(_descriptionsList[index]),
+                                    ),
+                                  ),
+                                ),
+                              ).toList(),
+                            ),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
