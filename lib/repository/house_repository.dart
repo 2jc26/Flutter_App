@@ -81,4 +81,16 @@ class HouseRepository {
     }
   }
 
+  Future<List<String>> getTopDescriptions() async {
+    try {
+      if(connectivity) {
+        return await houseDao.getTopDescriptions();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
 }

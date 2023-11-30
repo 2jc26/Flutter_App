@@ -121,6 +121,24 @@ class HouseDaoFireStore extends HouseDao {
       rethrow;
     }
   }
+
+  Future<List<String>> getTopDescriptions() async {
+    try {
+      List<String> descriptions = [];
+
+      final querySnapshot = await BackendService().getAll("houses/bestdescriptions");
+      if (querySnapshot.isEmpty) {
+        return [];
+      } else {
+        return descriptions;
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error fetching houses by likings: $error");
+      }
+      rethrow;
+    }
+  }
 }
 
 Future<List<HouseModelUpdate>> parseObjects(List<dynamic> querySnapshot) async {

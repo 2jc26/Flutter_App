@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:giusseppe_flut/widgets/image_selector.dart';
 
 class HouseCreationView {
-  
+  void refreshHouseCreationView(List<String> descriptions) {}
 }
 
 class HouseCreation extends StatefulWidget {
@@ -81,6 +81,7 @@ class _HouseCreationState extends State<HouseCreation> implements HouseCreationV
 
   void createApartment() {
     houseCreationPresenter.createHouse(_userId!,housingNameController.text, housingType, rentPriceController.text, descriptionController.text, citySelectedComboBoxValue, neighborhoodSelectedComboBoxValue, addressController.text, floorController.text, appartmentAreaController.text, roomsNumberController.text, roomAreaController.text, bathroomNumberController.text, stratumController.text, elevator, furnished, gymnasium, internet, laundryArea, pets, reception, smoke, supermarkets, tv, vape, _images);
+    Navigator.pop(context);
   }
 
   final List<File> _images = [];
@@ -90,7 +91,7 @@ class _HouseCreationState extends State<HouseCreation> implements HouseCreationV
 
     _userId = widget.userId;
     _help = false;
-    _descriptionsList = ["dshjkhdakjhdkj dsahfskjahfkjahdfkljhk afhlk afkshakj fal sdhajfhasdkjfhlhakjfh kslj", "dshjkhdakjhdkj dsahfskjahfkjahdfkljhk afhlk afkshakj fal sdhajfhasdkjfhlhakjfh kslj", "dshjkhdakjhdkj dsahfskjahfkjahdfkljhk afhlk afkshakj fal sdhajfhasdkjfhlhakjfh kslj"];
+    _descriptionsList = [];
     houseCreationPresenter = HouseCreationPresenter();
 
     houseCreationPresenter.backView = this;
@@ -578,6 +579,13 @@ class _HouseCreationState extends State<HouseCreation> implements HouseCreationV
         ),
       ),
     );
+  }
+  
+  @override
+  void refreshHouseCreationView(List<String> descriptions) {
+    setState(() {
+      _descriptionsList = descriptions;
+    });
   }
 }
 
