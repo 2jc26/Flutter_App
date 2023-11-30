@@ -98,11 +98,11 @@ class HouseRepository {
     }
   }
 
-    Future<HouseModelUpdate?> getStoredHouseLocalFile() async {
+    Future<Map<String, dynamic>?> getStoredHouseLocalFile() async {
     try {
       final storedHouse = await fileManager.read(File('${FileManager.directory.path}/storedhouse.json'));
       if (storedHouse != null) {
-        return HouseModelUpdate.fromJson({...storedHouse});
+        return storedHouse;
       }
       return null;
     } catch (error) {

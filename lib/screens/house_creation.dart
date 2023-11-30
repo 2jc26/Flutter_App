@@ -106,7 +106,7 @@ class _HouseCreationState extends State<HouseCreation> implements HouseCreationV
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("Creation without connection"),
-            content: const Text("Are you sure you want to create the appartment wh¡ithout connection?"),
+            content: const Text("Are you sure you want to create the appartment whithout connection?"),
             actions: [
               MaterialButton(
                 child: Text("Cancel"),
