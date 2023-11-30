@@ -98,7 +98,7 @@ class HouseRepository {
     }
   }
 
-    Future<HouseModelUpdate?> getStoredHouseLocalFile(String username, String password, String id) async {
+    Future<HouseModelUpdate?> getStoredHouseLocalFile() async {
     try {
       final storedHouse = await fileManager.read(File('${FileManager.directory.path}/storedhouse.json'));
       if (storedHouse != null) {
