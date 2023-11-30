@@ -79,7 +79,38 @@ class _HouseCreationState extends State<HouseCreation> implements HouseCreationV
     "Sumapaz"
   ];
 
-  void createApartment() {
+  void createApartment() async {
+    // Verificar que todos los campos esten llenos
+    if (housingNameController.text.isEmpty ||
+        rentPriceController.text.isEmpty ||
+        descriptionController.text.isEmpty ||
+        addressController.text.isEmpty ||
+        floorController.text.isEmpty ||
+        appartmentAreaController.text.isEmpty ||
+        roomsNumberController.text.isEmpty ||
+        roomAreaController.text.isEmpty ||
+        stratumController.text.isEmpty ||
+        bathroomNumberController.text.isEmpty ||
+        _images.length < 3) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Empty fields"),
+            content: const Text("Please fill all the fields and upload at least 3 images"),
+            actions: [
+              MaterialButton(
+                child: const Text("Ok"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
     if(ConnectivityManagerService().connectivity == true){
       houseCreationPresenter.createHouse(_userId!,housingNameController.text, housingType, rentPriceController.text, descriptionController.text, citySelectedComboBoxValue, neighborhoodSelectedComboBoxValue, addressController.text, floorController.text, appartmentAreaController.text, roomsNumberController.text, roomAreaController.text, bathroomNumberController.text, stratumController.text, elevator, furnished, gymnasium, internet, laundryArea, pets, reception, smoke, supermarkets, tv, vape, _images);
       showDialog(
@@ -93,7 +124,7 @@ class _HouseCreationState extends State<HouseCreation> implements HouseCreationV
                 child: const Text("Ok"),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  Navigator.pop(context);
+                  Navigator.pop(context, true);
                 },
               ),
             ],

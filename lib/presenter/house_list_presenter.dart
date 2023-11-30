@@ -39,14 +39,13 @@ class HouseListPresenter {
     }
   }
 
-  Future<bool> getAllHouses() async {
+  Future<void> getAllHouses() async {
     try {
       final houses = await houseRepository.getAllHouses();
       if (houses.isNotEmpty) {
         housesList = houses;
         _backView.refreshHouseListView(housesList,housesLikingList,housesSearchingList);
       }
-      return true;
     } catch (error) {
       rethrow;
     }

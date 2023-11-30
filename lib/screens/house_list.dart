@@ -276,25 +276,32 @@ class HouseSection extends StatelessWidget {
   final TextEditingController _searchController;
   final HouseListPresenter _houseListPresenter;
 
+  Future<void> _refresh() async {
+    _houseListPresenter.refreshData(_userId, null);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Flexible(
       flex: _flex,
       fit: FlexFit.tight,
-      child: Column(
-        children: [
-          Text(
-            _title,
-            style: const TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-          ),
-          if (_filter)
-            FilterButton(userId: _userId!, searchController: _searchController),
-          Expanded(
-            child: HouseElements(houseList: _housesList, houseListPresenter: _houseListPresenter),
-          ),
-          const SizedBox(height: 70)
-        ],
+      child: RefreshIndicator(
+        onRefresh: _refresh,
+        child: Column(
+          children: [
+            Text(
+              _title,
+              style: const TextStyle(
+                  fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+            ),
+            if (_filter)
+              FilterButton(userId: _userId!, searchController: _searchController),
+            Expanded(
+              child: HouseElements(houseList: _housesList, houseListPresenter: _houseListPresenter),
+            ),
+            const SizedBox(height: 70)
+          ],
+        ),
       ),
     );
   }
