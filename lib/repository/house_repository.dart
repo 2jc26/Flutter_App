@@ -48,6 +48,14 @@ class HouseRepository {
     }
   }
 
+  Future<List<File>> getLocalImages() async {
+    try {
+      return await fileManager.getLocalImages();
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<List<String>> uploadHouseImages(String folderPath, List<File> images) async {
     try {
       List<String> imagesUrl = [];
@@ -57,6 +65,8 @@ class HouseRepository {
           imagesUrl.add((await houseDao.uploadImage(folderPath, image, count.toString()))!);
           count++;
         }
+      } else {
+        fileManager.saveImagesLocally(images);
       }
       return imagesUrl;
     } catch (error) {
@@ -112,6 +122,7 @@ class HouseRepository {
 
   void deleteStoredHouseLocalFile() async {
     try {
+      fileManager.deleteStoredImages();
       await fileManager.delete(File('${FileManager.directory.path}/storedhouse.json'));
     } catch (error) {
       rethrow;

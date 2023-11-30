@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -85,10 +86,10 @@ class HouseListPresenter {
     try {
       Map<String, dynamic>? storedHouse = await houseRepository.getStoredHouseLocalFile();
       if (storedHouse != null && ConnectivityManagerService().connectivity == true) {
-        // String path = "/images_houses/${storedHouse.name}/${storedHouse.city}/${storedHouse.neighborhood}/${storedHouse.address}/";
-        // List<String> imagesUrls = await houseRepository.uploadHouseImages(path, storedHouse.images); //TODO Uncomment when storage bug is fixed
-        // houseRepository.createHouse(HouseModelUpdate.fromJson({...storedHouse, "images": imagesUrls}));
-        houseRepository.createHouse(HouseModelUpdate.fromJson({...storedHouse, "images": ["https://firebasestorage.googleapis.com/v0/b/senehouse-v2.appspot.com/o/images_houses%2FMariposas%20Doradas_Bogota_Teusaquillo_Avenida%206%20%2322-10%2F1.jpg?alt=media&token=5d3f54d1-67a4-467b-8faf-ac04987e5a64"]}));
+        List<File> images = await houseRepository.getLocalImages();
+        String path = "/images_houses/${storedHouse['name']}_${storedHouse['city']}_${storedHouse['neighborhood']}_${storedHouse['address']}/";
+        List<String> imagesUrls = await houseRepository.uploadHouseImages(path, images);
+        houseRepository.createHouse(HouseModelUpdate.fromJson({...storedHouse, "images": imagesUrls}));
         _backView.refreshHouseListView(housesList,housesLikingList,housesSearchingList);
         // Create a snackbar to show success on the creation of the house
         Get.rawSnackbar(
