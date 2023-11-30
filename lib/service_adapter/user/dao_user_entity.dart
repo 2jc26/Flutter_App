@@ -111,8 +111,6 @@ class UserDaoFireStore extends UserDao{
   Future<List<UserModel>> getUsersByPreferences() async {
     try {
       List<UserModel> users = [];
-      var x = UserFilter().toJson();
-      var y = x["likes_pet"];
       final querySnapshot = await BackendService().postAll("users/filtered", UserFilter());
       if (querySnapshot.isNotEmpty) {
         users = await compute(parseObjects, querySnapshot);
@@ -126,29 +124,12 @@ class UserDaoFireStore extends UserDao{
     }
   }
 
-  Future<List<UserModel>> getDocumentsWithinRadius(double latitude, double longitude) async {
-    List<UserModel> users=[];
-
-    const double radiusInDegrees = 20;
-
-    final double minLat = latitude - radiusInDegrees;
-    final double maxLat = latitude + radiusInDegrees;
-    final double minLon = longitude - radiusInDegrees;
-    final double maxLon = longitude + radiusInDegrees;
-
-    final QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('Users')
-        .where('latitude', isGreaterThanOrEqualTo: minLat)
-        .where('latitude', isLessThanOrEqualTo: maxLat)
-        .get();
-    Map map = Map();
-    map['snapshot'] = snapshot.docs;
-    map['minLon'] = minLon;
-    map['maxLon'] = maxLon;
-    users = await compute(parseObjectsLocation, map);
-
+  Future<List<UserModel>>getDocumentsWithinRadius(double latitude,double longitude)async{
+    List<UserModel>users=[];
+    Map<String,dynamic> mapa ={'latitude':latitude,'longitude':longitude};
+    final querySnapshot=await BackendService().postAll("users/ubication",mapa);
+    users= await compute(parseObjects,querySnapshot);
     return users;
-
   }
 
   @override
@@ -253,9 +234,7 @@ class UserDaoFireStore extends UserDao{
 
   Future<void> updateUserPreferencesStats() async {
     try {
-      print(UserFilter().toJson());
       BackendService().putAll("stats/usersfilters", UserFilter());
-
     } catch (error) {
       if (kDebugMode) {
         print("Error updating preferences stats: $error");
@@ -279,7 +258,7 @@ Future<List<UserModel>> parseObjects(List<dynamic> querySnapshot) async {
 Future<List<UserModel>> parseObjectsLocation(Map<dynamic, dynamic> variables) async {
   List<UserModel> users=[];
   for (var user in variables['snapshot']) {
-    if (user["longitude"]>=variables['minLon']	&& user['maxLon']<=variables){
+    if (user["longitude"]>=variables['minLon']	&& user['maxLon']<=variables["maxLon"]){
       users.add(UserModel.fromJson({...user}));
     }
   }

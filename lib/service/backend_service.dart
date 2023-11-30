@@ -34,13 +34,15 @@ class BackendService {
   }
 
   Future<List<dynamic>> postAll(String endPoint, object) async {
-    var waos =object.toJson();
+    if (object is! Map<String, dynamic>) {
+      object=object.toJson();
+    }
     final response = await http.post(Uri.parse(
       '$baseUrl/$endPoint'),
       headers: {
         "Content-Type": "application/json",
       },
-      body: json.encode(object.toJson()),
+      body: json.encode(object),
     );
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -51,12 +53,13 @@ class BackendService {
   }
 
   Future<List<dynamic>> putAll(String endPoint, object) async {
+
     final response = await http.put(Uri.parse(
       '$baseUrl/$endPoint'),
       headers: {
         "Content-Type": "application/json",
       },
-      body: json.encode(object.toJson()),
+      body: json.encode(object),
     );
     if (response.statusCode == 200) {
       if (response.body != "null") {

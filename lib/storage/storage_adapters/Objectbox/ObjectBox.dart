@@ -30,7 +30,7 @@ class ObjectBoxDao {
   // Create the ObjectBox singleton
   static Future<void> initialize() async {
     if (_instance == null) {
-      final store = await openStore();
+      final store = await openStore(maxDBSizeInKB: 102400);
       _instance = ObjectBoxDao._create(store);
     }
   }
@@ -93,6 +93,7 @@ class ObjectBoxDao {
     );
     return builder.watch(triggerImmediately: true).map((query) => query.find());
   }
+
 
 
 }
