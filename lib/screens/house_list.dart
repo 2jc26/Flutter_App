@@ -6,6 +6,7 @@ import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.d
 import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
 import 'package:giusseppe_flut/screens/InformationCardUser.dart';
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
+import 'package:giusseppe_flut/screens/house_creation.dart';
 import 'package:giusseppe_flut/screens/house_detail.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:giusseppe_flut/screens/no_connectivity.dart';
@@ -142,7 +143,17 @@ class _HouseListState extends State<HouseList> implements HouseListView {
             const SizedBox(height: 10),
           ],
         ),
-        drawer: CustomDrawer(customDrawerContext: context)
+        drawer: CustomDrawer(customDrawerContext: context),
+        floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => HouseCreation(userId: _userId!),
+            ));
+        },
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        child: Icon(Icons.add, color: Theme.of(context).colorScheme.tertiary,),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       );
     } else {
       if(ConnectivityManagerService().connectivity) {
@@ -282,6 +293,7 @@ class HouseSection extends StatelessWidget {
           Expanded(
             child: HouseElements(houseList: _housesList, houseListPresenter: _houseListPresenter),
           ),
+          const SizedBox(height: 70)
         ],
       ),
     );

@@ -99,7 +99,7 @@ class BackendService {
 
   Future<void> putVisit(String id) async {
     final response = await http.put(
-      Uri.parse("houses/$id/views"),
+      Uri.parse("$baseUrl/houses/$id/views"),
       headers: {
         "Content-Type": "application/json",
       },
