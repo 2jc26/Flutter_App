@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:giusseppe_flut/presenter/house_creation_presenter.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
+import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:giusseppe_flut/widgets/image_selector.dart';
 
 class HouseCreationView {
@@ -80,8 +80,70 @@ class _HouseCreationState extends State<HouseCreation> implements HouseCreationV
   ];
 
   void createApartment() {
-    houseCreationPresenter.createHouse(_userId!,housingNameController.text, housingType, rentPriceController.text, descriptionController.text, citySelectedComboBoxValue, neighborhoodSelectedComboBoxValue, addressController.text, floorController.text, appartmentAreaController.text, roomsNumberController.text, roomAreaController.text, bathroomNumberController.text, stratumController.text, elevator, furnished, gymnasium, internet, laundryArea, pets, reception, smoke, supermarkets, tv, vape, _images);
-    Navigator.pop(context);
+    if(ConnectivityManagerService().connectivity == true){
+      houseCreationPresenter.createHouse(_userId!,housingNameController.text, housingType, rentPriceController.text, descriptionController.text, citySelectedComboBoxValue, neighborhoodSelectedComboBoxValue, addressController.text, floorController.text, appartmentAreaController.text, roomsNumberController.text, roomAreaController.text, bathroomNumberController.text, stratumController.text, elevator, furnished, gymnasium, internet, laundryArea, pets, reception, smoke, supermarkets, tv, vape, _images);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Appartment created successfully"),
+            content: const Text("The appartment is now visibile to other users of the app"),
+            actions: [
+              MaterialButton(
+                child: const Text("Ok"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Creation without connection"),
+            content: const Text("Are you sure you want to create the appartment wh¡ithout connection?"),
+            actions: [
+              MaterialButton(
+                child: Text("Cancel"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              MaterialButton(
+                child: const Text("Ok"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  houseCreationPresenter.createHouse(_userId!,housingNameController.text, housingType, rentPriceController.text, descriptionController.text, citySelectedComboBoxValue, neighborhoodSelectedComboBoxValue, addressController.text, floorController.text, appartmentAreaController.text, roomsNumberController.text, roomAreaController.text, bathroomNumberController.text, stratumController.text, elevator, furnished, gymnasium, internet, laundryArea, pets, reception, smoke, supermarkets, tv, vape, _images);
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text("Postponed load"),
+                        content: const Text("The next time you open the app with connection, the apartment will be created"),
+                        actions: [
+                          MaterialButton(
+                            child: const Text("Ok"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   final List<File> _images = [];
@@ -192,22 +254,25 @@ class _HouseCreationState extends State<HouseCreation> implements HouseCreationV
                       const SizedBox(height: 20),
                       _inputField("Description", descriptionController, 100,
                           isNumber: false),
-                      GestureDetector(
-                        onTap: () {
-                          _showDescriptionHelpModal();
-                        },
-                        child: Row(
-                            children: [
-                              Icon(Icons.help, color: Theme.of(context).colorScheme.primary),
-                              Text(
-                                "What's a good description?",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).colorScheme.primary,
+                      Visibility(
+                        visible: _descriptionsList.isNotEmpty,
+                        child: GestureDetector(
+                          onTap: () {
+                            _showDescriptionHelpModal();
+                          },
+                          child: Row(
+                              children: [
+                                Icon(Icons.help, color: Theme.of(context).colorScheme.primary),
+                                Text(
+                                  "What's a good description?",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).colorScheme.primary,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
+                        ),
                       ),
                       Visibility(
                         visible: _help,
