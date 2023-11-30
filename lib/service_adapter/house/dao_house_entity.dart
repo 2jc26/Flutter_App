@@ -110,6 +110,17 @@ class HouseDaoFireStore extends HouseDao {
       rethrow;
     }
   }
+
+  Future<void> addVisitToHouse(String houseId) async {
+    try {
+      await BackendService().putVisit(houseId);
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error fetching houses: $error");
+      }
+      rethrow;
+    }
+  }
 }
 
 Future<List<HouseModelUpdate>> parseObjects(List<dynamic> querySnapshot) async {

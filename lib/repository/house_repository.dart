@@ -71,4 +71,14 @@ class HouseRepository {
     }
   }
 
+  Future<void> addVisitToHouse(String houseId) async {
+    try {
+      if(connectivity) {
+        await houseDao.addVisitToHouse(houseId);
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
 }
