@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/repository/search_repository.dart';
+import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 
 import '../models/house/house_model_update.dart';
 import '../repository/house_repository.dart';
@@ -84,7 +85,7 @@ class HouseListPresenter {
   Future<bool> _loadStoredHouse() async {
     try {
       Map<String, dynamic>? storedHouse = await houseRepository.getStoredHouseLocalFile();
-      if (storedHouse != null) {
+      if (storedHouse != null && ConnectivityManagerService().connectivity == true) {
         // String path = "/images_houses/${storedHouse.name}/${storedHouse.city}/${storedHouse.neighborhood}/${storedHouse.address}/";
         // List<String> imagesUrls = await houseRepository.uploadHouseImages(path, storedHouse.images); //TODO Uncomment when storage bug is fixed
         // houseRepository.createHouse(HouseModelUpdate.fromJson({...storedHouse, "images": imagesUrls}));
