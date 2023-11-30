@@ -116,44 +116,59 @@ class _HouseListState extends State<HouseList> implements HouseListView {
           ),
           centerTitle: true,
         ),
-        body: Column(
-          children: [
-            if (_houseFilters == null && _housesLikingList!.isNotEmpty)
+        body: Stack(
+          children: 
+          [
+            Column(
+            children: [
+              if (_houseFilters == null && _housesLikingList!.isNotEmpty)
+                const SizedBox(height: 10),
+              if (_houseFilters == null && _housesLikingList!.isNotEmpty)
+                HouseSection(
+                    userId: _userId,
+                    title: 'Liking Houses',
+                    housesList: _housesLikingList,
+                    flex: 1,
+                    filter: false,
+                    searchController: _searchController,
+                    houseListPresenter: houseListPresenter,
+                ),
               const SizedBox(height: 10),
-            if (_houseFilters == null && _housesLikingList!.isNotEmpty)
               HouseSection(
                   userId: _userId,
-                  title: 'Liking Houses',
-                  housesList: _housesLikingList,
-                  flex: 1,
-                  filter: false,
+                  title: 'All Houses',
+                  housesList: _filteredHousesList,
+                  flex: 2,
+                  filter: true,
                   searchController: _searchController,
                   houseListPresenter: houseListPresenter,
               ),
-            const SizedBox(height: 10),
-            HouseSection(
-                userId: _userId,
-                title: 'All Houses',
-                housesList: _filteredHousesList,
-                flex: 2,
-                filter: true,
-                searchController: _searchController,
-                houseListPresenter: houseListPresenter,
+              const SizedBox(height: 10),
+            ],
+          ),
+          Positioned(
+            bottom: 60.0,
+            right: 0.0,
+            left: 0.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FloatingActionButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => HouseCreation(userId: _userId!),
+                    ));
+                  },
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  child: Icon(Icons.add,
+                      color: Theme.of(context).colorScheme.tertiary),
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
-          ],
+          ),
+          ]
         ),
         drawer: CustomDrawer(customDrawerContext: context),
-        floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => HouseCreation(userId: _userId!),
-            ));
-        },
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        child: Icon(Icons.add, color: Theme.of(context).colorScheme.tertiary,),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       );
     } else {
       if(ConnectivityManagerService().connectivity) {
