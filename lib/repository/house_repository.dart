@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'dart:async';
@@ -36,6 +38,22 @@ class HouseRepository {
       } else {
         // Save in FIles
       }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<List<String>> uploadHouseImages(String folderPath, List<File> images) async {
+    try {
+      List<String> imagesUrl = [];
+      if(connectivity) {
+        int count = 1;
+        for (var image in images) {
+          imagesUrl.add((await houseDao.uploadImage(folderPath, image, count.toString()))!);
+          count++;
+        }
+      }
+      return imagesUrl;
     } catch (error) {
       rethrow;
     }

@@ -1,11 +1,16 @@
 
+import 'dart:io';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/service/backend_service.dart';
+import 'package:giusseppe_flut/service/firebase_storage_service.dart';
 
 import '../../models/house/house_model_update.dart';
-final storageRef = FirebaseStorage.instance.ref();
+
+final storageRef = FirebaseStorageService();
+
 abstract class HouseDao {
 
   Future<List<HouseModelUpdate>> getAllHouses();
@@ -23,6 +28,18 @@ class HouseDaoFireStore extends HouseDao {
   Future<void> createHouse(HouseModelUpdate house) async {
     try {
       BackendService().post("houses", house);
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error fetching houses: $error");
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String?> uploadImage(String path, File image, String num) async {
+    try {
+      return await storageRef.uploadImage(image, path, num);
     } catch (error) {
       if (kDebugMode) {
         print("Error fetching houses: $error");
