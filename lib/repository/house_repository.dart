@@ -110,6 +110,14 @@ class HouseRepository {
     }
   }
 
+  void deleteStoredHouseLocalFile() async {
+    try {
+      await fileManager.delete(File('${FileManager.directory.path}/storedhouse.json'));
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<void> createFileStoredHouse(HouseModelUpdate storedHouse) async {
     try {
       await fileManager.write(File('${FileManager.directory.path}/storedhouse.json'), json.encode(storedHouse.toJson()));

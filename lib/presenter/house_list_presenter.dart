@@ -38,13 +38,14 @@ class HouseListPresenter {
     }
   }
 
-  void getAllHouses() async {
+  Future<bool> getAllHouses() async {
     try {
       final houses = await houseRepository.getAllHouses();
       if (houses.isNotEmpty) {
         housesList = houses;
         _backView.refreshHouseListView(housesList,housesLikingList,housesSearchingList);
       }
+      return true;
     } catch (error) {
       rethrow;
     }
@@ -99,13 +100,13 @@ class HouseListPresenter {
             ),
           ),
           isDismissible: true,
-          duration: const Duration(days: 15),
+          duration: const Duration(seconds: 15),
           backgroundColor: Colors.green[400]!,
           icon: const Icon( Icons.check, color: Colors.white, size: 35,),
           margin: EdgeInsets.zero,
           snackStyle: SnackStyle.GROUNDED
         );
-
+        houseRepository.deleteStoredHouseLocalFile();
         return true;
       }
       return false;
