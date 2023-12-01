@@ -14,13 +14,22 @@ class HouseCreationPresenter {
 
   late HouseCreationView _backView = HouseCreationView();
 
+  HouseListPresenter() {
+    getTopDescriptions();
+  }
+
+  void getTopDescriptions() async {
+    _backView.refreshHouseCreationView(await houseRepository.getTopDescriptions());
+  }
+
   void createHouse(String userId,String name, String housingType, String rentPrice, String description, String city, String neighborhood, String address, String floor, String appartmentArea, String roomsNumber, String roomArea, String bathroomNumber, String stratum, bool elevator, bool furnished, bool gymnasium, bool internet, bool laundryArea, bool pets, bool reception, bool smoke, bool supermarkets, bool tv, bool vape, List<File> images) async {
     try {
       // TODO: Upload Images to Firebase Storage
       String path = "/images_houses/$name/$city/$neighborhood/$address/";
-      List<String> imagesUrls = await houseRepository.uploadHouseImages(path, images);
-      HouseModelUpdate house = HouseModelUpdate(id: "", name: name, city: city, neighborhood: neighborhood, address: address, housingType: housingType, rentPrice: double.parse(rentPrice), stratum: int.parse(stratum), area: double.parse(appartmentArea), apartmentFloor: int.parse(floor), roomsNumber: int.parse(roomsNumber), roomArea: double.parse(roomArea), bathroomsNumber: int.parse(bathroomNumber), laundryArea: laundryArea, internet: internet, tv: tv, furnished: furnished, elevator: elevator, gymnasium: gymnasium, reception: reception, supermarkets: supermarkets, description: description, rating: 5, longitude: -74.069, latitude: 4.6487, images: imagesUrls);
-      // houseRepository.createHouse(house); //TODO Uncomment when backend is ready
+      // List<String> imagesUrls = await houseRepository.uploadHouseImages(path, images); //TODO Uncomment when storage bug is fixed
+      // HouseModelUpdate house = HouseModelUpdate(id: "", name: name, city: city, neighborhood: neighborhood, address: address, housingType: housingType, rentPrice: double.parse(rentPrice), stratum: int.parse(stratum), area: double.parse(appartmentArea), apartmentFloor: int.parse(floor), roomsNumber: int.parse(roomsNumber), roomArea: double.parse(roomArea), bathroomsNumber: int.parse(bathroomNumber), laundryArea: laundryArea, internet: internet, tv: tv, furnished: furnished, elevator: elevator, gymnasium: gymnasium, reception: reception, supermarkets: supermarkets, description: description, rating: 5, longitude: -74.069, latitude: 4.6487, images: imagesUrls);
+      HouseModelUpdate house = HouseModelUpdate(id: "", name: name, city: city, neighborhood: neighborhood, address: address, housingType: housingType, rentPrice: double.parse(rentPrice), stratum: int.parse(stratum), area: double.parse(appartmentArea), apartmentFloor: int.parse(floor), roomsNumber: int.parse(roomsNumber), roomArea: double.parse(roomArea), bathroomsNumber: int.parse(bathroomNumber), laundryArea: laundryArea, internet: internet, tv: tv, furnished: furnished, elevator: elevator, gymnasium: gymnasium, reception: reception, supermarkets: supermarkets, description: description, rating: 5, longitude: -74.069, latitude: 4.6487, images: []);
+      houseRepository.createHouse(house);
     } catch (error) {
       rethrow;
     }
