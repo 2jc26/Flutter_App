@@ -134,7 +134,7 @@ class HouseDaoFireStore extends HouseDao {
       }
     } catch (error) {
       if (kDebugMode) {
-        print("Error fetching houses by likings: $error");
+        print("Error fetching descriptions: $error");
       }
       rethrow;
     }
