@@ -305,6 +305,7 @@ class HouseElements extends StatelessWidget {
       itemBuilder: ((context, index) {
         return GestureDetector(
           onTap: () {
+            _houseListPresenter.addVisitToHouse(_houseList![index].id);
             Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => HouseDetail(house: _houseList![index]),
             ));

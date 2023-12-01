@@ -40,7 +40,7 @@ dependencies:
   flutter_inset_box_shadow: ^1.0.8
   flutter_rating_bar: ^4.0.1
   google_maps_flutter: ^2.5.0
-  firebase_core: ^2.16.0
+  firebase_core: ^2.24.0
   cloud_firestore: ^4.9.2
   json_annotation: ^4.8.1
   geocoding: ^2.1.0
@@ -50,7 +50,7 @@ dependencies:
   flutter_bloc: ^7.0.0
   firebase_auth: ^4.10.0
   csc_picker: ^0.2.7
-  firebase_storage: ^11.3.1
+  firebase_storage: ^11.5.3
   get: ^4.6.6
   internet_connection_checker: ^1.0.0+1
   connectivity_plus: ^5.0.1
@@ -61,6 +61,7 @@ dependencies:
   http: ^1.1.0
   objectbox: ^2.3.1
   objectbox_flutter_libs: any
+  image_picker: ^1.0.4
 
 dev_dependencies:
   flutter_test:
