@@ -64,6 +64,14 @@ class HouseListPresenter {
     }
   }
 
+  void addVisitToHouse(String houseId) async {
+    try {
+      await houseRepository.addVisitToHouse(houseId);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   set backView(HouseListView value) {
     _backView = value;
     _backView.refreshHouseListView(housesList,housesLikingList,housesSearchingList);
