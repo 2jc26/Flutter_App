@@ -1,5 +1,13 @@
+import 'dart:ffi';
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/repository/search_repository.dart';
+import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 
 import '../models/house/house_model_update.dart';
 import '../repository/house_repository.dart';
@@ -14,6 +22,8 @@ class HouseListPresenter {
   List<HouseModelUpdate> housesSearchingList = [];
   late HouseListView _backView= HouseListView();
   HouseListPresenter(String? userId, HouseSearchingModelUpdate? houseFilters) {
+    // compute(_loadStoredHouseInIsolate, null);
+    _loadStoredHouse();
     getAllHouses();
     getLikingHouses(userId);
     if(houseFilters != null) {
@@ -30,7 +40,7 @@ class HouseListPresenter {
     }
   }
 
-  void getAllHouses() async {
+  Future<void> getAllHouses() async {
     try {
       final houses = await houseRepository.getAllHouses();
       if (houses.isNotEmpty) {
@@ -71,6 +81,45 @@ class HouseListPresenter {
       rethrow;
     }
   }
+
+  Future<bool> _loadStoredHouse() async {
+    try {
+      Map<String, dynamic>? storedHouse = await houseRepository.getStoredHouseLocalFile();
+      if (storedHouse != null && ConnectivityManagerService().connectivity == true) {
+        List<File> images = await houseRepository.getLocalImages();
+        String path = "/images_houses/${storedHouse['name']}_${storedHouse['city']}_${storedHouse['neighborhood']}_${storedHouse['address']}/";
+        List<String> imagesUrls = await houseRepository.uploadHouseImages(path, images);
+        houseRepository.createHouse(HouseModelUpdate.fromJson({...storedHouse, "images": imagesUrls}));
+        _backView.refreshHouseListView(housesList,housesLikingList,housesSearchingList);
+        // Create a snackbar to show success on the creation of the house
+        Get.rawSnackbar(
+          messageText: const Text(
+            'House created successfully!',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+            ),
+          ),
+          isDismissible: true,
+          duration: const Duration(seconds: 15),
+          backgroundColor: Colors.green[400]!,
+          icon: const Icon( Icons.check, color: Colors.white, size: 35,),
+          margin: EdgeInsets.zero,
+          snackStyle: SnackStyle.GROUNDED
+        );
+        houseRepository.deleteStoredHouseLocalFile();
+        return true;
+      }
+      return false;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<bool> _loadStoredHouseInIsolate(dynamic _) async {
+    return await _loadStoredHouse();
+  }
+
 
   set backView(HouseListView value) {
     _backView = value;
