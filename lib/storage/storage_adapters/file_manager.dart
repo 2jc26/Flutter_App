@@ -42,4 +42,67 @@ class FileManager with FileManagerMixin {
       return null;
     });
   }
+
+   void saveImagesLocally(List<File> images) async {
+    try {
+      final Directory appDir = await getApplicationDocumentsDirectory();
+      final String appDirPath = appDir.path;
+
+      for (int i = 0; i < images.length; i++) {
+        final String imagePath = '$appDirPath/image_$i.jpg';
+        await images[i].copy(imagePath);
+      }
+      print('Images saved successfully.');
+    } catch (error) {
+      print("Error saving images locally: $error");
+    }
+  }
+
+Future<List<File>> getLocalImages() async {
+  List<File> localImages = [];
+
+  try {
+    final Directory appDir = await getApplicationDocumentsDirectory();
+    final String appDirPath = appDir.path;
+    final String imageDirectoryPath = '$appDirPath';
+
+    final Directory imageDirectory = Directory(imageDirectoryPath);
+    final List<FileSystemEntity> files = imageDirectory.listSync();
+
+    for (final FileSystemEntity file in files) {
+      if (file is File) {
+        if (file.path.contains('.jpg')) {
+          localImages.add(file);
+        }
+      }
+    }
+  } catch (error) {
+    print("Error getting local images: $error");
+  }
+
+  return localImages;
+}
+
+  void deleteStoredImages() async {
+  try {
+    final Directory appDir = await getApplicationDocumentsDirectory();
+    final String appDirPath = appDir.path;
+    final String imageDirectoryPath = '$appDirPath';
+
+    final Directory imageDirectory = Directory(imageDirectoryPath);
+    final List<FileSystemEntity> files = imageDirectory.listSync();
+
+    for (final FileSystemEntity file in files) {
+      if (file is File) {
+        if (file.path.contains('.jpg')) {
+          file.deleteSync();
+        }
+      }
+    }
+
+    print('All images deleted successfully.');
+  } catch (error) {
+    print("Error deleting stored images: $error");
+  }
+}
 }
