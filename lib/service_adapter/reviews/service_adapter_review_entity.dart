@@ -7,6 +7,7 @@ import 'package:giusseppe_flut/service/backend_service.dart';
 
 abstract class ReviewServiceAdapter {
   Future<List<ReviewModel>> getAllReviews(String houseId);
+  Future<List<ReviewModel>> getAllReviewsUser(String userId);
   Future<void> insertReview(String houseId, String userId, String comment, double rating);
   Future<void> updateRaiting(String houseId);
 }
@@ -17,6 +18,20 @@ class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
   Future<List<ReviewModel>> getAllReviews(String houseId, {int skip = 0, int limit = 5}) async {
     try {
       final dynamicReviews = await BackendService().getReviewsPaginated("reviews", houseId, skip, limit);
+      if (dynamicReviews.isNotEmpty) {
+        return await compute(parseObjects, dynamicReviews);
+      } else {
+        return [];
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<ReviewModel>> getAllReviewsUser(String userId, {int skip = 0, int limit = 5}) async {
+    try {
+      final dynamicReviews = await BackendService().getReviewsPaginated("reviews/user", userId, skip, limit);
       if (dynamicReviews.isNotEmpty) {
         return await compute(parseObjects, dynamicReviews);
       } else {
@@ -53,7 +68,7 @@ class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
       if (decodeMessage['message'] != 'Rating updated successfully' && decodeMessage['message'] != 'No reviews for this house') {
         throw decodeMessage['message'];
       }
-      return decodeMessage['raiting'];
+      return decodeMessage['raiting'].toDouble();
     } catch (error) {
       if (kDebugMode) {
         print("Error updating house: $error");
@@ -66,6 +81,22 @@ class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
   Future<int> getLenght(String houseId) async {
     try {
       final message = await BackendService().getNum("total/reviews", houseId);
+      final decodeMessage = json.decode(message);
+      if (decodeMessage['message'] != 'Total Reviews') {
+        throw decodeMessage['message'];
+      }
+      return decodeMessage['count'];
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error searching for reviews: $error");
+      }
+      rethrow;
+    }
+  }
+
+  Future<int> getLenghtUser(String userId) async {
+    try {
+      final message = await BackendService().getNum("total/reviews/user", userId);
       final decodeMessage = json.decode(message);
       if (decodeMessage['message'] != 'Total Reviews') {
         throw decodeMessage['message'];

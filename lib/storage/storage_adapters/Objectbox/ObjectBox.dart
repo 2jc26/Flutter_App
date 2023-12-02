@@ -94,6 +94,19 @@ class ObjectBoxDao {
     return builder.watch(triggerImmediately: true).map((query) => query.find());
   }
 
+  Future<List<UserModel>> getTop5() async {
+      final query = userBox.query().order(UserModel_.stars, flags: Order.descending).build();
+      List<UserModel> users = query.find();
+      List<UserModel> topFive = [];
+      if (users.length >= 5) {
+        topFive = users.take(5).toList();
+      } else {
+        topFive = topFive;
+      }
+      query.close();
+    return topFive;
+  }
+
 
 
 }

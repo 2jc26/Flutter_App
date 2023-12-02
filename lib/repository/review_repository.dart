@@ -28,6 +28,18 @@ class ReviewRepository {
     }
   }
 
+  Future<List<ReviewModel>> getAllReviewsUser(String userId, {int skip = 0, int limit = 5}) async {
+    try {
+      if (connectivity) {
+        return await reviewApi.getAllReviewsUser(userId, skip: skip, limit: limit);
+      } else {
+        return [];
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<void> insertReview(String houseId, String userId, String comment, double rating) {
     try {
       if(connectivity) {
@@ -56,6 +68,18 @@ class ReviewRepository {
     try {
       if(connectivity) {
         return reviewApi.getLenght(houseId);
+      } else {
+        return Future.value(0);
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<int> getLenghtUser(String houseId){
+    try {
+      if(connectivity) {
+        return reviewApi.getLenghtUser(houseId);
       } else {
         return Future.value(0);
       }
