@@ -46,6 +46,7 @@ class UserRepository {
   Future<List<UserModel>> getAllUsersByPreferences() async {
     try {
       if (connectivity){
+        userDao.updateUserPreferencesStats();
         List<UserModel> lista= await userDao.getUsersByPreferences();
         for (var usuario in lista){
           bool condicion =instancia.verifyUserExist(usuario.id);

@@ -100,7 +100,14 @@ class BackendService {
     }
   }
 
-
+  Future<void> putVisit(String id) async {
+    final response = await http.put(
+      Uri.parse("$baseUrl/houses/$id/views"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    );
+  }
 
   Future<dynamic> post(String endPoint, dynamic object) async {
     final response = await http.post(

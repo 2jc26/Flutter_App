@@ -6,6 +6,7 @@ import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.d
 import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
 import 'package:giusseppe_flut/screens/InformationCardUser.dart';
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
+import 'package:giusseppe_flut/screens/house_creation.dart';
 import 'package:giusseppe_flut/screens/house_detail.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:giusseppe_flut/screens/no_connectivity.dart';
@@ -115,34 +116,59 @@ class _HouseListState extends State<HouseList> implements HouseListView {
           ),
           centerTitle: true,
         ),
-        body: Column(
-          children: [
-            if (_houseFilters == null && _housesLikingList!.isNotEmpty)
+        body: Stack(
+          children: 
+          [
+            Column(
+            children: [
+              if (_houseFilters == null && _housesLikingList!.isNotEmpty)
+                const SizedBox(height: 10),
+              if (_houseFilters == null && _housesLikingList!.isNotEmpty)
+                HouseSection(
+                    userId: _userId,
+                    title: 'Liking Houses',
+                    housesList: _housesLikingList,
+                    flex: 1,
+                    filter: false,
+                    searchController: _searchController,
+                    houseListPresenter: houseListPresenter,
+                ),
               const SizedBox(height: 10),
-            if (_houseFilters == null && _housesLikingList!.isNotEmpty)
               HouseSection(
                   userId: _userId,
-                  title: 'Liking Houses',
-                  housesList: _housesLikingList,
-                  flex: 1,
-                  filter: false,
+                  title: 'All Houses',
+                  housesList: _filteredHousesList,
+                  flex: 2,
+                  filter: true,
                   searchController: _searchController,
                   houseListPresenter: houseListPresenter,
               ),
-            const SizedBox(height: 10),
-            HouseSection(
-                userId: _userId,
-                title: 'All Houses',
-                housesList: _filteredHousesList,
-                flex: 2,
-                filter: true,
-                searchController: _searchController,
-                houseListPresenter: houseListPresenter,
+              const SizedBox(height: 10),
+            ],
+          ),
+          Positioned(
+            bottom: 60.0,
+            right: 0.0,
+            left: 0.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FloatingActionButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => HouseCreation(userId: _userId!),
+                    ));
+                  },
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  child: Icon(Icons.add,
+                      color: Theme.of(context).colorScheme.tertiary),
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
-          ],
+          ),
+          ]
         ),
-        drawer: CustomDrawer(customDrawerContext: context)
+        drawer: CustomDrawer(customDrawerContext: context),
       );
     } else {
       if(ConnectivityManagerService().connectivity) {
@@ -156,7 +182,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
           return const NoHousesSearch();
         }
       } else {
-        return const NoConnectivity();
+        return NoConnectivity(presenter: houseListPresenter, userId:_userId, houseFilters: _houseFilters);
       }
     }
   }
@@ -265,24 +291,32 @@ class HouseSection extends StatelessWidget {
   final TextEditingController _searchController;
   final HouseListPresenter _houseListPresenter;
 
+  Future<void> _refresh() async {
+    _houseListPresenter.refreshData(_userId, null);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Flexible(
       flex: _flex,
       fit: FlexFit.tight,
-      child: Column(
-        children: [
-          Text(
-            _title,
-            style: const TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-          ),
-          if (_filter)
-            FilterButton(userId: _userId!, searchController: _searchController),
-          Expanded(
-            child: HouseElements(houseList: _housesList, houseListPresenter: _houseListPresenter),
-          ),
-        ],
+      child: RefreshIndicator(
+        onRefresh: _refresh,
+        child: Column(
+          children: [
+            Text(
+              _title,
+              style: const TextStyle(
+                  fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+            ),
+            if (_filter)
+              FilterButton(userId: _userId!, searchController: _searchController),
+            Expanded(
+              child: HouseElements(houseList: _housesList, houseListPresenter: _houseListPresenter),
+            ),
+            const SizedBox(height: 70)
+          ],
+        ),
       ),
     );
   }
@@ -305,6 +339,7 @@ class HouseElements extends StatelessWidget {
       itemBuilder: ((context, index) {
         return GestureDetector(
           onTap: () {
+            _houseListPresenter.addVisitToHouse(_houseList![index].id);
             Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => HouseDetail(house: _houseList![index]),
             ));

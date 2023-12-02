@@ -2,11 +2,11 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/presenter/house_detail_presenter.dart';
+import 'package:giusseppe_flut/screens/review_list.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:giusseppe_flut/widgets/cache_network_image.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/house/house_model_update.dart';
-import '../widgets/drawer.dart';
 
 class HouseDetailView {
   void refreshHouseDetailView(HouseModelUpdate house) {}
@@ -103,7 +103,7 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
             const SizedBox(height: 5),
             // Horizontal Scrollable Row of Images with padding
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 28),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -117,10 +117,14 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                         scrollDirection: Axis.horizontal,
                         itemCount: _house!.images.length,
                         itemBuilder: (BuildContext context, int index) {
-                          EdgeInsets padding = const EdgeInsets.only(left: 10.0);
+                          EdgeInsets padding =
+                              const EdgeInsets.only(left: 10.0);
 
                           if (index == _house!.images.length - 1) {
                             padding = padding.copyWith(right: 40.0);
+                          }
+                          if (index == 0) {
+                            padding = padding.copyWith(left: 0);
                           }
                           
 
@@ -132,12 +136,8 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                                     _mainImg = _house!.images[index];
                                   });
                                 },
-                                child: ChNetworkImage(
-                                    url: _house!.images[index],
-                                    height: 100,
-                                    width: 100,
-                                    cacheheight: 100,
-                                    cachewidth: 100)),
+                                child: SmallImage(url: _house!.images[index],)
+                            )
                           );
                         },
                       ),
@@ -159,7 +159,7 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
             ),
             // Expansions
             Flexible(
-              flex: 1,
+              flex: 2,
               child: ListView.builder(
                   itemCount: 3,
                   itemBuilder: (context, index) {
@@ -167,7 +167,8 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                       return DescriptionCard(house: _house);
                     } else if (index == 1) {
                       if (ConnectivityManagerService().connectivity == true) {
-                        return LocationCard(house: _house, newMarker: newMarker);
+                        return LocationCard(
+                            house: _house, newMarker: newMarker);
                       } else {
                         return const SizedBox.shrink();
                       }
@@ -176,13 +177,17 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                     }
                   }),
             ),
+            Flexible(
+              flex: 1,
+              child: Row(
+              children: [
+                Button(title: 'Reviews', houseId: widget.house.id),
+                const Button(title: "I'm Interested"),
+              ],
+            ),
+            ),
           ],
         ),
-
-        
-
-        // Botón Abajo
-        bottomNavigationBar: const Button(),
       );
     } else {
       return const Scaffold(
@@ -234,8 +239,15 @@ class DescriptionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Theme.of(context).colorScheme.primary,
-      child: ExpansionTile(
-        title: Text(
+      child: Theme(
+        // Use Theme widget to set the iconTheme property
+        data: ThemeData(
+          iconTheme: const IconThemeData(
+            color: Color.fromARGB(255, 255, 0, 0), // Change this to your desired color
+          ),
+        ),
+        child: ExpansionTile(
+        title: Text(  
           'Description',
           style: TextStyle(
             color: Theme.of(context)
@@ -257,6 +269,7 @@ class DescriptionCard extends StatelessWidget {
           )
         ],
       ),
+      ),
     );
   }
 }
@@ -273,7 +286,14 @@ class AmenitiesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Theme.of(context).colorScheme.primary,
-      child: ExpansionTile(
+      child: Theme(
+        // Use Theme widget to set the iconTheme property
+        data: ThemeData(
+          iconTheme: const IconThemeData(
+            color: Color.fromARGB(255, 255, 0, 0), // Change this to your desired color
+          ),
+        ),
+        child: ExpansionTile(
         title: Text(
           'Included Amenities',
           style: TextStyle(
@@ -289,6 +309,7 @@ class AmenitiesCard extends StatelessWidget {
                 house: _house!,
               )),
         ],
+        )
       ),
     );
   }
@@ -306,42 +327,74 @@ class LocationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Theme.of(context).colorScheme.primary,
-      child: ExpansionTile(
-        title: Text(
-          'Location',
-          style: TextStyle(
-            color: Theme.of(context)
-                .colorScheme
-                .tertiary, // Set the text color here
+    if (ConnectivityManagerService().connectivity == true) {
+      return Card(
+        color: Theme.of(context).colorScheme.primary,
+        child: Theme(
+        // Use Theme widget to set the iconTheme property
+        data: ThemeData(
+          iconTheme: const IconThemeData(
+            color: Color.fromARGB(255, 255, 0, 0), // Change this to your desired color
           ),
         ),
-        children: <Widget>[
-          SizedBox(
-              width: 250,
-              height: 250,
-              child: GoogleMap(
-                mapType: MapType.hybrid,
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(
-                      _house!.latitude,
-                      _house!
-                          .longitude), // Cambia esto a las coordenadas deseadas
-                  zoom: 14,
-                ),
-                markers: {newMarker},
-              )),
-        ],
-      ),
-    );
+        child: ExpansionTile(
+          title: Text(
+            'Location',
+            style: TextStyle(
+              color: Theme.of(context)
+                  .colorScheme
+                  .tertiary, // Set the text color here
+            ),
+          ),
+          children: <Widget>[
+            SizedBox(
+                width: 250,
+                height: 250,
+                child: GoogleMap(
+                  mapType: MapType.hybrid,
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(
+                        _house!.latitude,
+                        _house!
+                            .longitude), // Cambia esto a las coordenadas deseadas
+                    zoom: 14,
+                  ),
+                  markers: {newMarker},
+                )),
+          ],
+        )
+        ),
+      );
+    } else {
+      return Card(
+        color: Theme.of(context).colorScheme.primary,
+        child: ExpansionTile(
+          title: Text(
+            'Location',
+            style: TextStyle(
+              color: Theme.of(context)
+                  .colorScheme
+                  .tertiary, // Set the text color here
+            ),
+          ),
+          children: <Widget>[
+            Text(_house!.address,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary, // Set the text color here
+            ),)
+          ],
+        ),
+      );
+    }
   }
 }
 
 class Button extends StatelessWidget {
-  const Button({
-    super.key,
-  });
+  const Button({super.key, required this.title, this.houseId});
+
+  final String title;
+
+  final String? houseId;
 
   @override
   Widget build(BuildContext context) {
@@ -352,11 +405,42 @@ class Button extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
-              width: 300.0,
+              width: 160.0,
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  if (title == "I'm Interested") {
+                    Navigator.of(context).pop();
+                  } else if (title == "Reviews") {
+                    if (ConnectivityManagerService().connectivity == true) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ReviewList(
+                                  houseId: houseId ?? '',
+                                  userId: 'Mpat7dK8qrOtuyl0cynM')));
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title:
+                                const Text("There is no Internet Connection"),
+                            content: const Text(
+                                'This function only works with an internet connection. Please try again later.'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('Cerrar'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context)
@@ -368,7 +452,7 @@ class Button extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  "I'm Interested",
+                  title,
                   style: TextStyle(
                       color: Theme.of(context)
                           .colorScheme
@@ -387,10 +471,10 @@ class Button extends StatelessWidget {
 class SmallImage extends StatelessWidget {
   const SmallImage({
     super.key,
-    required this.getImageURL,
+    required this.url,
   });
 
-  final Future<Uint8List?> Function() getImageURL;
+  final String url;
 
   @override
   Widget build(BuildContext context) {
@@ -400,33 +484,19 @@ class SmallImage extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(
           color: Theme.of(context).colorScheme.onPrimary, // Color of the border
-          width: 3.0,
+          width: 4.0,
         ),
         borderRadius:
             BorderRadius.circular(12.0), // Radius of the border corners
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(6.0),
-        child: FutureBuilder<Uint8List?>(
-          future: getImageURL(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la imagen.
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (snapshot.hasData) {
-              return Image.memory(
-                snapshot.data!,
-                width: double.infinity,
-                height: 150,
-                fit: BoxFit.cover,
-              );
-            } else {
-              return const Text(
-                  'No image available'); // Mostrar algo si no hay imagen.
-            }
-          },
-        ),
+        child: ChNetworkImage(
+                                    url: url,
+                                    height: 100,
+                                    width: 100,
+                                    cacheheight: 100,
+                                    cachewidth: 100),
       ),
     );
   }
@@ -515,7 +585,7 @@ class FeatureTable extends StatelessWidget {
                 child: Text(
                   caracName,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -525,7 +595,7 @@ class FeatureTable extends StatelessWidget {
                 child: Text(
                   caracValue!,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -537,7 +607,7 @@ class FeatureTable extends StatelessWidget {
 
     return Table(
       border: TableBorder.all(
-        color: Theme.of(context).colorScheme.tertiary,
+        color: Colors.white,
       ),
       children: tableRows,
     );

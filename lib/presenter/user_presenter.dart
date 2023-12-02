@@ -56,7 +56,6 @@ class UserListPresenter {
   }
 }
 
-
 double getAverage(List<UserModel>list){
   double suma = 0;
   for (var element in list){

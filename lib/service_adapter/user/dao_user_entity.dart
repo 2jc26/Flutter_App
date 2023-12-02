@@ -183,25 +183,26 @@ class UserDaoFireStore extends UserDao{
       int star = 5;     
 
       Map<String, dynamic> toJson() => {
-        'email': email,
-        'password': password, 
-        'name': fullname, 
         'age': age, 
-        'phone': phoneFin, 
-        'gender': genero, 
+        'longitude': long, 
+        'rol': 'Renter',
+        'full_name': fullname,
         'bring_people': bringPeople, 
-        'sleep': sleep, 
-        'vape': vape, 
-        'personality': personality, 
-        'likes_pets': likesPets, 
-        'clean': clean, 
-        'smoke': smoke,
-        'lat': lat, 
-        'long': long, 
-        'stars': star,
-        'locality':locality,
         'city':city,
-        'image':'images_profile/Male/7.jpg'
+        'vape': vape, 
+        'password': password, 
+        'image':'https://firebasestorage.googleapis.com/v0/b/senehouse-v2.appspot.com/o/images_profile%2Ffemale%2F2.jpg?alt=media&token=ac719683-e4ef-47bb-b3ea-fb429179fc1d',
+        'phone': phoneFin, 
+        'smoke': smoke,
+        'locality':locality,
+        'clean': clean, 
+        'likes_pets': likesPets, 
+        'latitude': lat, 
+        'gender': genero, 
+        'stars': star,
+        'personality': personality, 
+        'sleep': sleep, 
+        'email': email
       };
 
       // Check if a user with the given email exists in Firestore

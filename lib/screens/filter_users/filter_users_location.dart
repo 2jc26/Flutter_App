@@ -41,7 +41,7 @@ class _FilterUsersLocationsState extends State<FilterUsersLocations> with Restor
         ),
         centerTitle: true,
       ),
-      drawer: CustomDrawer(customDrawerContext: context),
+      // drawer: CustomDrawer(customDrawerContext: context),
       body: SingleChildScrollView( child:BodyLocation(
         cityController: cityController,
         neighborhoodController: neighborhoodController,

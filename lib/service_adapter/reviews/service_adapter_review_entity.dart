@@ -16,17 +16,18 @@ class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
   @override
   Future<List<ReviewModel>> getAllReviews(String houseId) async {
     try {
+
+      List<ReviewModel> reviews = [];
+
       final dynamicReviews = await BackendService().getOneAll("reviews", houseId);
-      // FIX this performance issue
-      if (dynamicReviews != null && dynamicReviews is List) {
-        List<ReviewModel> reviews = dynamicReviews.map((review) {
-          return ReviewModel.fromJson(review);
-        }).toList();
+      
+      if(dynamicReviews.isNotEmpty) {
+        reviews = await compute(parseObjects, dynamicReviews);
         return reviews;
       } else {
-        print("Invalid or null dynamicReviews data");
-        return [];
+        return reviews;
       }
+      
     } catch (error) {
       if (kDebugMode) {
         print("Error fetching reviews: $error");
@@ -70,4 +71,13 @@ class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
     }
   }
 
+}
+
+Future<List<ReviewModel>> parseObjects(List<dynamic> querySnapshot) async {
+  List<ReviewModel> reviews=[];
+  for (var review in querySnapshot) {
+    ReviewModel nuevaReview=ReviewModel.fromJson({...review});
+    reviews.add(nuevaReview);
+  }
+  return reviews;
 }

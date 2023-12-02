@@ -34,6 +34,7 @@ class ReviewListPresenter {
     try {
       await reviewRepository.insertReview(houseId, userId, comment, rating);
       getAllReviews(houseId);
+      putReview(houseId);
     } catch (error) {
       rethrow;
     }
@@ -43,7 +44,7 @@ class ReviewListPresenter {
     try {
       final responsRaiting = await reviewRepository.updateRaiting(houseId);
       if (responsRaiting != null) {
-        _raiting = responsRaiting.toString();
+        _raiting = responsRaiting.toStringAsFixed(2);
         _view.refreshRaiting(_raiting);
       }
     } catch (error) {
