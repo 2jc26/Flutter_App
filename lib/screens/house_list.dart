@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:giusseppe_flut/auth/auth_cubit.dart';
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
-import 'package:giusseppe_flut/screens/InformationCardUser.dart';
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
 import 'package:giusseppe_flut/screens/house_creation.dart';
 import 'package:giusseppe_flut/screens/house_detail.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:giusseppe_flut/screens/no_connectivity.dart';
+import 'package:giusseppe_flut/widgets/bottom_nav_bar.dart';
+import 'package:giusseppe_flut/widgets/custom_app_bar.dart';
+import 'package:giusseppe_flut/widgets/info_card.dart';
 import 'package:giusseppe_flut/widgets/search_field.dart';
-import '../widgets/drawer.dart';
 
 class HouseListView {
   void refreshHouseListView(
@@ -101,21 +100,8 @@ class _HouseListState extends State<HouseList> implements HouseListView {
     
     if ((_housesList!.isNotEmpty && _houseFilters == null) || (_housesSearchingList!.isNotEmpty && _houseFilters != null)) {
       return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF2E5EAA),
-          title: const Text(
-            'Senehouse',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          centerTitle: true,
-        ),
+        appBar: CustomAppBar(),
+        bottomNavigationBar: const BottomNavBar(index: 3),
         body: Stack(
           children: 
           [
@@ -145,30 +131,9 @@ class _HouseListState extends State<HouseList> implements HouseListView {
               ),
               const SizedBox(height: 10),
             ],
-          ),
-          Positioned(
-            bottom: 60.0,
-            right: 0.0,
-            left: 0.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FloatingActionButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => HouseCreation(userId: _userId!),
-                    ));
-                  },
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  child: Icon(Icons.add,
-                      color: Theme.of(context).colorScheme.tertiary),
-                ),
-              ],
-            ),
-          ),
+          )
           ]
         ),
-        drawer: CustomDrawer(customDrawerContext: context),
       );
     } else {
       if(ConnectivityManagerService().connectivity) {
@@ -205,22 +170,8 @@ class NoHousesSearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF2E5EAA),
-        title: const Text(
-          'Senehouse',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        centerTitle: true,
-      ),
-      drawer: CustomDrawer(customDrawerContext: context),
+      appBar: CustomAppBar(),
+      bottomNavigationBar: const BottomNavBar(index: 3),
       body: const Padding(
         padding: EdgeInsets.all(15),
         child: Text(
@@ -231,37 +182,6 @@ class NoHousesSearch extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
       ),
-    );
-  }
-}
-
-class FilterButton extends StatelessWidget {
-  const FilterButton({
-    super.key,
-    required String? userId,
-    required TextEditingController searchController,
-  })  : _userId = userId,
-        _searchController = searchController;
-
-  final String? _userId;
-  final TextEditingController _searchController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SearchField(searchController: _searchController),
-        IconButton(
-          icon: const Icon(Icons.filter_list),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AppartmentFilter(userId: _userId!)),
-            );
-          },
-        ),
-      ],
     );
   }
 }
@@ -309,12 +229,40 @@ class HouseSection extends StatelessWidget {
               style: const TextStyle(
                   fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
             ),
-            if (_filter)
-              FilterButton(userId: _userId!, searchController: _searchController),
+            SearchField(searchController: _searchController),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  child: const Text('Create New'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HouseCreation(userId: _userId!)),
+                    );
+                  },
+                ),
+                const SizedBox(width: 10),
+                Visibility(
+                  visible: _filter,
+                  child: ElevatedButton(
+                    child: const Text('Filter'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AppartmentFilter(userId: _userId!)),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
             Expanded(
               child: HouseElements(houseList: _housesList, houseListPresenter: _houseListPresenter),
             ),
-            const SizedBox(height: 70)
           ],
         ),
       ),
@@ -344,7 +292,18 @@ class HouseElements extends StatelessWidget {
               builder: (context) => HouseDetail(house: _houseList![index]),
             ));
           },
-          child: InformationCardUser(url: _houseList![index].images[0], stars: _houseList![index].rating, text: _houseList![index].name),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: InfoCard(
+              name: _houseList![index].name,
+              rating: _houseList![index].rating,
+              address: _houseList![index].address,
+              imageUrl: _houseList![index].images[0],
+              imageWidth: 300,
+              imageHeight: 300,
+              padding: 40,
+            ),
+          )
         );
       }),
     );

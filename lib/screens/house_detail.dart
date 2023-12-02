@@ -5,6 +5,7 @@ import 'package:giusseppe_flut/presenter/house_detail_presenter.dart';
 import 'package:giusseppe_flut/screens/review_list.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:giusseppe_flut/widgets/cache_network_image.dart';
+import 'package:giusseppe_flut/widgets/custom_app_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/house/house_model_update.dart';
 
@@ -49,22 +50,7 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
 
     if (_house != null) {
       return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF2E5EAA),
-          title: const Text(
-            'Senehouse',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          centerTitle: true,
-        ),
-        // drawer: CustomDrawer(customDrawerContext: context),
+        appBar: CustomAppBar(),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -56,7 +56,8 @@ class ConnectivityManagerService {
           backgroundColor: Colors.red[400]!,
           icon: const Icon( Icons.wifi_off, color: Colors.white, size: 35,),
           margin: EdgeInsets.zero,
-          snackStyle: SnackStyle.GROUNDED
+          snackStyle: SnackStyle.GROUNDED,
+          snackPosition: SnackPosition.TOP
         );
       } else {
         if(Get.isSnackbarOpen) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
+import 'package:giusseppe_flut/widgets/custom_app_bar.dart';
 import 'package:giusseppe_flut/widgets/drawer.dart';
 
 class NoConnectivity extends StatelessWidget {
@@ -18,21 +19,7 @@ class NoConnectivity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF2E5EAA),
-          title: const Text(
-            'Senehouse',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          centerTitle: true,
-        ),
+        appBar: CustomAppBar(),
         drawer: CustomDrawer(customDrawerContext: context),
         body: Center(
           child: Column(
@@ -56,6 +43,7 @@ class NoConnectivity extends StatelessWidget {
               ),
             ],
           ),
-        ));
+        )
+      );
   }
 }
