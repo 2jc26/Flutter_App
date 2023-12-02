@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:giusseppe_flut/auth/auth_cubit.dart';
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
-import 'package:giusseppe_flut/screens/InformationCardUser.dart';
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
 import 'package:giusseppe_flut/screens/house_creation.dart';
 import 'package:giusseppe_flut/screens/house_detail.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:giusseppe_flut/screens/no_connectivity.dart';
+import 'package:giusseppe_flut/widgets/bottom_nav_bar.dart';
+import 'package:giusseppe_flut/widgets/custom_app_bar.dart';
+import 'package:giusseppe_flut/widgets/info_card.dart';
 import 'package:giusseppe_flut/widgets/search_field.dart';
-import '../widgets/drawer.dart';
 
 class HouseListView {
   void refreshHouseListView(
@@ -101,21 +100,8 @@ class _HouseListState extends State<HouseList> implements HouseListView {
     
     if ((_housesList!.isNotEmpty && _houseFilters == null) || (_housesSearchingList!.isNotEmpty && _houseFilters != null)) {
       return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF2E5EAA),
-          title: const Text(
-            'Senehouse',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          centerTitle: true,
-        ),
+        appBar: CustomAppBar(),
+        bottomNavigationBar: const BottomNavBar(index: 3),
         body: Stack(
           children: 
           [
@@ -168,7 +154,6 @@ class _HouseListState extends State<HouseList> implements HouseListView {
           ),
           ]
         ),
-        drawer: CustomDrawer(customDrawerContext: context),
       );
     } else {
       if(ConnectivityManagerService().connectivity) {
@@ -205,22 +190,8 @@ class NoHousesSearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF2E5EAA),
-        title: const Text(
-          'Senehouse',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        centerTitle: true,
-      ),
-      drawer: CustomDrawer(customDrawerContext: context),
+      appBar: CustomAppBar(),
+      bottomNavigationBar: const BottomNavBar(index: 3),
       body: const Padding(
         padding: EdgeInsets.all(15),
         child: Text(
@@ -344,7 +315,18 @@ class HouseElements extends StatelessWidget {
               builder: (context) => HouseDetail(house: _houseList![index]),
             ));
           },
-          child: InformationCardUser(url: _houseList![index].images[0], stars: _houseList![index].rating, text: _houseList![index].name),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: InfoCard(
+              name: _houseList![index].name,
+              rating: _houseList![index].rating,
+              address: _houseList![index].address,
+              imageUrl: _houseList![index].images[0],
+              imageWidth: 300,
+              imageHeight: 300,
+              padding: 40,
+            ),
+          )
         );
       }),
     );
