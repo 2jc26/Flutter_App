@@ -126,7 +126,12 @@ class HouseDaoFireStore extends HouseDao {
     try {
       List<String> descriptions = [];
 
-      final querySnapshot = await BackendService().getAll("houses/bestdescriptions");
+      final querySnapshot = await BackendService().getAll("bestdescriptions");
+      for (var desc in querySnapshot) {
+        String description = desc;
+        descriptions.add(description);
+      }
+
       if (querySnapshot.isEmpty) {
         return [];
       } else {

@@ -184,10 +184,10 @@ class _HouseCreationState extends State<HouseCreation> implements HouseCreationV
 
     _userId = widget.userId;
     _help = false;
-    _descriptionsList = [];
     houseCreationPresenter = HouseCreationPresenter();
 
     houseCreationPresenter.backView = this;
+    houseCreationPresenter.getTopDescriptions();
 
     super.initState();
   }
