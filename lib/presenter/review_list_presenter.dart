@@ -7,6 +7,7 @@ class ReviewListPresenter {
   final ReviewRepository reviewRepository = ReviewRepository();
   List<ReviewModel> reviewsList = [];
   String _raiting = '0';
+  int _number = 0;
 
   late ReviewsListView _view = ReviewsListView();
 
@@ -17,13 +18,16 @@ class ReviewListPresenter {
 
   }
 
-
-  void getAllReviews(String houseId) async {
+  void getAllReviews(String houseId, {int skip = 0, int limit = 5}) async {
     try {
-      final reviews = await reviewRepository.getAllReviews(houseId);
+      _number = await reviewRepository.getLenght(houseId);
+      // haz que _number se divida en 5 y redondea hacia arriba
+      _number = ((_number / 5) + 0.5).toInt();
+      final reviews = await reviewRepository.getAllReviews(houseId, skip: skip, limit: limit);
       if (reviews.isNotEmpty) {
         reviewsList = reviews;
         _view.refreshReviewListView(reviewsList);
+        _view.refreshNumber(_number);
       }
     } catch (error) {
       rethrow;
@@ -56,6 +60,7 @@ class ReviewListPresenter {
     _view = value;
     _view.refreshReviewListView(reviewsList);
     _view.refreshRaiting(_raiting);
+    _view.refreshNumber(_number);
   }
 
 }

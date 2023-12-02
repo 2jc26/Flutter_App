@@ -126,7 +126,12 @@ class HouseDaoFireStore extends HouseDao {
     try {
       List<String> descriptions = [];
 
-      final querySnapshot = await BackendService().getAll("houses/bestdescriptions");
+      final querySnapshot = await BackendService().getAll("bestdescriptions");
+      for (var desc in querySnapshot) {
+        String description = desc;
+        descriptions.add(description);
+      }
+
       if (querySnapshot.isEmpty) {
         return [];
       } else {
@@ -139,6 +144,25 @@ class HouseDaoFireStore extends HouseDao {
       rethrow;
     }
   }
+
+  Future<List<HouseModelUpdate>> getTopHouses() async {
+    List<HouseModelUpdate> houses = [];
+    try {
+      final querySnapshot = await BackendService().getAll("best/houses");
+      if (querySnapshot.isEmpty) {
+        return [];
+      } else {
+        houses = await compute(parseObjects,querySnapshot);
+      }
+      return houses;
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error fetching houses: $error");
+      }
+      rethrow;
+    }
+  }
+  
 }
 
 Future<List<HouseModelUpdate>> parseObjects(List<dynamic> querySnapshot) async {

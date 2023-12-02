@@ -14,24 +14,15 @@ abstract class ReviewServiceAdapter {
 class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
 
   @override
-  Future<List<ReviewModel>> getAllReviews(String houseId) async {
+  Future<List<ReviewModel>> getAllReviews(String houseId, {int skip = 0, int limit = 5}) async {
     try {
-
-      List<ReviewModel> reviews = [];
-
-      final dynamicReviews = await BackendService().getOneAll("reviews", houseId);
-      
-      if(dynamicReviews.isNotEmpty) {
-        reviews = await compute(parseObjects, dynamicReviews);
-        return reviews;
+      final dynamicReviews = await BackendService().getReviewsPaginated("reviews", houseId, skip, limit);
+      if (dynamicReviews.isNotEmpty) {
+        return await compute(parseObjects, dynamicReviews);
       } else {
-        return reviews;
+        return [];
       }
-      
     } catch (error) {
-      if (kDebugMode) {
-        print("Error fetching reviews: $error");
-      }
       rethrow;
     }
   }
@@ -59,13 +50,30 @@ class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
     try {
       final message = await BackendService().put("houses", {}, houseId);
       final decodeMessage = json.decode(message);
-      if (decodeMessage['message'] != 'Rating updated successfully') {
+      if (decodeMessage['message'] != 'Rating updated successfully' && decodeMessage['message'] != 'No reviews for this house') {
         throw decodeMessage['message'];
       }
       return decodeMessage['raiting'];
     } catch (error) {
       if (kDebugMode) {
         print("Error updating house: $error");
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<int> getLenght(String houseId) async {
+    try {
+      final message = await BackendService().getNum("total/reviews", houseId);
+      final decodeMessage = json.decode(message);
+      if (decodeMessage['message'] != 'Total Reviews') {
+        throw decodeMessage['message'];
+      }
+      return decodeMessage['count'];
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error searching for reviews: $error");
       }
       rethrow;
     }

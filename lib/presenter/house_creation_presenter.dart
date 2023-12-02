@@ -14,12 +14,12 @@ class HouseCreationPresenter {
 
   late HouseCreationView _backView = HouseCreationView();
 
-  HouseListPresenter() {
-    getTopDescriptions();
+  HouseCreationPresenter() {
   }
 
   void getTopDescriptions() async {
-    _backView.refreshHouseCreationView(await houseRepository.getTopDescriptions());
+    List<String> descriptions = await houseRepository.getTopDescriptions();
+    _backView.refreshHouseCreationView(descriptions);
   }
 
   void createHouse(String userId,String name, String housingType, String rentPrice, String description, String city, String neighborhood, String address, String floor, String appartmentArea, String roomsNumber, String roomArea, String bathroomNumber, String stratum, bool elevator, bool furnished, bool gymnasium, bool internet, bool laundryArea, bool pets, bool reception, bool smoke, bool supermarkets, bool tv, bool vape, List<File> images) async {

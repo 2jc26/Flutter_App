@@ -137,4 +137,16 @@ class HouseRepository {
     }
   }
 
+  Future<List<HouseModelUpdate>> getTopHouses() async {
+    try {
+      if(connectivity) {
+        return await houseDao.getTopHouses();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
 }

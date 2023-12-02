@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:giusseppe_flut/presenter/house_creation_presenter.dart';
 import 'dart:io';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
+import 'package:giusseppe_flut/widgets/bottom_nav_bar.dart';
+import 'package:giusseppe_flut/widgets/custom_app_bar.dart';
 import 'package:giusseppe_flut/widgets/image_selector.dart';
 
 class HouseCreationView {
@@ -184,10 +186,10 @@ class _HouseCreationState extends State<HouseCreation> implements HouseCreationV
 
     _userId = widget.userId;
     _help = false;
-    _descriptionsList = [];
     houseCreationPresenter = HouseCreationPresenter();
 
     houseCreationPresenter.backView = this;
+    houseCreationPresenter.getTopDescriptions();
 
     super.initState();
   }
@@ -201,21 +203,7 @@ class _HouseCreationState extends State<HouseCreation> implements HouseCreationV
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF2E5EAA),
-        title: const Text(
-          'Senehouse',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
