@@ -7,6 +7,8 @@ class ReviewsListView {
   void refreshReviewListView(List<ReviewModel> reviewsList) {}
 
   void refreshRaiting(String raiting) {}
+
+  void refreshNumber(int number) {}
 }
 
 class ReviewList extends StatefulWidget {
@@ -28,6 +30,7 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
 
   String? _raiting = '0';
   String? _manualRating = '0';
+  int _number = 0;
 
   final TextEditingController _commentController = TextEditingController();
 
@@ -46,6 +49,13 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
   void refreshRaiting(String raiting) {
     setState(() {
       _raiting = raiting;
+    });
+  }
+
+  @override
+  void refreshNumber(int number) {
+    setState(() {
+      _number = number;
     });
   }
 
@@ -69,6 +79,7 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
 
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF2E5EAA),
@@ -166,6 +177,7 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
                                 children: [
                                   Text(
                                       'Rating: ${_reviewsList![index].rating}'),
+                                      
                                   Text(
                                       'Comment: ${_reviewsList![index].comment}'),
                                 ],
@@ -174,6 +186,43 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
                           );
                         },
                       ),
+                      
+                      Padding(
+                        padding: const EdgeInsets.only(left:8.0),
+                        child: SizedBox(
+                            width: screenSize.width,
+                            height: 50,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _number,
+                              itemBuilder: (BuildContext context, int index) {
+                                // Agrega un GestureDetector para permitir clics en cada elemento
+                                return GestureDetector(
+                                  onTap: () {
+                                    reviewListPresenter.getAllReviews(widget.houseId, skip: index * 5, limit: 5);
+                                  },
+                                  child: Container(
+                                    width: 50, // Ajusta el ancho del contenedor según tus necesidades
+                                    margin: const EdgeInsets.all(5.0),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.blue, // Color del borde del contenedor
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        (index + 1).toString(), // Números del 1 al _number
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                      ),
+                      const SizedBox(height: 75),
           ],
         ),
       ),

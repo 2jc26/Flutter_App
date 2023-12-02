@@ -83,6 +83,15 @@ class BackendService {
     }
   }
 
+  Future<List<dynamic>> getReviewsPaginated(String endPoint, String id, int skip, int limit) async {
+    final response = await http.get(Uri.parse('$baseUrl/$endPoint/$id?skip=$skip&limit=$limit'));
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      return [];
+    }
+  }
+
   Future<dynamic> put(String endPoint, Map<String, dynamic> object, String id) async {
     final response = await http.put(
       Uri.parse('$baseUrl/$endPoint/$id'),
@@ -92,6 +101,16 @@ class BackendService {
       body: object != null ? json.encode(object) : null,
     );
 
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      // Request failed
+      return null;
+    }
+  }
+
+  Future<dynamic> getNum(String endPoint, String id) async {
+    final response = await http.get(Uri.parse('$baseUrl/$endPoint/$id'));
     if (response.statusCode == 200) {
       return response.body;
     } else {
