@@ -95,6 +95,20 @@ class UserRepository {
     }
   }
 
+  Future<UserModel?> getUserLocalFileLessArgs() async {
+    try {
+      final user = await fileManager.read(File('${FileManager.directory.path}/user.json'));
+      if (user != null) {
+        return UserModel.fromJson({...user});
+      }
+      return null;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+
+
   Future<void> createFileUser(UserModel user) async {
     try {
       await fileManager.write(File('${FileManager.directory.path}/user.json'), json.encode(user.toJson()));

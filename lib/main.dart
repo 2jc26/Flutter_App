@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
         child:
         BlocProvider(
           create: (context) => SessionCubit(authRepo: context.read<AuthRepository>()),
-          child: AppNavigator(),
+          child: AppNavigator()//,AppNavigator()
         ),
       ),
     );
