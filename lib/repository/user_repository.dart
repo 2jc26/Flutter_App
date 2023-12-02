@@ -125,7 +125,17 @@ class UserRepository {
     }
   }
 
-
+  Future<List<UserModel>> getTopUsers() async {
+    try {
+      if(connectivity) {
+        return await userDao.getTopUsers();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
 
   double getAverage(List<UserModel> list){
     double suma = 0;

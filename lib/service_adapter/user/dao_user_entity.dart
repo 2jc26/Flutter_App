@@ -52,6 +52,24 @@ class UserDaoFireStore extends UserDao{
     }
   }
 
+  Future<List<UserModel>> getTopUsers() async {
+    List<UserModel> users = [];
+    try {
+      final querySnapshot = await BackendService().getAll("best/users");
+      if (querySnapshot.isEmpty) {
+        return [];
+      } else {
+        users = await compute(parseObjects,querySnapshot);
+      }
+      return users;
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error fetching users: $error");
+      }
+      rethrow;
+    }
+  }
+
   @override
   Future<UserModel> getUserById(String id) async {
     try {
