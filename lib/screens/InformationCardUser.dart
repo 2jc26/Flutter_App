@@ -31,8 +31,8 @@ class InformationCardUser extends StatelessWidget {
               height:150,
               fit: BoxFit.cover,
               width: 350,
-              memCacheWidth: 350,
-              memCacheHeight: 150,
+              memCacheWidth: 350,//35o
+              memCacheHeight: 150,//150
               progressIndicatorBuilder: (context, url,progress) {
                 return ColoredBox(
                     color: Colors.black,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // Importar Flutter Bloc
 import 'package:giusseppe_flut/auth/auth_cubit.dart';
 import 'package:giusseppe_flut/screens/house_list.dart';
+import 'package:giusseppe_flut/screens/profile.dart';
 import 'package:giusseppe_flut/screens/user_list.dart';
 import 'package:giusseppe_flut/screens/user_recomendation_ubication.dart';
 import 'package:giusseppe_flut/storage/providers/nickname_provider.dart';
@@ -44,6 +45,15 @@ class CustomDrawer extends StatelessWidget {
                 ],
               ),
             ),
+          ),
+          ListTile(
+            title: const Text("Profile"),
+            onTap: () {
+              Navigator.push(
+                customDrawerContext,
+                MaterialPageRoute(builder: (customDrawerContext) => profile()),
+              );
+            },
           ),
           ListTile(
             title: const Text("Publish"),

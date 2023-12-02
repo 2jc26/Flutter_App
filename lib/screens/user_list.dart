@@ -13,9 +13,8 @@ import '../widgets/drawer.dart';
 import 'InformationCardUser.dart';
 
 class UserList extends StatefulWidget {
+
   UserPreferencesDTO? userPreferences;
-
-
   UserList({Key? key, this.userPreferences}) : super(key: key);
 
   @override
