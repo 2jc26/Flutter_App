@@ -16,12 +16,12 @@ class ReviewRepository {
     });
   }
 
-  Future<List<ReviewModel>> getAllReviews(String houseId) async {
+  Future<List<ReviewModel>> getAllReviews(String houseId, {int skip = 0, int limit = 5}) async {
     try {
-      if(connectivity) {
-        return await reviewApi.getAllReviews(houseId);
+      if (connectivity) {
+        return await reviewApi.getAllReviews(houseId, skip: skip, limit: limit);
       } else {
-        return []; 
+        return [];
       }
     } catch (error) {
       rethrow;
@@ -46,6 +46,18 @@ class ReviewRepository {
         return reviewApi.updateRaiting(houseId);
       } else {
         return Future.value(0.0);
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<int> getLenght(String houseId){
+    try {
+      if(connectivity) {
+        return reviewApi.getLenght(houseId);
+      } else {
+        return Future.value(0);
       }
     } catch (error) {
       rethrow;
