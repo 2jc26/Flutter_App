@@ -105,7 +105,8 @@ class HouseListPresenter {
           backgroundColor: Colors.green[400]!,
           icon: const Icon( Icons.check, color: Colors.white, size: 35,),
           margin: EdgeInsets.zero,
-          snackStyle: SnackStyle.GROUNDED
+          snackStyle: SnackStyle.GROUNDED,
+          snackPosition: SnackPosition.TOP
         );
         houseRepository.deleteStoredHouseLocalFile();
         return true;
