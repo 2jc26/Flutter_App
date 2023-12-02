@@ -112,7 +112,12 @@ class _PrincipalViewState extends State<PrincipalView> implements PrincipalViewA
               child: SizedBox(
                 height: 400,
                 width: 300,
-                child: ListView.builder(
+                child: 
+                _housesList == null
+                ? const Center(child: CircularProgressIndicator())
+                : _housesList!.isEmpty
+                    ? const Center(child: Text('No houses availables at the moment'))
+                  : ListView.builder(
                   scrollDirection: Axis.horizontal,  // Configura el desplazamiento horizontal
                   itemCount: _housesList?.length,
                   itemBuilder: (context, index) {
@@ -150,7 +155,12 @@ class _PrincipalViewState extends State<PrincipalView> implements PrincipalViewA
               child: SizedBox(
                 height: 400,
                 width: 300,
-                child: ListView.builder(
+                child: 
+                _userList == null
+                ? const Center(child: CircularProgressIndicator())
+                : _userList!.isEmpty
+                    ? const Center(child: Text('No Users availables at the moment'))
+                  : ListView.builder(
                   scrollDirection: Axis.horizontal,  // Configura el desplazamiento horizontal
                   itemCount: _userList?.length,
                   itemBuilder: (context, index) {
