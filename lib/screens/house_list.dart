@@ -131,27 +131,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
               ),
               const SizedBox(height: 10),
             ],
-          ),
-          Positioned(
-            bottom: 60.0,
-            right: 0.0,
-            left: 0.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FloatingActionButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => HouseCreation(userId: _userId!),
-                    ));
-                  },
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  child: Icon(Icons.add,
-                      color: Theme.of(context).colorScheme.tertiary),
-                ),
-              ],
-            ),
-          ),
+          )
           ]
         ),
       );
@@ -206,37 +186,6 @@ class NoHousesSearch extends StatelessWidget {
   }
 }
 
-class FilterButton extends StatelessWidget {
-  const FilterButton({
-    super.key,
-    required String? userId,
-    required TextEditingController searchController,
-  })  : _userId = userId,
-        _searchController = searchController;
-
-  final String? _userId;
-  final TextEditingController _searchController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SearchField(searchController: _searchController),
-        IconButton(
-          icon: const Icon(Icons.filter_list),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AppartmentFilter(userId: _userId!)),
-            );
-          },
-        ),
-      ],
-    );
-  }
-}
-
 class HouseSection extends StatelessWidget {
   const HouseSection({
     super.key,
@@ -280,12 +229,40 @@ class HouseSection extends StatelessWidget {
               style: const TextStyle(
                   fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
             ),
-            if (_filter)
-              FilterButton(userId: _userId!, searchController: _searchController),
+            SearchField(searchController: _searchController),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  child: const Text('Create New'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HouseCreation(userId: _userId!)),
+                    );
+                  },
+                ),
+                const SizedBox(width: 10),
+                Visibility(
+                  visible: _filter,
+                  child: ElevatedButton(
+                    child: const Text('Filter'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AppartmentFilter(userId: _userId!)),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
             Expanded(
               child: HouseElements(houseList: _housesList, houseListPresenter: _houseListPresenter),
             ),
-            const SizedBox(height: 70)
           ],
         ),
       ),
