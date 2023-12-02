@@ -51,10 +51,10 @@ class PrincipalRepository {
     }
   }
 
-  Future<List<ReviewModel>> getAllReview(String userId) async {
+  Future<List<ReviewModel>> getAllReview(String userId, {int skip = 0, int limit = 5}) async {
     try {
       if(connectivity) {
-        return await reviewRepository.getAllReviewsUser(userId);
+        return await reviewRepository.getAllReviewsUser(userId, skip: skip, limit: limit);
       } else {
         return [];
       }
@@ -63,4 +63,12 @@ class PrincipalRepository {
     }
   }
 
+
+  Future<int> getLenght(String userId) async {
+    try {
+        return await reviewRepository.getLenghtUser(userId);
+    } catch (error) {
+      rethrow;
+    }
+  }
 }

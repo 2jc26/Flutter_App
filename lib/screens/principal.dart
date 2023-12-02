@@ -12,6 +12,7 @@ class PrincipalViewAbs {
   void refreshHousesPrincipalView(List<HouseModelUpdate> housesList) {}
   void refreshUsersPrincipalView(List<UserModel> userList) {}
   void refreshReviewsPrincipalView(List<ReviewModel> reviewList) {}
+  void refreshNumber(int number) {}
 }
 
 class PrincipalView extends StatefulWidget {
@@ -29,6 +30,7 @@ class _PrincipalViewState extends State<PrincipalView> implements PrincipalViewA
   late PrincipalPresenter principalPresenter;
 
   String? _userId;
+  int _number = 0;
 
   List<HouseModelUpdate>? _housesList;
   List<UserModel>? _userList;
@@ -56,6 +58,13 @@ class _PrincipalViewState extends State<PrincipalView> implements PrincipalViewA
   }
 
   @override
+  void refreshNumber(int number) {
+    setState(() {
+      _number = number;
+    });
+  }
+
+  @override
   void initState() {
     _userId = widget.userId;
 
@@ -68,6 +77,7 @@ class _PrincipalViewState extends State<PrincipalView> implements PrincipalViewA
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: CustomAppBar(),
       body: SingleChildScrollView(
@@ -104,7 +114,7 @@ class _PrincipalViewState extends State<PrincipalView> implements PrincipalViewA
                 width: 300,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,  // Configura el desplazamiento horizontal
-                  itemCount: _userList?.length,
+                  itemCount: _housesList?.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
@@ -135,35 +145,109 @@ class _PrincipalViewState extends State<PrincipalView> implements PrincipalViewA
                 fontWeight: FontWeight.bold,
               ),
             ),
-            // SingleChildScrollView(
-            //   scrollDirection: Axis.horizontal,
-            //   child: SizedBox(
-            //     height: 400,
-            //     width: 300,
-            //     child: ListView.builder(
-            //       scrollDirection: Axis.horizontal,  // Configura el desplazamiento horizontal
-            //       itemCount: _housesList?.length,
-            //       itemBuilder: (context, index) {
-            //         return GestureDetector(
-            //           onTap: () {
-            //             Navigator.of(context).push(MaterialPageRoute(
-            //               builder: (context) => HouseDetail(house: _housesList![index]),
-            //             ));
-            //           },
-            //           child: InfoCard(
-            //             name: _userList![index].full_name,
-            //             rating: _userList![index].stars,
-            //             address: '${_userList![index].city}-${_userList![index].locality}',
-            //             imageUrl: _userList![index].image,
-            //             imageWidth: 300,
-            //             imageHeight: 300,
-            //             padding: 20,
-            //           ),
-            //         );
-            //       },
-            //     ),
-            //   ),
-            // ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: SizedBox(
+                height: 400,
+                width: 300,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,  // Configura el desplazamiento horizontal
+                  itemCount: _userList?.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //   builder: (context) => HouseDetail(house: _userList![index]),
+                        // ));
+                      },
+                      child: InfoCard(
+                        name: _userList![index].full_name,
+                        rating: _userList![index].stars,
+                        address: '${_userList![index].city}-${_userList![index].locality}',
+                        imageUrl: _userList![index].image,
+                        imageWidth: 300,
+                        imageHeight: 300,
+                        padding: 20,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            const Text(
+              'Reviews del usuario:',
+              
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                color: Color(0xFF2E5EAA),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+             _reviewList == null
+                ? const Center(child: CircularProgressIndicator())
+                : _reviewList!.isEmpty
+                    ? const Center(child: Text('No comments'))
+                    : ListView.builder(
+                        shrinkWrap: true, // Use shrinkWrap to avoid the error
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: _reviewList!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Card(
+                            margin: const EdgeInsets.all(10.0),
+                            child: ListTile(
+                              title: Text(index.toString()),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      'Rating: ${_reviewList![index].rating}'),
+                                      
+                                  Text(
+                                      'Comment: ${_reviewList![index].comment}'),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      
+                      Padding(
+                        padding: const EdgeInsets.only(left:8.0),
+                        child: SizedBox(
+                            width: screenSize.width,
+                            height: 50,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _number,
+                              itemBuilder: (BuildContext context, int index) {
+                                // Agrega un GestureDetector para permitir clics en cada elemento
+                                return GestureDetector(
+                                  onTap: () {
+                                    principalPresenter.getAllReview(widget.userId, skip: index * 5, limit: 5);
+                                  },
+                                  child: Container(
+                                    width: 50, // Ajusta el ancho del contenedor según tus necesidades
+                                    margin: const EdgeInsets.all(5.0),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.blue, // Color del borde del contenedor
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        (index + 1).toString(), // Números del 1 al _number
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                      )
           ]
         ),
       ),

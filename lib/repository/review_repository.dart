@@ -75,5 +75,17 @@ class ReviewRepository {
       rethrow;
     }
   }
+
+  Future<int> getLenghtUser(String houseId){
+    try {
+      if(connectivity) {
+        return reviewApi.getLenghtUser(houseId);
+      } else {
+        return Future.value(0);
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
   
 }

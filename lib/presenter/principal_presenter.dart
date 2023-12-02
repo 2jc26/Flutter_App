@@ -10,6 +10,8 @@ class PrincipalPresenter {
   List<UserModel> userList = [];
   List<ReviewModel> reviewList = [];
   late PrincipalViewAbs _backView = PrincipalViewAbs();
+  int _number = 0;
+
   PrincipalPresenter(String? userId) {
     getAllHouses();
     getAllUser();
@@ -46,12 +48,16 @@ class PrincipalPresenter {
     }
   }
 
-  Future<void> getAllReview(String userId) async {
+  Future<void> getAllReview(String userId, {int skip = 0, int limit = 5}) async {
     try {
-      final review = await principalRepository.getAllReview(userId);
+      _number = await principalRepository.getLenght(userId);
+      // haz que _number se divida en 5 y redondea hacia arriba
+      _number = ((_number / 5) + 0.5).toInt();
+      final review = await principalRepository.getAllReview(userId, skip: skip, limit: limit);
       if (review.isNotEmpty) {
         reviewList = review;
         _backView.refreshReviewsPrincipalView(reviewList);
+        _backView.refreshNumber(_number);
       }
     } catch (error) {
       rethrow;

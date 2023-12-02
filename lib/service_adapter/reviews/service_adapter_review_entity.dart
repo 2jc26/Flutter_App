@@ -68,7 +68,7 @@ class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
       if (decodeMessage['message'] != 'Rating updated successfully' && decodeMessage['message'] != 'No reviews for this house') {
         throw decodeMessage['message'];
       }
-      return decodeMessage['raiting'];
+      return decodeMessage['raiting'].toDouble();
     } catch (error) {
       if (kDebugMode) {
         print("Error updating house: $error");
@@ -81,6 +81,22 @@ class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
   Future<int> getLenght(String houseId) async {
     try {
       final message = await BackendService().getNum("total/reviews", houseId);
+      final decodeMessage = json.decode(message);
+      if (decodeMessage['message'] != 'Total Reviews') {
+        throw decodeMessage['message'];
+      }
+      return decodeMessage['count'];
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error searching for reviews: $error");
+      }
+      rethrow;
+    }
+  }
+
+  Future<int> getLenghtUser(String userId) async {
+    try {
+      final message = await BackendService().getNum("total/reviews/user", userId);
       final decodeMessage = json.decode(message);
       if (decodeMessage['message'] != 'Total Reviews') {
         throw decodeMessage['message'];
