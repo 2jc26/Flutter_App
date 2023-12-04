@@ -123,6 +123,7 @@ class _PrincipalViewState extends State<PrincipalView> implements PrincipalViewA
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
+                        principalPresenter.addVisitToHouse(_housesList![index].id);
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => HouseDetail(house: _housesList![index]),
                         ));

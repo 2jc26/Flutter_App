@@ -63,6 +63,13 @@ class PrincipalRepository {
     }
   }
 
+    Future<void> addVisitToHouse(String houseId) async {
+    try {
+      houseRepository.addVisitToHouse(houseId);
+    } catch (error) {
+      rethrow;
+    }
+  }
 
   Future<int> getLenght(String userId) async {
     try {
