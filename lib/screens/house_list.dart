@@ -1,3 +1,4 @@
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
@@ -92,47 +93,113 @@ class _HouseListState extends State<HouseList> implements HouseListView {
     houseListPresenter.backView = this;
     
     _searchController.addListener(_onSearchTextChanged);
+    _pageController.addListener(() {
+      setState(() {
+        _currentPage = _pageController.page?.round() ?? 0;
+      });
+    });
     super.initState();
   }
+
+  Future<void> _refresh() async {
+    houseListPresenter.refreshData(_userId, null);
+  }
+
+  // Images
+  PageController _pageController = PageController();
+  int _currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
     
+    int dotsCount = _housesLikingList!.length;
+
+    if(dotsCount == 0) {
+      dotsCount = 1;
+    }
+
     if ((_housesList!.isNotEmpty && _houseFilters == null) || (_housesSearchingList!.isNotEmpty && _houseFilters != null)) {
       return Scaffold(
         appBar: CustomAppBar(),
         bottomNavigationBar: const BottomNavBar(index: 3),
-        body: Stack(
-          children: 
-          [
-            Column(
+        body: RefreshIndicator(
+          onRefresh: _refresh,
+          child: Stack(
             children: [
-              if (_houseFilters == null && _housesLikingList!.isNotEmpty)
-                const SizedBox(height: 10),
-              if (_houseFilters == null && _housesLikingList!.isNotEmpty)
-                HouseSection(
-                    userId: _userId,
-                    title: 'Liking Houses',
-                    housesList: _housesLikingList,
-                    flex: 1,
-                    filter: false,
-                    searchController: _searchController,
-                    houseListPresenter: houseListPresenter,
-                ),
-              const SizedBox(height: 10),
-              HouseSection(
-                  userId: _userId,
-                  title: 'All Houses',
-                  housesList: _filteredHousesList,
-                  flex: 2,
-                  filter: true,
-                  searchController: _searchController,
-                  houseListPresenter: houseListPresenter,
-              ),
-              const SizedBox(height: 10),
-            ],
+              SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                    children: [
+                      if (_houseFilters == null && _housesLikingList!.isNotEmpty)
+                        const SizedBox(height: 10),
+                      Visibility(
+                        visible: _houseFilters == null && _housesLikingList!.isNotEmpty,
+                        child: const Text(
+                          "Liking Houses",
+                          style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+                        )
+                      ),
+                      Visibility(
+                        visible: _houseFilters == null && _housesLikingList!.isNotEmpty && _housesLikingList!.isNotEmpty,
+                        child: SizedBox(
+                          height: 370, // Set the fixed height
+                          child: Stack(
+                            children: [
+                            PageView.builder(
+                                controller: _pageController,
+                                itemCount: _housesLikingList!.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      houseListPresenter.addVisitToHouse(_housesLikingList![index].id);
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => HouseDetail(house: _housesLikingList![index]),
+                                      ));
+                                    },
+                                    child: InfoCard(
+                                      name: _housesLikingList![index].name,
+                                      rating: _housesLikingList![index].rating,
+                                      address: _housesLikingList![index].address,
+                                      imageUrl: _housesLikingList![index].images[0],
+                                      imageWidth: 300,
+                                      imageHeight: 300,
+                                      padding: 40,
+                                    ),
+                                  );
+                                },
+                              ),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: DotsIndicator(
+                                  dotsCount: dotsCount,
+                                  position: _currentPage,
+                                  decorator: const DotsDecorator(
+                                    activeColor: Colors.blue,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      HouseSection(
+                          userId: _userId,
+                          title: 'All Houses',
+                          housesList: _filteredHousesList,
+                          flex: 650,
+                          filter: true,
+                          searchController: _searchController,
+                          houseListPresenter: houseListPresenter,
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                )
+            ]
           )
-          ]
         ),
       );
     } else {
@@ -192,7 +259,7 @@ class HouseSection extends StatelessWidget {
     required String title,
     required String? userId,
     required List<HouseModelUpdate>? housesList,
-    required int flex,
+    required double flex,
     required bool filter,
     required TextEditingController searchController,
     required HouseListPresenter houseListPresenter,
@@ -206,31 +273,28 @@ class HouseSection extends StatelessWidget {
   final String? _userId;
   final String _title;
   final List<HouseModelUpdate>? _housesList;
-  final int _flex;
+  final double _flex;
   final bool _filter;
   final TextEditingController _searchController;
   final HouseListPresenter _houseListPresenter;
 
-  Future<void> _refresh() async {
-    _houseListPresenter.refreshData(_userId, null);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      flex: _flex,
-      fit: FlexFit.tight,
-      child: RefreshIndicator(
-        onRefresh: _refresh,
-        child: Column(
-          children: [
-            Text(
-              _title,
-              style: const TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-            ),
-            SearchField(searchController: _searchController),
-            Row(
+    return SizedBox(
+      height: _flex,
+      child: Column(
+        children: [
+          Text(
+            _title,
+            style: const TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+          Visibility(
+            visible: _title == 'All Houses',
+            child: SearchField(searchController: _searchController)),
+          Visibility(
+            visible: _title == 'All Houses',
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
@@ -259,12 +323,12 @@ class HouseSection extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: HouseElements(houseList: _housesList, houseListPresenter: _houseListPresenter),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: HouseElements(houseList: _housesList, houseListPresenter: _houseListPresenter),
+          ),
+        ],
       ),
     );
   }
