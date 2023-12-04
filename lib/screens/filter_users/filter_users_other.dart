@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../enum/feature_enum.dart';
 import '../../models/user/query_filter_user.dart';
 import '../../models/user/query_likes_user.dart';
+import '../../repository/features_repository.dart';
 import '../../widgets/drawer.dart';
 import '../user_list.dart';
 
@@ -25,7 +27,7 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
   RestorableTextEditingController workFromHomeController = RestorableTextEditingController();
   RestorableTextEditingController sleepTimeController = RestorableTextEditingController();
   RestorableTextEditingController externalPeopleController = RestorableTextEditingController();
-
+  final FeatureRepository featureRepository= FeatureRepository();
 @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -183,6 +185,7 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
               ),
               ElevatedButton(
                 onPressed: () {
+                  featureRepository.createFeature(Feature.filtroUsuario);
                   String pet = petController.value.text;
                   UserFilter().setPetPreference(pet);
                   bool? pet_did=UserFilter().getPetPreference();

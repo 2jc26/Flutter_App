@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:giusseppe_flut/storage/storage_adapters/file_manager.dart';
 import '../models/user/user_model.dart';
 import '../service/connectivity_manager_service.dart';
@@ -87,7 +88,7 @@ class UserRepository {
     try {
       final user = await fileManager.read(File('${FileManager.directory.path}/user.json'));
       if (user != null) {
-        return UserModel.fromJson({...user, 'id': id, 'username': username, 'password': password});
+        return await compute(_parseUserModel, user);
       }
       return null;
     } catch (error) {
@@ -99,7 +100,7 @@ class UserRepository {
     try {
       final user = await fileManager.read(File('${FileManager.directory.path}/user.json'));
       if (user != null) {
-        return UserModel.fromJson({...user});
+        return await compute(_parseUserModel, user);
       }
       return null;
     } catch (error) {
@@ -157,4 +158,7 @@ class UserRepository {
 
 
 
+}
+UserModel _parseUserModel(dynamic user) {
+  return UserModel.fromJson({...user});
 }

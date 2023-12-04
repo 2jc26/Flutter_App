@@ -23,8 +23,6 @@ class UserListPresenter {
 
   void getAllUsers() async {
     try {
-      var aaa= UserFilter().toJson();
-      var aws=aaa["lies_pett"];
       List<UserModel> users = [];
       users = await userRepository.getAllUsersByPreferences();
       usersList = users;

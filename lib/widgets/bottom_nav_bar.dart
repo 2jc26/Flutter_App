@@ -3,8 +3,16 @@ import 'package:giusseppe_flut/screens/house_list.dart';
 import 'package:giusseppe_flut/screens/user_list.dart';
 import 'package:giusseppe_flut/screens/user_recomendation_ubication.dart';
 
+import '../enum/feature_enum.dart';
+import '../presenter/drawer_presenter.dart';
+import '../screens/principal.dart';
+import '../screens/profile.dart';
+import '../storage/providers/id_provider.dart';
+import 'drawer.dart';
+
 class BottomNavBar extends StatefulWidget {
   final int index;
+
 
   const BottomNavBar({super.key, required this.index});
 
@@ -12,16 +20,29 @@ class BottomNavBar extends StatefulWidget {
   _BottomNavBarState createState() => _BottomNavBarState();
 }
 
-class _BottomNavBarState extends State<BottomNavBar> {
+class _BottomNavBarState extends State<BottomNavBar> implements CustomDrawerView {
   int _currentIndex = 0;
+  final DrawerPresenter drawerPresenter = DrawerPresenter();
+  final IdProvider idProvider = IdProvider();
+  late String id='';
 
   @override
   void initState() {
-    setState(() {
+    setState(()  {
       _currentIndex = widget.index;
     });
-    super.initState();
   }
+
+  Future<String> giveId() async {
+    id= await idProvider.getId() ?? '';
+    return id;
+  }
+  @override
+  void refreshId(String id) {
+    this.id=id;
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,36 +77,49 @@ class _BottomNavBarState extends State<BottomNavBar> {
     });
     switch (index) {
       case 0:
-        // Navigator.push(
-        //   context, // Usar el contexto personalizado
-        //   MaterialPageRoute(builder: (context) => const Home()),
-        // );
+        giveId().then((userId) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PrincipalView(userId: userId)),
+          );
+        });
         break;
       case 1:
+        drawerPresenter.addUse(Feature.filtroUsuario);
         Navigator.push(
           context, // Usar el contexto personalizado
           MaterialPageRoute(builder: (context) => UserList()),
         );
         break;
       case 2:
+        drawerPresenter.addUse(Feature.localizacionUsuario);
         Navigator.push(
           context, // Usar el contexto personalizado
           MaterialPageRoute(builder: (context) => LocationPermissionView()),
         );
         break;
       case 3:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const HouseList(userId: '', houseFilters: null)),
-        );
+        giveId().then((userId) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HouseList(userId: userId, houseFilters: null)),
+          );
+        });
         break;
       case 4:
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (customDrawerContext) => profile()),
-        // );
+        Navigator.push(
+           context,
+           MaterialPageRoute(builder: (customDrawerContext) => profile()),
+         );
         break;
     }
 
   }
+
+  @override
+  void refreshImage(String image) {
+    // TODO: implement refreshImage
+  }
+
+
 }

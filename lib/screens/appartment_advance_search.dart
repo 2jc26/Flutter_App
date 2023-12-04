@@ -5,6 +5,9 @@ import 'package:giusseppe_flut/presenter/house_search_presenter.dart';
 import 'package:giusseppe_flut/screens/house_list.dart';
 import 'package:giusseppe_flut/widgets/drawer.dart';
 
+import '../enum/feature_enum.dart';
+import '../repository/features_repository.dart';
+
 class AppartmentAdvanceSearch extends StatefulWidget {
   const AppartmentAdvanceSearch({
     Key? key,
@@ -40,6 +43,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
   TextEditingController roomsNumberontroller = TextEditingController();
   TextEditingController roomAreaController = TextEditingController();
   TextEditingController bathroomAreaController = TextEditingController();
+  final FeatureRepository featureRepository= FeatureRepository();
 
   // Servicee
   bool _isLaundrySelected = false;
@@ -409,7 +413,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
   Widget _filterButton() {
     return ElevatedButton(
       onPressed: () {
-        
+        featureRepository.createFeature(Feature.filtroUsuario);
         HouseSearchingModelUpdate filter = HouseSearchingModelUpdate(
           city: cityController.text,
           neighborhood: neighborhoodController.text,
