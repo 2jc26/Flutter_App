@@ -3,6 +3,7 @@ import "package:flutter/services.dart";
 import "package:giusseppe_flut/screens/appartment_advance_search.dart";
 import "package:giusseppe_flut/screens/roomie_detail.dart";
 import "package:flutter_rating_bar/flutter_rating_bar.dart";
+import "package:giusseppe_flut/widgets/custom_app_bar.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 
 
@@ -28,22 +29,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffDAE3E5),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF2E5EAA),
-        title: Text(
-          widget.title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 24,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(),
       // drawer: CustomDrawer(customDrawerContext: context),
       body: SingleChildScrollView(
         child: Column(
@@ -58,7 +44,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
-                      color: Color(0xFF2E5EAA),
+                      color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -136,7 +122,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: const Color(0xFF2E5EAA), // Border color
+                            color: const Color(0xFF2c595b), // Border color
                             width: 2.0, // Border width
                           ),
                           borderRadius:
@@ -149,7 +135,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                             const Text(
                                 "Rating Score",
                                 style: TextStyle(
-                                  color: Color(0xFF2E5EAA),
+                                  color: Color(0xFF2c595b),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -160,7 +146,7 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                                 Icons.star,
                                 color: Color(0xFFEDF9B9),
                               ),
-                              unratedColor: const Color(0xFF2E5EAA),
+                              unratedColor: const Color(0xFF2c595b),
                               onRatingUpdate: (rating) => setState(() {
                                 ratingVal = rating;
                               }),
@@ -188,12 +174,12 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                             Text(
                               "Advance Search",
                               style: TextStyle(
-                                color: Color(0xFF2E5EAA),
+                                color: Color(0xFF2c595b),
                               ),
                             ),
                             Icon(
                               Icons.arrow_downward,
-                              color: Color(0xFF2E5EAA),
+                              color: Color(0xFF2c595b),
                             ),
                           ],
                         ),

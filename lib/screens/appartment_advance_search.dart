@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_search_presenter.dart';
 import 'package:giusseppe_flut/screens/house_list.dart';
+import 'package:giusseppe_flut/widgets/custom_app_bar.dart';
 import 'package:giusseppe_flut/widgets/drawer.dart';
 
 import '../enum/feature_enum.dart';
@@ -63,22 +64,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
 
     return Scaffold(
       backgroundColor: const Color(0xffDAE3E5),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF2E5EAA),
-        title: Text(
-          widget.title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 24,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(),
       // drawer: CustomDrawer(customDrawerContext: context),
       body: SingleChildScrollView(
         child: Column(
@@ -102,7 +88,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: <Widget>[
-                  const Text("Type of House", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                  const Text("Type of House", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2e5eaa)),),
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -238,7 +224,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: Colors.blue,
+                  color: const Color(0xFF2c595b),
                   width: 2.0,
                 ),
               ),
@@ -247,7 +233,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Services", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                    const Text("Services", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2e5eaa)),),
                     createCustomCheckbox('Laundry Area', _isLaundrySelected, () {
                       setState(() {
                         _isLaundrySelected = !_isLaundrySelected;
@@ -277,7 +263,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: Colors.blue,
+                  color: const Color(0xFF2c595b),
                   width: 2.0,
                 ),
               ),
@@ -286,7 +272,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Others", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                    const Text("Others", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2e5eaa)),),
                     createCustomCheckbox('Elevator', _isElevatorSelected, () {
                       setState(() {
                         _isElevatorSelected = !_isElevatorSelected;
@@ -443,22 +429,15 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
           builder: (context) => HouseList(userId: widget.userId, houseFilters: filter),
         ));
       },
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        backgroundColor: const Color(0xFF2E5EAA),
-        foregroundColor: const Color(0xFFF2F4F6),
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        elevation: 10,
-        shadowColor: Colors.black,
-      ),
       child: const SizedBox(
         width: double.infinity,
         child: Text(
           "Search",
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(
+            fontSize: 20,
+            color: Color(0xFF2c595b)  
+          ),
         ),
       ),
     );
