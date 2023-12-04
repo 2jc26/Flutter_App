@@ -131,7 +131,6 @@ class HouseDaoFireStore extends HouseDao {
         String description = desc;
         descriptions.add(description);
       }
-
       if (querySnapshot.isEmpty) {
         return [];
       } else {

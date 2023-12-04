@@ -11,6 +11,8 @@ import '../storage/providers/id_provider.dart';
 import '../storage/providers/nickname_provider.dart';
 import '../storage/providers/password_provider.dart';
 import '../storage/storage_adapters/custom_cache_manager.dart';
+import '../widgets/bottom_nav_bar.dart';
+import '../widgets/custom_app_bar.dart';
 
 class profile extends StatefulWidget {
   const profile({super.key});
@@ -40,22 +42,8 @@ class _profileState extends State<profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF2E5EAA),
-        title: const Text(
-          "Account",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(),
+      bottomNavigationBar: const BottomNavBar(index: 1),
       // drawer: CustomDrawer(customDrawerContext: context),
       body: Column(
         children: [
