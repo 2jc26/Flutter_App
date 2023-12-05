@@ -27,6 +27,8 @@ class _UserListState extends State<UserList> implements UserListView {
   final UserListPresenter userListPresenter = UserListPresenter();
   List<UserModel> _userList = [];
   double average = 0.0;
+  int _numberPage = 0;
+  bool actual = false;
   InformationCardUser Function(BuildContext, int) _itemBuilder(
       List<UserModel> users) {
     return (BuildContext context, int index) => InformationCardUser(
@@ -59,6 +61,20 @@ class _UserListState extends State<UserList> implements UserListView {
   }
 
   @override
+  void refreshNumber(int number) {
+    setState(() {
+      _numberPage = number;
+    });
+  }
+
+  @override
+  void acutalized(bool value) {
+    setState(() {
+      actual = value;
+    });
+  }
+
+  @override
   void initState() {
     super.initState();
     userListPresenter.setUserPreferences();
@@ -67,6 +83,7 @@ class _UserListState extends State<UserList> implements UserListView {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: CustomAppBar(),
       bottomNavigationBar: const BottomNavBar(index: 1),
@@ -156,7 +173,46 @@ class _UserListState extends State<UserList> implements UserListView {
           WidgetConditions(
               userListPresenter: userListPresenter,
               connectivity: connectivity,
-              users: _userList)
+              users: _userList),
+          Padding(
+            padding: const EdgeInsets.only(left:8.0),
+            child: SizedBox(
+                width: screenSize.width,
+                height: 50,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _numberPage,
+                  itemBuilder: (BuildContext context, int index) {
+                    // Agrega un GestureDetector para permitir clics en cada elemento
+                    return GestureDetector(
+                      onTap: () {
+                        if (actual == false) {
+                          actual = true;
+                          userListPresenter.setUserPreferences(skip: index * 5, limit: 5);
+                        }
+                      },
+                      child: Container(
+                        width: 50, // Ajusta el ancho del contenedor según tus necesidades
+                        margin: const EdgeInsets.all(5.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.blue, // Color del borde del contenedor
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text(
+                            (index + 1).toString(), // Números del 1 al _number
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+          ),
+          
           /*_userList!.isNotEmpty?
             Expanded(
               child: ListView.builder(

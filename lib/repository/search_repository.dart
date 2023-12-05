@@ -23,12 +23,24 @@ class SearchRepository {
     });
   }
 
-  Future<List<HouseModelUpdate>> getSimilarFilteredHouses(HouseSearchingModelUpdate houseFilters) async {
+  Future<List<HouseModelUpdate>> getSimilarFilteredHouses(HouseSearchingModelUpdate houseFilters, {int skip = 0, int limit= 5}) async {
     try {
       if(connectivity) {
-        return await houseDao.getHousesByFilters(houseFilters);
+        return await houseDao.getHousesByFilters(houseFilters, skip: skip, limit: limit);
       } else {
         return []; // TODO: remove and add local/cache behavior
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<int> getLenght(HouseSearchingModelUpdate? houseFilters){
+    try {
+      if(connectivity) {
+        return houseDao.getLenghtFilters(houseFilters);
+      } else {
+        return Future.value(0);
       }
     } catch (error) {
       rethrow;

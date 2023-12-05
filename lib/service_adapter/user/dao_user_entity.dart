@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -126,10 +127,10 @@ class UserDaoFireStore extends UserDao{
 
   }
 
-  Future<List<UserModel>> getUsersByPreferences() async {
+  Future<List<UserModel>> getUsersByPreferences({int skip=0, int limit=5}) async {
     try {
       List<UserModel> users = [];
-      final querySnapshot = await BackendService().postAll("users/filtered", UserFilter());
+      final querySnapshot = await BackendService().postAll("users/filtered", UserFilter(), skip: skip, limit: limit);
       if (querySnapshot.isNotEmpty) {
         users = await compute(parseObjects, querySnapshot);
       }
@@ -137,6 +138,22 @@ class UserDaoFireStore extends UserDao{
     } catch (error) {
       if (kDebugMode) {
         print("Error fetching users by searching: $error");
+      }
+      rethrow;
+    }
+  }
+
+  Future<int> getLenght() async {
+    try {
+      final message = await BackendService().postTot("total/users", UserFilter());
+      final decodeMessage = json.decode(message);
+      if (decodeMessage['message'] != 'Total Users') {
+        throw decodeMessage['message'];
+      }
+      return decodeMessage['count'];
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error searching for users: $error");
       }
       rethrow;
     }

@@ -241,7 +241,7 @@ class _LoginState extends State<Login> {
 
   Widget _extraText() {
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-      return Row(
+      return Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ElevatedButton(
@@ -283,16 +283,7 @@ class _LoginState extends State<Login> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-          const Text(
-            "Forget Details?",
-            textAlign: TextAlign.right,
-            style: TextStyle(
-              fontSize: 10,
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          )
         ],
       );
     });
