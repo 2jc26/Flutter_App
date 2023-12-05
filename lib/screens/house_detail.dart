@@ -2,11 +2,13 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:giusseppe_flut/presenter/house_detail_presenter.dart';
+import 'package:giusseppe_flut/screens/review_list.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:giusseppe_flut/widgets/cache_network_image.dart';
+import 'package:giusseppe_flut/widgets/custom_app_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import '../models/house/house_model_update.dart';
-import '../widgets/drawer.dart';
 
 class HouseDetailView {
   void refreshHouseDetailView(HouseModelUpdate house) {}
@@ -23,8 +25,11 @@ class HouseDetail extends StatefulWidget {
 
 class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
   HouseModelUpdate? _house;
-  String? _mainImg;
   final HouseDetailPresenter houseDetailPresenter = HouseDetailPresenter();
+
+  // Images
+  PageController _pageController = PageController();
+  int _currentPage = 0;
 
   @override
   void refreshHouseDetailView(HouseModelUpdate house) {
@@ -37,11 +42,18 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
   void initState() {
     super.initState();
     _house = widget.house;
-    _mainImg = widget.house.images[0];
+    _pageController.addListener(() {
+      setState(() {
+        _currentPage = _pageController.page?.round() ?? 0;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+
+    double screenWidth = MediaQuery.of(context).size.width;
+
     Marker newMarker = Marker(
       markerId: const MarkerId('uniqueMarkerId'),
       position: LatLng(_house!.latitude, _house!.longitude),
@@ -49,140 +61,124 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
 
     if (_house != null) {
       return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF2E5EAA),
-          title: const Text(
-            'Senehouse',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          centerTitle: true,
-        ),
-        // drawer: CustomDrawer(customDrawerContext: context),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Text at the top
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                _house!.name,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            // Square Big Image
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-              child: Container(
-                width: double.infinity,
-                height: 180,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    width: 6.0,
-                  ),
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: ChNetworkImage(
-                    url: _mainImg!,
-                    height: 180,
-                    width: double.infinity,
-                    cacheheight: 150,
-                    cachewidth: 350),
-              ),
-            ),
-            const SizedBox(height: 5),
-            // Horizontal Scrollable Row of Images with padding
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
+        appBar: CustomAppBar(),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SectionTitle(title: _house!.name),
+              SizedBox(
+                height: 200, // Set the fixed height
+                child: Stack(
                   children: [
-                    Container(
-                      width: MediaQuery.of(context)
-                          .size
-                          .width, // Set the width to screen width
-                      height: 100,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: PageView.builder(
+                        controller: _pageController,
                         itemCount: _house!.images.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          EdgeInsets padding = const EdgeInsets.only(left: 10.0);
-
-                          if (index == _house!.images.length - 1) {
-                            padding = padding.copyWith(right: 40.0);
-                          }
-                          
-
-                          return Padding(
-                            padding: padding,
-                            child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _mainImg = _house!.images[index];
-                                  });
-                                },
-                                child: ChNetworkImage(
-                                    url: _house!.images[index],
-                                    height: 100,
-                                    width: 100,
-                                    cacheheight: 100,
-                                    cachewidth: 100)),
+                        itemBuilder: (context, index) {
+                          return ChNetworkImage(
+                            url: _house!.images[index],
+                            height: 200,
+                            width: screenWidth, // Set width to screen width
+                            cacheheight: 200,
+                            cachewidth: screenWidth.toInt(),
                           );
                         },
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: DotsIndicator(
+                        dotsCount: _house!.images.length,
+                        position: _currentPage,
+                        decorator: const DotsDecorator(
+                          activeColor: Colors.blue,
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-            // Details text
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: Text(
-                'Details',
-                style: TextStyle(
-                  fontSize: 18, // Adjust font size as needed
-                  fontWeight: FontWeight.bold,
+              const SectionTitle(title: "Description"),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Container(
+                  width: double.infinity,
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(_house!.description),
+                    ),
+                  ),
                 ),
               ),
-            ),
-            // Expansions
-            Flexible(
-              flex: 1,
-              child: ListView.builder(
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return DescriptionCard(house: _house);
-                    } else if (index == 1) {
-                      if (ConnectivityManagerService().connectivity == true) {
-                        return LocationCard(house: _house, newMarker: newMarker);
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    } else {
-                      return AmenitiesCard(house: _house);
-                    }
-                  }),
-            ),
-          ],
+              const SectionTitle(title: "Location"),
+              Visibility(
+                visible: ConnectivityManagerService().connectivity == true,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Card(
+                    child: SizedBox(
+                      height: 200,
+                      child: GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(_house!.latitude, _house!.longitude),
+                          zoom: 15,
+                        ),
+                        markers: {newMarker},
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: ConnectivityManagerService().connectivity == false,
+                child: const Center(
+                  child: Text(
+                    "No map - No internet connection",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Container(
+                    width: double.infinity,
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          _house!.address,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          )
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SectionTitle(title: "Included Amenities"),
+              FeatureTable(house: _house!),
+              Row(
+                children: [
+                  Button(title: 'Reviews', houseId: widget.house.id),
+                  const Button(title: "I'm Interested"),
+                ]
+              )
+            ],
+          ),
         ),
-
-        
-
-        // Botón Abajo
-        bottomNavigationBar: const Button(),
       );
     } else {
       return const Scaffold(
@@ -194,239 +190,26 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
   }
 }
 
-class BigImage extends StatelessWidget {
-  const BigImage({super.key, required this.getImageURL});
-
-  final Future<Uint8List?> Function() getImageURL;
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<Uint8List?>(
-      future: getImageURL(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la imagen.
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else if (snapshot.hasData) {
-          return Image.memory(
-            snapshot.data!,
-            width: double.infinity,
-            fit: BoxFit.cover,
-          );
-        } else {
-          return Text('No image available'); // Mostrar algo si no hay imagen.
-        }
-      },
-    );
-  }
-}
-
-class DescriptionCard extends StatelessWidget {
-  const DescriptionCard({
+class SectionTitle extends StatelessWidget {
+  const SectionTitle({
     super.key,
-    required HouseModelUpdate? house,
-  }) : _house = house;
+    required String title,
+  }) : _title = title;
 
-  final HouseModelUpdate? _house;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: Theme.of(context).colorScheme.primary,
-      child: ExpansionTile(
-        title: Text(
-          'Description',
-          style: TextStyle(
-            color: Theme.of(context)
-                .colorScheme
-                .tertiary, // Set the text color here
-          ),
-        ),
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
-            child: Text(
-              _house!.description,
-              style: TextStyle(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .secondary, // Set the text color here
-                  fontSize: 16.0),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class AmenitiesCard extends StatelessWidget {
-  const AmenitiesCard({
-    super.key,
-    required HouseModelUpdate? house,
-  }) : _house = house;
-
-  final HouseModelUpdate? _house;
+  final String _title;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Theme.of(context).colorScheme.primary,
-      child: ExpansionTile(
-        title: Text(
-          'Included Amenities',
-          style: TextStyle(
-            color: Theme.of(context)
-                .colorScheme
-                .tertiary, // Set the text color here
-          ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        _title,
+        style: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF2e5eaa)
         ),
-        children: <Widget>[
-          Padding(
-              padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
-              child: FeatureTable(
-                house: _house!,
-              )),
-        ],
-      ),
-    );
-  }
-}
-
-class LocationCard extends StatelessWidget {
-  const LocationCard({
-    super.key,
-    required HouseModelUpdate? house,
-    required this.newMarker,
-  }) : _house = house;
-
-  final HouseModelUpdate? _house;
-  final Marker newMarker;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: Theme.of(context).colorScheme.primary,
-      child: ExpansionTile(
-        title: Text(
-          'Location',
-          style: TextStyle(
-            color: Theme.of(context)
-                .colorScheme
-                .tertiary, // Set the text color here
-          ),
-        ),
-        children: <Widget>[
-          SizedBox(
-              width: 250,
-              height: 250,
-              child: GoogleMap(
-                mapType: MapType.hybrid,
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(
-                      _house!.latitude,
-                      _house!
-                          .longitude), // Cambia esto a las coordenadas deseadas
-                  zoom: 14,
-                ),
-                markers: {newMarker},
-              )),
-        ],
-      ),
-    );
-  }
-}
-
-class Button extends StatelessWidget {
-  const Button({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      child: SizedBox(
-        height: 56.0, // Set the desired height for your button
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              width: 300.0,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context)
-                      .colorScheme
-                      .primary, // Set the button color here
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        10.0), // Adjust the border radius as needed
-                  ),
-                ),
-                child: Text(
-                  "I'm Interested",
-                  style: TextStyle(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .background, // Set the text color here
-                      fontSize: 16.0),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SmallImage extends StatelessWidget {
-  const SmallImage({
-    super.key,
-    required this.getImageURL,
-  });
-
-  final Future<Uint8List?> Function() getImageURL;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 100, // Adjust the width as needed
-      height: 100, // Adjust the height as needed
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context).colorScheme.onPrimary, // Color of the border
-          width: 3.0,
-        ),
-        borderRadius:
-            BorderRadius.circular(12.0), // Radius of the border corners
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(6.0),
-        child: FutureBuilder<Uint8List?>(
-          future: getImageURL(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la imagen.
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (snapshot.hasData) {
-              return Image.memory(
-                snapshot.data!,
-                width: double.infinity,
-                height: 150,
-                fit: BoxFit.cover,
-              );
-            } else {
-              return const Text(
-                  'No image available'); // Mostrar algo si no hay imagen.
-            }
-          },
-        ),
+        textAlign: TextAlign.left,
       ),
     );
   }
@@ -514,8 +297,8 @@ class FeatureTable extends StatelessWidget {
               child: Center(
                 child: Text(
                   caracName,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
+                  style: const TextStyle(
+                    color: Color(0xFF2c595b),
                   ),
                 ),
               ),
@@ -524,8 +307,8 @@ class FeatureTable extends StatelessWidget {
               child: Center(
                 child: Text(
                   caracValue!,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
+                  style: const TextStyle(
+                    color: Color(0xFF2c595b),
                   ),
                 ),
               ),
@@ -535,11 +318,79 @@ class FeatureTable extends StatelessWidget {
       );
     }
 
-    return Table(
-      border: TableBorder.all(
-        color: Theme.of(context).colorScheme.tertiary,
+    return Padding(
+      padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
+      child: Table(
+        border: TableBorder.all(
+          color: Color(0xFF2c595b),
+        ),
+        children: tableRows,
       ),
-      children: tableRows,
+    );
+  }
+}
+
+class Button extends StatelessWidget {
+  const Button({super.key, required this.title, this.houseId});
+
+  final String title;
+
+  final String? houseId;
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      child: SizedBox(
+        height: 56.0, // Set the desired height for your button
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              width: 160.0,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (title == "I'm Interested") {
+                    Navigator.of(context).pop();
+                  } else if (title == "Reviews") {
+                    if (ConnectivityManagerService().connectivity == true) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ReviewList(
+                                  houseId: houseId ?? '',
+                                  userId: 'Mpat7dK8qrOtuyl0cynM')));
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title:
+                                const Text("There is no Internet Connection"),
+                            content: const Text(
+                                'This function only works with an internet connection. Please try again later.'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('Cerrar'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  }
+                },
+                child: Text(
+                  title,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

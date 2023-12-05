@@ -1,22 +1,29 @@
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:giusseppe_flut/auth/auth_cubit.dart';
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
-import 'package:giusseppe_flut/screens/InformationCardUser.dart';
 import 'package:giusseppe_flut/screens/appartment_filter.dart';
+import 'package:giusseppe_flut/screens/house_creation.dart';
 import 'package:giusseppe_flut/screens/house_detail.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:giusseppe_flut/screens/no_connectivity.dart';
+<<<<<<< HEAD
+=======
+import 'package:giusseppe_flut/widgets/bottom_nav_bar.dart';
+import 'package:giusseppe_flut/widgets/custom_app_bar.dart';
+import 'package:giusseppe_flut/widgets/info_card.dart';
+>>>>>>> origin/develop
 import 'package:giusseppe_flut/widgets/search_field.dart';
-import '../widgets/drawer.dart';
 
 class HouseListView {
   void refreshHouseListView(
       List<HouseModelUpdate> housesList,
       List<HouseModelUpdate> housesLikingList,
       List<HouseModelUpdate> housesSearchingList) {}
+
+  void refreshNumber(int number) {}
+  void acutalized(bool value) {}
 }
 
 class HouseList extends StatefulWidget {
@@ -35,6 +42,10 @@ class _HouseListState extends State<HouseList> implements HouseListView {
   late HouseListPresenter houseListPresenter;
 
   String? _userId;
+
+  int _numberPagin = 0;
+
+  bool actual = false;
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -81,8 +92,22 @@ class _HouseListState extends State<HouseList> implements HouseListView {
   }
 
   @override
+  void refreshNumber(int number) {
+    setState(() {
+      _numberPagin = number;
+    });
+  }
+
+  @override
+  void acutalized(bool value) {
+    setState(() {
+      actual = value;
+    });
+  }
+
+  @override
   void initState() {
-    // TODO: reemplazar por el id del usuario logueado del cache/local storage
+    
     _userId = widget.userId;
 
     _houseFilters = widget.houseFilters;
@@ -90,14 +115,28 @@ class _HouseListState extends State<HouseList> implements HouseListView {
     houseListPresenter = HouseListPresenter(widget.userId, widget.houseFilters);
 
     houseListPresenter.backView = this;
-    
+
     _searchController.addListener(_onSearchTextChanged);
+    _pageController.addListener(() {
+      setState(() {
+        _currentPage = _pageController.page?.round() ?? 0;
+      });
+    });
     super.initState();
   }
+
+  Future<void> _refresh() async {
+    houseListPresenter.refreshData(_userId, _houseFilters, skip: 0 * 5, limit: 5);
+  }
+
+  // Images
+  PageController _pageController = PageController();
+  int _currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
     
+<<<<<<< HEAD
     if ((_housesList!.isNotEmpty && _houseFilters == null) || (_housesSearchingList!.isNotEmpty && _houseFilters != null)) {
       return Scaffold(
         appBar: AppBar(
@@ -147,6 +186,140 @@ class _HouseListState extends State<HouseList> implements HouseListView {
     } else {
       if(ConnectivityManagerService().connectivity) {
         if(_housesList!.isEmpty && _houseFilters == null) {
+=======
+    final Size screenSize = MediaQuery.of(context).size;
+    int dotsCount = _housesLikingList!.length;
+
+    if(dotsCount == 0) {
+      dotsCount = 1;
+    }
+
+    if ((_housesList!.isNotEmpty && _houseFilters == null) || (_housesSearchingList!.isNotEmpty && _houseFilters != null)) {
+      return Scaffold(
+        appBar: CustomAppBar(),
+        bottomNavigationBar: const BottomNavBar(index: 3),
+        body: RefreshIndicator(
+          onRefresh: _refresh,
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                    children: [
+                      if (_houseFilters == null && _housesLikingList!.isNotEmpty)
+                        const SizedBox(height: 10),
+                      Visibility(
+                        visible: _houseFilters == null && _housesLikingList!.isNotEmpty,
+                        child: const Text(
+                          "Liking Houses",
+                          style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+                        )
+                      ),
+                      Visibility(
+                        visible: _houseFilters == null && _housesLikingList!.isNotEmpty && _housesLikingList!.isNotEmpty,
+                        child: SizedBox(
+                          height: 370, // Set the fixed height
+                          child: Stack(
+                            children: [
+                            PageView.builder(
+                                controller: _pageController,
+                                itemCount: _housesLikingList!.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      houseListPresenter.addVisitToHouse(_housesLikingList![index].id);
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => HouseDetail(house: _housesLikingList![index]),
+                                      ));
+                                    },
+                                    child: InfoCard(
+                                      name: _housesLikingList![index].name,
+                                      rating: _housesLikingList![index].rating,
+                                      address: _housesLikingList![index].address,
+                                      imageUrl: _housesLikingList![index].images[0],
+                                      imageWidth: 300,
+                                      imageHeight: 300,
+                                      padding: 40,
+                                    ),
+                                  );
+                                },
+                              ),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: DotsIndicator(
+                                  dotsCount: dotsCount,
+                                  position: _currentPage,
+                                  decorator: const DotsDecorator(
+                                    activeColor: Colors.blue,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      HouseSection(
+                          userId: _userId,
+                          title: 'All Houses',
+                          housesList: _filteredHousesList,
+                          flex: 600,
+                          filter: true,
+                          searchController: _searchController,
+                          houseListPresenter: houseListPresenter,
+                      ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.only(left:8.0),
+                        child: SizedBox(
+                            width: screenSize.width,
+                            height: 50,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _numberPagin,
+                              itemBuilder: (BuildContext context, int index) {
+                                // Agrega un GestureDetector para permitir clics en cada elemento
+                                return GestureDetector(
+                                  onTap: () {
+                                    if (actual == false) {
+                                      actual = true;
+                                      houseListPresenter.refreshData(_userId, _houseFilters, skip: index * 5, limit: 5);
+                                    }
+                                  },
+                                  child: Container(
+                                    width: 50, // Ajusta el ancho del contenedor según tus necesidades
+                                    margin: const EdgeInsets.all(5.0),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.blue, // Color del borde del contenedor
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        (index + 1).toString(), // Números del 1 al _number
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                      ),
+                    ],
+                  ),
+                )
+            ]
+          )
+        ),
+      );
+    } else {
+      if (ConnectivityManagerService().connectivity) {
+        if (_housesList!.isEmpty && _houseFilters == null) {
+>>>>>>> origin/develop
           return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
@@ -156,18 +329,24 @@ class _HouseListState extends State<HouseList> implements HouseListView {
           return const NoHousesSearch();
         }
       } else {
+<<<<<<< HEAD
         return const NoConnectivity();
+=======
+        return NoConnectivity(
+            presenter: houseListPresenter,
+            userId: _userId,
+            houseFilters: _houseFilters);
+>>>>>>> origin/develop
       }
     }
   }
 
   void openHouseDetail(HouseModelUpdate house) {
     Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HouseDetail(house: house),
-      )
-    );
+        context,
+        MaterialPageRoute(
+          builder: (context) => HouseDetail(house: house),
+        ));
   }
 }
 
@@ -179,63 +358,17 @@ class NoHousesSearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF2E5EAA),
-        title: const Text(
-          'Senehouse',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        centerTitle: true,
-      ),
-      drawer: CustomDrawer(customDrawerContext: context),
+      appBar: CustomAppBar(),
+      bottomNavigationBar: const BottomNavBar(index: 3),
       body: const Padding(
         padding: EdgeInsets.all(15),
         child: Text(
           "There are no houses matching your search",
           style: TextStyle(
-            fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black
-          ),
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
           textAlign: TextAlign.center,
         ),
       ),
-    );
-  }
-}
-
-class FilterButton extends StatelessWidget {
-  const FilterButton({
-    super.key,
-    required String? userId,
-    required TextEditingController searchController,
-  })  : _userId = userId,
-        _searchController = searchController;
-
-  final String? _userId;
-  final TextEditingController _searchController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SearchField(searchController: _searchController),
-        IconButton(
-          icon: const Icon(Icons.filter_list),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AppartmentFilter(userId: _userId!)),
-            );
-          },
-        ),
-      ],
     );
   }
 }
@@ -246,7 +379,7 @@ class HouseSection extends StatelessWidget {
     required String title,
     required String? userId,
     required List<HouseModelUpdate>? housesList,
-    required int flex,
+    required double flex,
     required bool filter,
     required TextEditingController searchController,
     required HouseListPresenter houseListPresenter,
@@ -260,16 +393,15 @@ class HouseSection extends StatelessWidget {
   final String? _userId;
   final String _title;
   final List<HouseModelUpdate>? _housesList;
-  final int _flex;
+  final double _flex;
   final bool _filter;
   final TextEditingController _searchController;
   final HouseListPresenter _houseListPresenter;
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      flex: _flex,
-      fit: FlexFit.tight,
+    return SizedBox(
+      height: _flex,
       child: Column(
         children: [
           Text(
@@ -277,8 +409,44 @@ class HouseSection extends StatelessWidget {
             style: const TextStyle(
                 fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
           ),
-          if (_filter)
-            FilterButton(userId: _userId!, searchController: _searchController),
+          Visibility(
+            visible: _title == 'All Houses',
+            child: SearchField(searchController: _searchController)),
+          Visibility(
+            visible: _title == 'All Houses',
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  child: const Text('Create New'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              HouseCreation(userId: _userId!)),
+                    );
+                  },
+                ),
+                const SizedBox(width: 10),
+                Visibility(
+                  visible: _filter,
+                  child: ElevatedButton(
+                    child: const Text('Filter'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                AppartmentFilter(userId: _userId!)),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
           Expanded(
             child: HouseElements(houseList: _housesList, houseListPresenter: _houseListPresenter),
           ),
@@ -289,11 +457,12 @@ class HouseSection extends StatelessWidget {
 }
 
 class HouseElements extends StatelessWidget {
-  const HouseElements({
-    super.key,
-    required List<HouseModelUpdate>? houseList,
-    required HouseListPresenter houseListPresenter
-  }) : _houseList = houseList, _houseListPresenter = houseListPresenter;
+  const HouseElements(
+      {super.key,
+      required List<HouseModelUpdate>? houseList,
+      required HouseListPresenter houseListPresenter})
+      : _houseList = houseList,
+        _houseListPresenter = houseListPresenter;
 
   final List<HouseModelUpdate>? _houseList;
   final HouseListPresenter _houseListPresenter;
@@ -304,13 +473,24 @@ class HouseElements extends StatelessWidget {
       itemCount: _houseList?.length,
       itemBuilder: ((context, index) {
         return GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => HouseDetail(house: _houseList![index]),
+            onTap: () {
+              _houseListPresenter.addVisitToHouse(_houseList![index].id);
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => HouseDetail(house: _houseList![index]),
+              ));
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: InfoCard(
+                name: _houseList![index].name,
+                rating: _houseList![index].rating,
+                address: _houseList![index].address,
+                imageUrl: _houseList![index].images[0],
+                imageWidth: 300,
+                imageHeight: 300,
+                padding: 40,
+              ),
             ));
-          },
-          child: InformationCardUser(url: _houseList![index].images[0], stars: _houseList![index].rating, text: _houseList![index].name),
-        );
       }),
     );
   }

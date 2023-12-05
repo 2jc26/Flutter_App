@@ -1,59 +1,48 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geocoding/geocoding.dart'; // Importa geocoding para convertir direcciones en coordenadas
+import 'package:geocoding/geocoding.dart';
 
-import "package:giusseppe_flut/widgets/drawer.dart";
 import '../../models/user/query_filter_user.dart';
-import '../../models/user/query_likes_user.dart';
+import '../../service/connectivity_manager_service.dart';
+import '../../widgets/bottom_nav_bar.dart';
+import '../../widgets/custom_app_bar.dart';
 import 'filter_users_other.dart';
-import 'package:csc_picker/csc_picker.dart';
 
 class FilterUsersLocations extends StatefulWidget {
-
   FilterUsersLocations({super.key});
 
   @override
   _FilterUsersLocationsState createState() => _FilterUsersLocationsState();
-
 }
 
-class _FilterUsersLocationsState extends State<FilterUsersLocations> with RestorationMixin{
-  RestorableTextEditingController cityController = RestorableTextEditingController();
-  RestorableTextEditingController neighborhoodController = RestorableTextEditingController();
+class _FilterUsersLocationsState extends State<FilterUsersLocations>
+    with RestorationMixin {
+  RestorableTextEditingController cityController =
+      RestorableTextEditingController();
+  RestorableTextEditingController neighborhoodController =
+      RestorableTextEditingController();
   LatLng markerLocation = LatLng(4.6097, -74.0817);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF2E5EAA),
-        title: const Text(
-          "Search Roommate",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+        appBar: CustomAppBar(),
+        bottomNavigationBar: const BottomNavBar(index: 1),
+        // drawer: CustomDrawer(customDrawerContext: context),
+        body: SingleChildScrollView(
+          child: BodyLocation(
+            cityController: cityController,
+            neighborhoodController: neighborhoodController,
+            markerLocation: markerLocation,
+            updateMarkerLocation: (LatLng location) {
+              setState(() {
+                markerLocation = location;
+              });
+            },
           ),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        centerTitle: true,
-      ),
-      drawer: CustomDrawer(customDrawerContext: context),
-      body: SingleChildScrollView( child:BodyLocation(
-        cityController: cityController,
-        neighborhoodController: neighborhoodController,
-        markerLocation: markerLocation,
-        updateMarkerLocation: (LatLng location) {
-          setState(() {
-            markerLocation = location;
-          });
-        },
-      ),
-    )
-    );
+        ));
   }
 
   @override
@@ -65,6 +54,7 @@ class _FilterUsersLocationsState extends State<FilterUsersLocations> with Restor
     registerForRestoration(neighborhoodController, "neighborhood");
   }
 }
+
 class BodyLocation extends StatefulWidget {
   FilterUsersOthers filterUsersOthers;
   RestorableTextEditingController cityController;
@@ -79,8 +69,7 @@ class BodyLocation extends StatefulWidget {
     required this.markerLocation,
     required this.updateMarkerLocation,
     FilterUsersOthers? filterUsersOthers,
-  }) :
-        filterUsersOthers = filterUsersOthers ?? FilterUsersOthers(),
+  })  : filterUsersOthers = filterUsersOthers ?? FilterUsersOthers(),
         super(key: key);
 
   @override
@@ -90,46 +79,71 @@ class BodyLocation extends StatefulWidget {
 class _BodyLocation extends State<BodyLocation> {
   String localidadValue = "Seleccione una opción";
   String ciudadValue = "Bogotá";
+  late StreamSubscription<bool> connectionSubscription;
+  bool connectivity = ConnectivityManagerService().connectivity;
+
+  _BodyLocation() {
+    initializeConnectivity();
+  }
+  Future<void> initializeConnectivity() async {
+    connectionSubscription =
+        ConnectivityManagerService().connectionStatus.listen((isConnected) {
+      connectivity = isConnected;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        //const SizedBox(height: 16),
-        //Row(
-          //mainAxisAlignment: MainAxisAlignment.center,
-          //children: [
-            //RoundedButton(text: 'Location', onPressed: () {}),
-            //const SizedBox(width: 10),
-            //RoundedButton(text: 'Information', onPressed: () {}),
-          //],
-        //),
         const SizedBox(height: 20),
         CustomListField(
           hintText: 'Bogotá',
           selectedValue: ciudadValue,
           items: ['Bogotá'],
           onItemSelected: (String? value) {
-            setState(() =>ciudadValue =value!);
+            setState(() => ciudadValue = value!);
           },
         ),
         const SizedBox(height: 20),
         CustomListField(
           hintText: 'Selecciona una opción',
           selectedValue: localidadValue,
-          items: const ["Seleccione una opción","Usaquén", "Chapinero", "Santa Fe", "San Cristóbal", "Usme",
-            "Tunjuelito", "Bosa", "Kennedy", "Fontibón", "Engativá", "Suba",
-            "Barrios Unidos", "Teusaquillo", "Los Mártires", "Antonio Nariño",
-            "Puente Aranda", "La Candelaria", "Rafael Uribe Uribe",
-            "Ciudad Bolívar", "Sumapaz"],
+          items: const [
+            "Seleccione una opción",
+            "Usaquén",
+            "Chapinero",
+            "Santa Fe",
+            "San Cristóbal",
+            "Usme",
+            "Tunjuelito",
+            "Bosa",
+            "Kennedy",
+            "Fontibón",
+            "Engativá",
+            "Suba",
+            "Barrios Unidos",
+            "Teusaquillo",
+            "Los Mártires",
+            "Antonio Nariño",
+            "Puente Aranda",
+            "La Candelaria",
+            "Rafael Uribe Uribe",
+            "Ciudad Bolívar",
+            "Sumapaz"
+          ],
           onItemSelected: (String? value) async {
-            setState(() =>localidadValue =value!);
-            if (localidadValue!="Seleccione una opción" && ciudadValue!="Seleccione una opción"){
-              String query= "$localidadValue , $ciudadValue";
-              final locations = await GeocodingPlatform.instance.locationFromAddress(query);
+            setState(() => localidadValue = value!);
+            if (localidadValue != "Seleccione una opción" &&
+                ciudadValue != "Seleccione una opción" &&
+                connectivity) {
+              String query = "$localidadValue , $ciudadValue";
+              final locations =
+                  await GeocodingPlatform.instance.locationFromAddress(query);
               if (locations.isNotEmpty) {
-                final newLocation = LatLng(locations[0].latitude, locations[0].longitude);
+                final newLocation =
+                    LatLng(locations[0].latitude, locations[0].longitude);
                 widget.updateMarkerLocation(newLocation);
               }
             }
@@ -141,19 +155,27 @@ class _BodyLocation extends State<BodyLocation> {
           child: SizedBox(
             height: 400,
             width: 350,
-            child: GoogleMap(
-              mapType: MapType.terrain,
-              initialCameraPosition: CameraPosition(
-                target: widget.markerLocation,
-                zoom: 11,
-              ),
-              markers: {
-                Marker(
-                  markerId: MarkerId('selectedLocation'),
-                  position: widget.markerLocation,
-                ),
-              },
-            ),
+            child: connectivity
+                ? GoogleMap(
+                    mapType: MapType.terrain,
+                    initialCameraPosition: CameraPosition(
+                      target: widget.markerLocation,
+                      zoom: 11,
+                    ),
+                    markers: {
+                      Marker(
+                        markerId: MarkerId('selectedLocation'),
+                        position: widget.markerLocation,
+                      ),
+                    },
+                  )
+                : const Center(
+                    child: Text(
+                      'No map - No internet connection.',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
           ),
         ),
         const SizedBox(height: 16),
@@ -207,6 +229,7 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
+
 class SelectionList extends StatefulWidget {
   final String hintText;
   String selectedValue; // Removed 'final'
@@ -226,7 +249,6 @@ class SelectionList extends StatefulWidget {
 }
 
 class _SelectionList extends State<SelectionList> {
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -247,13 +269,11 @@ class _SelectionList extends State<SelectionList> {
   }
 }
 
-
 class CustomListField extends StatelessWidget {
   final String hintText;
   final String selectedValue;
   final List<String> items;
   final Function(String?) onItemSelected;
-
   const CustomListField({
     Key? key,
     required this.hintText,
@@ -313,7 +333,3 @@ class RoundedButton extends StatelessWidget {
     );
   }
 }
-
-
-
-

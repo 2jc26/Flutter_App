@@ -335,7 +335,7 @@ class _SignUpState extends State<SignUp> {
             fillColor: const Color(0XffEBEDF0),
             hintText: 'Fullname',
           ),
-          maxLength: 50,
+          maxLength: 25,
           validator: (value) =>
               state.isValidFullName ? null : 'Fullname is invalid',
           onChanged: (value) {
@@ -509,13 +509,13 @@ class _SignUpState extends State<SignUp> {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: const Text("No hay Conexión a una red"),
+                          title: const Text("There is no Internet Connection"),
                           content: const Text(
-                            'En este momento no hay conexión a internet. Está función solo funciona con conexión a internet, intente de nuevo más tarde.'
+                            'This function only works with an internet connection, please try again later.'
                           ),
                           actions: <Widget>[
                             TextButton (
-                              child: const Text('Cerrar'),
+                              child: const Text('Close'),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
@@ -567,7 +567,7 @@ class _SignUpState extends State<SignUp> {
           content: Text(message.replaceAll("Exception: ", "")),
           actions: <Widget>[
             TextButton(
-              child: const Text('Cerrar'),
+              child: const Text('Close'),
               onPressed: () {
                 Navigator.of(context).pop();
               },

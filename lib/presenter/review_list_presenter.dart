@@ -7,6 +7,7 @@ class ReviewListPresenter {
   final ReviewRepository reviewRepository = ReviewRepository();
   List<ReviewModel> reviewsList = [];
   String _raiting = '0';
+  int _number = 0;
 
   late ReviewsListView _view = ReviewsListView();
 
@@ -17,13 +18,16 @@ class ReviewListPresenter {
 
   }
 
-
-  void getAllReviews(String houseId) async {
+  void getAllReviews(String houseId, {int skip = 0, int limit = 5}) async {
     try {
-      final reviews = await reviewRepository.getAllReviews(houseId);
+      _number = await reviewRepository.getLenght(houseId);
+      _number = (_number/5).ceil();
+      final reviews = await reviewRepository.getAllReviews(houseId, skip: skip, limit: limit);
       if (reviews.isNotEmpty) {
         reviewsList = reviews;
         _view.refreshReviewListView(reviewsList);
+        _view.refreshNumber(_number);
+        _view.acutalized(false);
       }
     } catch (error) {
       rethrow;
@@ -34,6 +38,10 @@ class ReviewListPresenter {
     try {
       await reviewRepository.insertReview(houseId, userId, comment, rating);
       getAllReviews(houseId);
+<<<<<<< HEAD
+=======
+      putReview(houseId);
+>>>>>>> origin/develop
     } catch (error) {
       rethrow;
     }
@@ -43,7 +51,11 @@ class ReviewListPresenter {
     try {
       final responsRaiting = await reviewRepository.updateRaiting(houseId);
       if (responsRaiting != null) {
+<<<<<<< HEAD
         _raiting = responsRaiting.toString();
+=======
+        _raiting = responsRaiting.toStringAsFixed(2);
+>>>>>>> origin/develop
         _view.refreshRaiting(_raiting);
       }
     } catch (error) {
@@ -55,6 +67,7 @@ class ReviewListPresenter {
     _view = value;
     _view.refreshReviewListView(reviewsList);
     _view.refreshRaiting(_raiting);
+    _view.refreshNumber(_number);
   }
 
 }

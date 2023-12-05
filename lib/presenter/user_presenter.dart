@@ -18,26 +18,37 @@ class UserListPresenter {
   List<UserModel>? usersList = [];
   late UserListView _backView= UserListView();
   double average=0.0;
+  int _number = 0;
 
   UserListPresenter();
 
+<<<<<<< HEAD
   void getAllUsers() async {
+=======
+  void getAllUsers({int skip=0, int limit=5}) async {
+>>>>>>> origin/develop
     try {
       var aaa= UserFilter().toJson();
       var aws=aaa["lies_pett"];
       List<UserModel> users = [];
-      users = await userRepository.getAllUsersByPreferences();
+      _number = await userRepository.getLenght();
+      _number = (_number/5).ceil();
+      users = await userRepository.getAllUsersByPreferences(skip: skip, limit: limit);
       usersList = users;
       if (users.isNotEmpty) {
         average= await compute(getAverage, users);
       } else {
         average=0.0;
       }
+
       _backView.refreshUserListView(usersList!, average);
+      _backView.refreshNumber(_number);
+      _backView.acutalized(false);
     } catch (error) {
       rethrow;
     }
   }
+
   Stream<List<UserModel>> getUsersStreamByPreferences() {
     return ObjectBoxDao().getUsersStreamByPreferences();
   }
@@ -51,12 +62,15 @@ class UserListPresenter {
     _backView.refreshUserListView(usersList!,average);
   }
 
-  void setUserPreferences() {
-    getAllUsers();
+  void setUserPreferences({int skip=0, int limit=5}) {
+    getAllUsers(skip: skip, limit: limit);
   }
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/develop
 double getAverage(List<UserModel>list){
   double suma = 0;
   for (var element in list){

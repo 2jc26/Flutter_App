@@ -1,10 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:giusseppe_flut/app_navigator.dart';
 
 import 'package:giusseppe_flut/auth/auth_repository.dart';
+<<<<<<< HEAD
 import 'package:giusseppe_flut/screens/user_list.dart';
+=======
+import 'package:giusseppe_flut/screens/user_recomendation_ubication.dart';
+>>>>>>> origin/develop
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:get/get.dart';
 
@@ -25,6 +30,14 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+<<<<<<< HEAD
+=======
+
+  final now = DateTime.now();
+  if (kDebugMode) {
+    print(now);
+  }
+>>>>>>> origin/develop
   runApp(const MyApp());
   ConnectivityManagerService().initialize();
 }
@@ -60,11 +73,12 @@ class MyApp extends StatelessWidget {
         child:
         BlocProvider(
           create: (context) => SessionCubit(authRepo: context.read<AuthRepository>()),
-          child: AppNavigator(),
+          child: AppNavigator()//,AppNavigator()
         ),
       ),
     );
   }
+<<<<<<< HEAD
 }
 
 
@@ -91,3 +105,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }*/
+=======
+}
+>>>>>>> origin/develop

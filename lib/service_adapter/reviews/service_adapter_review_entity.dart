@@ -7,6 +7,7 @@ import 'package:giusseppe_flut/service/backend_service.dart';
 
 abstract class ReviewServiceAdapter {
   Future<List<ReviewModel>> getAllReviews(String houseId);
+  Future<List<ReviewModel>> getAllReviewsUser(String userId);
   Future<void> insertReview(String houseId, String userId, String comment, double rating);
   Future<void> updateRaiting(String houseId);
 }
@@ -14,8 +15,9 @@ abstract class ReviewServiceAdapter {
 class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
 
   @override
-  Future<List<ReviewModel>> getAllReviews(String houseId) async {
+  Future<List<ReviewModel>> getAllReviews(String houseId, {int skip = 0, int limit = 5}) async {
     try {
+<<<<<<< HEAD
       final dynamicReviews = await BackendService().getOneAll("reviews", houseId);
       // FIX this performance issue
       if (dynamicReviews != null && dynamicReviews is List) {
@@ -23,19 +25,37 @@ class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
           return ReviewModel.fromJson(review);
         }).toList();
         return reviews;
+=======
+      final dynamicReviews = await BackendService().getReviewsPaginated("reviews", houseId, skip, limit);
+      if (dynamicReviews.isNotEmpty) {
+        return await compute(parseObjects, dynamicReviews);
+>>>>>>> origin/develop
       } else {
-        print("Invalid or null dynamicReviews data");
         return [];
       }
     } catch (error) {
-      if (kDebugMode) {
-        print("Error fetching reviews: $error");
-      }
       rethrow;
     }
   }
 
   @override
+<<<<<<< HEAD
+=======
+  Future<List<ReviewModel>> getAllReviewsUser(String userId, {int skip = 0, int limit = 5}) async {
+    try {
+      final dynamicReviews = await BackendService().getReviewsPaginated("reviews/user", userId, skip, limit);
+      if (dynamicReviews.isNotEmpty) {
+        return await compute(parseObjects, dynamicReviews);
+      } else {
+        return [];
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  @override
+>>>>>>> origin/develop
   Future<void> insertReview(String houseId, String userId, String comment, double rating) async {
     try {
       final reviewSkeleton = {
@@ -58,10 +78,17 @@ class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
     try {
       final message = await BackendService().put("houses", {}, houseId);
       final decodeMessage = json.decode(message);
+<<<<<<< HEAD
       if (decodeMessage['message'] != 'Rating updated successfully') {
         throw decodeMessage['message'];
       }
       return decodeMessage['raiting'];
+=======
+      if (decodeMessage['message'] != 'Rating updated successfully' && decodeMessage['message'] != 'No reviews for this house') {
+        throw decodeMessage['message'];
+      }
+      return decodeMessage['raiting'].toDouble();
+>>>>>>> origin/develop
     } catch (error) {
       if (kDebugMode) {
         print("Error updating house: $error");
@@ -70,4 +97,45 @@ class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
     }
   }
 
+  Future<int> getLenght(String houseId) async {
+    try {
+      final message = await BackendService().getNum("total/reviews", houseId);
+      final decodeMessage = json.decode(message);
+      if (decodeMessage['message'] != 'Total Reviews') {
+        throw decodeMessage['message'];
+      }
+      return decodeMessage['count'];
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error searching for reviews: $error");
+      }
+      rethrow;
+    }
+  }
+
+  Future<int> getLenghtUser(String userId) async {
+    try {
+      final message = await BackendService().getNum("total/reviews/user", userId);
+      final decodeMessage = json.decode(message);
+      if (decodeMessage['message'] != 'Total Reviews') {
+        throw decodeMessage['message'];
+      }
+      return decodeMessage['count'];
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error searching for reviews: $error");
+      }
+      rethrow;
+    }
+  }
+
+}
+
+Future<List<ReviewModel>> parseObjects(List<dynamic> querySnapshot) async {
+  List<ReviewModel> reviews=[];
+  for (var review in querySnapshot) {
+    ReviewModel nuevaReview=ReviewModel.fromJson({...review});
+    reviews.add(nuevaReview);
+  }
+  return reviews;
 }

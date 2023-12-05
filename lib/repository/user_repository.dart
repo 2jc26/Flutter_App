@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:giusseppe_flut/storage/storage_adapters/file_manager.dart';
 import '../models/user/user_model.dart';
 import '../service/connectivity_manager_service.dart';
@@ -9,7 +10,6 @@ import '../service_adapter/user/dao_user_entity.dart';
 import '../storage/storage_adapters/Objectbox/ObjectBox.dart';
 
 class UserRepository {
-
   final UserDaoFireStore userDao= UserDaoFireStore();
   ObjectBoxDao instancia= ObjectBoxDao();
   FileManager fileManager = FileManager();
@@ -43,10 +43,11 @@ class UserRepository {
       rethrow;
     }
   }
-  Future<List<UserModel>> getAllUsersByPreferences() async {
+  Future<List<UserModel>> getAllUsersByPreferences({int skip=0, int limit=5}) async {
     try {
       if (connectivity){
-        List<UserModel> lista= await userDao.getUsersByPreferences();
+        userDao.updateUserPreferencesStats();
+        List<UserModel> lista= await userDao.getUsersByPreferences(skip: skip, limit: limit);
         for (var usuario in lista){
           bool condicion =instancia.verifyUserExist(usuario.id);
           if (!condicion){
@@ -55,7 +56,39 @@ class UserRepository {
         }
         return lista;
       }else{
-        return instancia.getUsersByPreferences();
+        return instancia.getUsersByPreferencesPagination(skip, limit);
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<List<UserModel>> getAllUsersByPreferencesPagination(int skip, int limit) async {
+    try {
+      if (connectivity) {
+        userDao.updateUserPreferencesStats();
+        List<UserModel> lista = await userDao.getUsersByPreferences();
+        for (var usuario in lista) {
+          bool condicion = instancia.verifyUserExist(usuario.id);
+          if (!condicion) {
+            instancia.addUser(usuario);
+          }
+        }
+        return lista;
+      } else {
+        return instancia.getUsersByPreferencesPagination(skip, limit);
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<int> getLenght(){
+    try {
+      if(connectivity) {
+        return userDao.getLenght();
+      } else {
+        return instancia.getUsersByPreferencesPaginationNumber();
       }
     } catch (error) {
       rethrow;
@@ -86,13 +119,27 @@ class UserRepository {
     try {
       final user = await fileManager.read(File('${FileManager.directory.path}/user.json'));
       if (user != null) {
-        return UserModel.fromJson({...user, 'id': id, 'username': username, 'password': password});
+        return await compute(_parseUserModel, user);
       }
       return null;
     } catch (error) {
       rethrow;
     }
   }
+
+  Future<UserModel?> getUserLocalFileLessArgs() async {
+    try {
+      final user = await fileManager.read(File('${FileManager.directory.path}/user.json'));
+      if (user != null) {
+        return await compute(_parseUserModel, user);
+      }
+      return null;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+
 
   Future<void> createFileUser(UserModel user) async {
     try {
@@ -110,7 +157,17 @@ class UserRepository {
     }
   }
 
-
+  Future<List<UserModel>> getTopUsers() async {
+    try {
+      if(connectivity) {
+        return await userDao.getTopUsers();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
 
   double getAverage(List<UserModel> list){
     double suma = 0;
@@ -130,6 +187,17 @@ class UserRepository {
     }
   }
 
+  Future<List<UserModel>> getDocumentsWithinRadiusPagination(double latitude, double longitude) async {
+    try {
+      return await userDao.getDocumentsWithinRadiusPagination(latitude,longitude);
+    } catch (error) {
+      rethrow;
+    }
+  }
 
 
+
+}
+UserModel _parseUserModel(dynamic user) {
+  return UserModel.fromJson({...user});
 }
