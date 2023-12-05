@@ -15,14 +15,10 @@ class UserListPresenterLocation {
   UserListPresenterLocation(){
 
   }
-
-
-
   void getNearUsers(double latitud, double longitud) async {
-
     try {
       List<UserModel>? users = [];
-      users = await userRepository.getDocumentsWithinRadius(latitud!,longitud!);
+      users = await userRepository.getDocumentsWithinRadiusPagination(latitud!,longitud!);
       if (users != null) {
         usersList = users;
         _backView.refreshUserListView(usersList!);

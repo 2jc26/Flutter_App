@@ -183,7 +183,6 @@ class _UserListState extends State<UserList> implements UserListView {
                   scrollDirection: Axis.horizontal,
                   itemCount: _numberPage,
                   itemBuilder: (BuildContext context, int index) {
-                    // Agrega un GestureDetector para permitir clics en cada elemento
                     return GestureDetector(
                       onTap: () {
                         if (actual == false) {
@@ -192,17 +191,17 @@ class _UserListState extends State<UserList> implements UserListView {
                         }
                       },
                       child: Container(
-                        width: 50, // Ajusta el ancho del contenedor según tus necesidades
+                        width: 50,
                         margin: const EdgeInsets.all(5.0),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Colors.blue, // Color del borde del contenedor
+                            color: Colors.blue,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Center(
                           child: Text(
-                            (index + 1).toString(), // Números del 1 al _number
+                            (index + 1).toString(),
                             style: const TextStyle(fontSize: 16),
                           ),
                         ),
@@ -212,57 +211,9 @@ class _UserListState extends State<UserList> implements UserListView {
                 ),
               ),
           ),
-          
-          /*_userList!.isNotEmpty?
-            Expanded(
-              child: ListView.builder(
-                itemCount: _userList?.length,
-                itemBuilder: ((context, index) {
-                  return InformationCardUser(
-                    url: _userList![index].image,
-                    stars: _userList![index].stars,
-                    text: _userList![index].full_name,
-                  );
-                }),
-              ),
-              ):const Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Text(
-                    "There are no users matching your search",
-                    style: TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),*/ //const NoUsersSearch(),
-          /*Expanded(
-            child: StreamBuilder<List<UserModel>>(
-                stream: userListPresenter.getUsersStreamByPreferences(),
-                builder: (context,snapshot){
-                    if (snapshot.hasData){
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: snapshot.hasData ? snapshot.data!.length: 0,
-                        itemBuilder: _itemBuilder(snapshot.data?? [])
-                      );
-                    } else{
-                      return const Center( child: Text("Conectate a internet"));
-                    }
-                },
-            )
-          ),*/
         ],
       ),
     );
-    /*else if (_userList!.isEmpty && _userList == null){
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    } else {
-      return const NoUsersSearch();
-    }*/
   }
 }
 

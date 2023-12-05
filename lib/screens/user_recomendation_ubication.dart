@@ -15,14 +15,15 @@ class LocationPermissionView extends StatefulWidget {
   _LocationPermissionViewState createState() => _LocationPermissionViewState();
 }
 
-class _LocationPermissionViewState extends State<LocationPermissionView> implements UserListViewLocation {
+class _LocationPermissionViewState extends State<LocationPermissionView>
+    implements UserListViewLocation {
   double? latitude;
   double? longitude;
   List<UserModel> _userList = [];
   UserListPresenterLocation userListPresenter = UserListPresenterLocation();
   late bool serviceEnabled = true;
   late Position _currentPosition;
-  String currectAddress ="";
+  String currectAddress = "";
 
   @override
   void initState() {
@@ -30,66 +31,46 @@ class _LocationPermissionViewState extends State<LocationPermissionView> impleme
     userListPresenter.backView = this;
     _getLocation();
   }
+
   _getLocation() async {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.location,
     ].request();
     var status = await Permission.location.status;
 
-    if(status.isGranted){
+    if (status.isGranted) {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       setState(() {
         latitude = position.latitude;
         longitude = position.longitude;
-      });
-      setState(() {
         serviceEnabled = true;
       });
       userListPresenter.getNearUsers(latitude!, longitude!);
-    }else if (status.isDenied){
+    } else if (status.isDenied) {
       LocationPermission permission = await Geolocator.requestPermission();
-      if(status.isGranted){
+      if (status.isGranted) {
         setState(() {
           serviceEnabled = true;
         });
-      }else{
+      } else {
         setState(() {
           serviceEnabled = false;
         });
       }
-    } else if (await Permission.location.isPermanentlyDenied){
+    } else if (await Permission.location.isPermanentlyDenied) {
       LocationPermission permission = await Geolocator.requestPermission();
-      if(status.isGranted){
+      if (status.isGranted) {
         setState(() {
           serviceEnabled = true;
         });
-      }else{
+      } else {
         setState(() {
           serviceEnabled = false;
         });
       }
       openAppSettings();
     }
-    /*permission = await Geolocator.checkPermission();
-*/
-
-    /*if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        setState(() {
-          serviceEnabled = false;
-        });
-      } else  {
-        setState(() {
-          serviceEnabled = true;
-        });
-      }
-    }
-    else {
-      serviceEnabled = true;
-    }*/
-
   }
 
   @override
@@ -101,51 +82,64 @@ class _LocationPermissionViewState extends State<LocationPermissionView> impleme
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
     if (!serviceEnabled) {
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(
-                'Por favor, acepta los permisos para utilizar la funcionalidad.'),
+              'Por favor, acepta los permisos para utilizar la funcionalidad.',
+            ),
           ),
         );
       });
     }
-
     return Scaffold(
       appBar: CustomAppBar(),
       bottomNavigationBar: const BottomNavBar(index: 2),
       // drawer: CustomDrawer(customDrawerContext: context),
       body: serviceEnabled
           ? Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('Latitud: $latitude'),
-            Text('Longitud: $longitude'),
-            const SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _userList.length,
-                itemBuilder: ((context, index) {
-                  return InformationCard(
-                    path: 'assets/images/house1.jpg',
-                    stars: _userList[index].stars,
-                    text: _userList[index].full_name,
-                  );
-                }),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+              _userList.isEmpty
+              ? const Column(children: [Text('No hay usuarios cerca de ti.')])
+                      : Column(
+                          children: [
+                            Text('Latitud: $latitude'),
+                            Text('Longitud: $longitude'),
+                            const SizedBox(height: 20),
+                            SizedBox(
+                                    width: screenSize.width,
+                                    height: 500,
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: _userList.length,
+                                      itemBuilder: ((context, index) {
+                                        return InformationCard(
+                                          path: 'assets/images/house1.jpg',
+                                          stars: _userList[index].stars,
+                                          text: _userList[index].full_name,
+                                        );
+                                      }),
+                                    ),
+                                  ),
+                          ],
+                        ),
+                ],
+              ),
+            )
+          : const Center(
+              child: Text(
+                'Necesitas permitir la ubicación para utilizar esta funcionalidad.',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
-          ],
-        ),
-      )
-          : Center(
-        child: Text(
-          'Necesitas permitir la ubicación para utilizar esta funcionalidad.',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
-      ),
     );
   }
 }

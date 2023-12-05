@@ -10,7 +10,6 @@ import '../service_adapter/user/dao_user_entity.dart';
 import '../storage/storage_adapters/Objectbox/ObjectBox.dart';
 
 class UserRepository {
-
   final UserDaoFireStore userDao= UserDaoFireStore();
   ObjectBoxDao instancia= ObjectBoxDao();
   FileManager fileManager = FileManager();
@@ -57,7 +56,7 @@ class UserRepository {
         }
         return lista;
       }else{
-        return instancia.getUsersByPreferences();
+        return instancia.getUsersByPreferencesPagination(skip, limit);
       }
     } catch (error) {
       rethrow;
@@ -89,7 +88,7 @@ class UserRepository {
       if(connectivity) {
         return userDao.getLenght();
       } else {
-        return Future.value(0);
+        return instancia.getUsersByPreferencesPaginationNumber();
       }
     } catch (error) {
       rethrow;
@@ -188,9 +187,9 @@ class UserRepository {
     }
   }
 
-  Future<List<UserModel>> getDocumentsWithinRadiusPagination(double latitude, double longitude, int skip, int limit) async {
+  Future<List<UserModel>> getDocumentsWithinRadiusPagination(double latitude, double longitude) async {
     try {
-      return await userDao.getDocumentsWithinRadiusPagination(latitude,longitude, skip, limit);
+      return await userDao.getDocumentsWithinRadiusPagination(latitude,longitude);
     } catch (error) {
       rethrow;
     }
