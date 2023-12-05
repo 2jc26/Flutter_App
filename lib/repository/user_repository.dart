@@ -10,7 +10,6 @@ import '../service_adapter/user/dao_user_entity.dart';
 import '../storage/storage_adapters/Objectbox/ObjectBox.dart';
 
 class UserRepository {
-
   final UserDaoFireStore userDao= UserDaoFireStore();
   ObjectBoxDao instancia= ObjectBoxDao();
   FileManager fileManager = FileManager();
@@ -57,7 +56,27 @@ class UserRepository {
         }
         return lista;
       }else{
-        return instancia.getUsersByPreferences();
+        return instancia.getUsersByPreferencesPagination(skip, limit);
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<List<UserModel>> getAllUsersByPreferencesPagination(int skip, int limit) async {
+    try {
+      if (connectivity) {
+        userDao.updateUserPreferencesStats();
+        List<UserModel> lista = await userDao.getUsersByPreferences();
+        for (var usuario in lista) {
+          bool condicion = instancia.verifyUserExist(usuario.id);
+          if (!condicion) {
+            instancia.addUser(usuario);
+          }
+        }
+        return lista;
+      } else {
+        return instancia.getUsersByPreferencesPagination(skip, limit);
       }
     } catch (error) {
       rethrow;
@@ -69,13 +88,12 @@ class UserRepository {
       if(connectivity) {
         return userDao.getLenght();
       } else {
-        return Future.value(0);
+        return instancia.getUsersByPreferencesPaginationNumber();
       }
     } catch (error) {
       rethrow;
     }
   }
-
   Future<Uint8List?> getImage(String image) async {
     return userDao.getImage(image);
   }
@@ -164,6 +182,14 @@ class UserRepository {
   Future<List<UserModel>> getDocumentsWithinRadius(double latitude, double longitude) async {
     try {
       return await userDao.getDocumentsWithinRadius(latitude,longitude);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<List<UserModel>> getDocumentsWithinRadiusPagination(double latitude, double longitude) async {
+    try {
+      return await userDao.getDocumentsWithinRadiusPagination(latitude,longitude);
     } catch (error) {
       rethrow;
     }
