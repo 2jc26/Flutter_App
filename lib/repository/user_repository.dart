@@ -44,11 +44,11 @@ class UserRepository {
       rethrow;
     }
   }
-  Future<List<UserModel>> getAllUsersByPreferences() async {
+  Future<List<UserModel>> getAllUsersByPreferences({int skip=0, int limit=5}) async {
     try {
       if (connectivity){
         userDao.updateUserPreferencesStats();
-        List<UserModel> lista= await userDao.getUsersByPreferences();
+        List<UserModel> lista= await userDao.getUsersByPreferences(skip: skip, limit: limit);
         for (var usuario in lista){
           bool condicion =instancia.verifyUserExist(usuario.id);
           if (!condicion){
@@ -63,6 +63,19 @@ class UserRepository {
       rethrow;
     }
   }
+
+  Future<int> getLenght(){
+    try {
+      if(connectivity) {
+        return userDao.getLenght();
+      } else {
+        return Future.value(0);
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<Uint8List?> getImage(String image) async {
     return userDao.getImage(image);
   }

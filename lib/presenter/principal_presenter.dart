@@ -51,13 +51,13 @@ class PrincipalPresenter {
   Future<void> getAllReview(String userId, {int skip = 0, int limit = 5}) async {
     try {
       _number = await principalRepository.getLenght(userId);
-      // haz que _number se divida en 5 y redondea hacia arriba
-      _number = ((_number / 5) + 0.5).toInt();
+      _number = (_number/5).ceil();
       final review = await principalRepository.getAllReview(userId, skip: skip, limit: limit);
       if (review.isNotEmpty) {
         reviewList = review;
         _backView.refreshReviewsPrincipalView(reviewList);
         _backView.refreshNumber(_number);
+        _backView.acutalized(false);
       }
     } catch (error) {
       rethrow;
