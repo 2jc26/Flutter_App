@@ -1,14 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geocoding/geocoding.dart'; // Importa geocoding para convertir direcciones en coordenadas
+import 'package:geocoding/geocoding.dart';
 
-import "package:giusseppe_flut/widgets/drawer.dart";
 import '../../models/user/query_filter_user.dart';
-import '../../models/user/query_likes_user.dart';
+import '../../service/connectivity_manager_service.dart';
 import '../../widgets/bottom_nav_bar.dart';
 import '../../widgets/custom_app_bar.dart';
 import 'filter_users_other.dart';
-import 'package:csc_picker/csc_picker.dart';
 
 class FilterUsersLocations extends StatefulWidget {
   FilterUsersLocations({super.key});
@@ -79,21 +79,24 @@ class BodyLocation extends StatefulWidget {
 class _BodyLocation extends State<BodyLocation> {
   String localidadValue = "Seleccione una opción";
   String ciudadValue = "Bogotá";
+  late StreamSubscription<bool> connectionSubscription;
+  bool connectivity = ConnectivityManagerService().connectivity;
+
+  _BodyLocation() {
+    initializeConnectivity();
+  }
+  Future<void> initializeConnectivity() async {
+    connectionSubscription =
+        ConnectivityManagerService().connectionStatus.listen((isConnected) {
+      connectivity = isConnected;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        //const SizedBox(height: 16),
-        //Row(
-        //mainAxisAlignment: MainAxisAlignment.center,
-        //children: [
-        //RoundedButton(text: 'Location', onPressed: () {}),
-        //const SizedBox(width: 10),
-        //RoundedButton(text: 'Information', onPressed: () {}),
-        //],
-        //),
         const SizedBox(height: 20),
         CustomListField(
           hintText: 'Bogotá',
@@ -133,7 +136,8 @@ class _BodyLocation extends State<BodyLocation> {
           onItemSelected: (String? value) async {
             setState(() => localidadValue = value!);
             if (localidadValue != "Seleccione una opción" &&
-                ciudadValue != "Seleccione una opción") {
+                ciudadValue != "Seleccione una opción" &&
+                connectivity) {
               String query = "$localidadValue , $ciudadValue";
               final locations =
                   await GeocodingPlatform.instance.locationFromAddress(query);
@@ -151,19 +155,27 @@ class _BodyLocation extends State<BodyLocation> {
           child: SizedBox(
             height: 400,
             width: 350,
-            child: GoogleMap(
-              mapType: MapType.terrain,
-              initialCameraPosition: CameraPosition(
-                target: widget.markerLocation,
-                zoom: 11,
-              ),
-              markers: {
-                Marker(
-                  markerId: MarkerId('selectedLocation'),
-                  position: widget.markerLocation,
-                ),
-              },
-            ),
+            child: connectivity
+                ? GoogleMap(
+                    mapType: MapType.terrain,
+                    initialCameraPosition: CameraPosition(
+                      target: widget.markerLocation,
+                      zoom: 11,
+                    ),
+                    markers: {
+                      Marker(
+                        markerId: MarkerId('selectedLocation'),
+                        position: widget.markerLocation,
+                      ),
+                    },
+                  )
+                : const Center(
+                    child: Text(
+                      'No map - No internet connection.',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
           ),
         ),
         const SizedBox(height: 16),
@@ -262,7 +274,6 @@ class CustomListField extends StatelessWidget {
   final String selectedValue;
   final List<String> items;
   final Function(String?) onItemSelected;
-
   const CustomListField({
     Key? key,
     required this.hintText,
