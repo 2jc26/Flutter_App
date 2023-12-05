@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
 
@@ -25,9 +26,22 @@ class DrawerPresenter {
   final FeatureRepository featureRepository= FeatureRepository();
   final IdProvider idProvider = IdProvider();
   late String id= '';
+  late StreamSubscription<bool> connectionSubscription;
+  bool connectivity = ConnectivityManagerService().connectivity;
   void setUserPreferences() {
     getImage();
     giveId();
+  }
+  DrawerPresenter(){
+    initializeConnectivity();
+  }
+  Future<void> initializeConnectivity() async{
+    connectionSubscription = ConnectivityManagerService().connectionStatus.listen((isConnected) {
+      connectivity = isConnected;
+    });
+  }
+  bool getConnectivity(){
+    return connectivity;
   }
 
   Future<void> giveId() async {
