@@ -122,7 +122,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
   }
 
   Future<void> _refresh() async {
-    houseListPresenter.refreshData(_userId, null, skip: 0 * 5, limit: 5);
+    houseListPresenter.refreshData(_userId, _houseFilters, skip: 0 * 5, limit: 5);
   }
 
   // Images
@@ -210,7 +210,7 @@ class _HouseListState extends State<HouseList> implements HouseListView {
                           userId: _userId,
                           title: 'All Houses',
                           housesList: _filteredHousesList,
-                          flex: 650,
+                          flex: 600,
                           filter: true,
                           searchController: _searchController,
                           houseListPresenter: houseListPresenter,
