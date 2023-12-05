@@ -25,17 +25,6 @@ class UserList extends StatefulWidget {
 
 class _UserListState extends State<UserList> implements UserListView {
   final UserListPresenter userListPresenter = UserListPresenter();
-<<<<<<< HEAD
-  List<UserModel> _userList= [];
-  double average = 0.0;
-  InformationCardUser Function(BuildContext, int) _itemBuilder(List<UserModel> users){
-    return (BuildContext context, int index) =>
-        InformationCardUser(
-            url: users![index].image,
-            stars: users![index].stars,
-            text: users![index].full_name,
-          );
-=======
   List<UserModel> _userList = [];
   double average = 0.0;
   int _numberPage = 0;
@@ -47,7 +36,6 @@ class _UserListState extends State<UserList> implements UserListView {
           stars: users![index].stars,
           text: users![index].full_name,
         );
->>>>>>> origin/develop
   }
 
   late StreamSubscription<bool> connectionSubscription;
@@ -112,14 +100,10 @@ class _UserListState extends State<UserList> implements UserListView {
           ),
           Center(
             child: Padding(
-<<<<<<< HEAD
-              padding: const EdgeInsets.only(top: 4.0, bottom: 15.0,),
-=======
               padding: const EdgeInsets.only(
                 top: 4.0,
                 bottom: 15.0,
               ),
->>>>>>> origin/develop
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(

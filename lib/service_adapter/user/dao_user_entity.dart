@@ -1,8 +1,5 @@
 import 'dart:async';
-<<<<<<< HEAD
-=======
 import 'dart:convert';
->>>>>>> origin/develop
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -18,14 +15,7 @@ import 'abstract/base_user_dao.dart';
 final storageRef = FirebaseStorage.instance.ref();
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-<<<<<<< HEAD
-class UserDaoFireStore extends UserDao{
-  //final storage = FirebaseStorage.instance;
-  //final storageRef = FirebaseStorage.instance.ref();
-
-=======
 class UserDaoFireStore extends UserDao {
->>>>>>> origin/develop
   Future<Uint8List?> getImage(String image) async {
     final ref = storageRef.child(image);
     try {
@@ -41,14 +31,9 @@ class UserDaoFireStore extends UserDao {
   Future<List<UserModel>> getAllUsers() async {
     List<UserModel> users = [];
     try {
-<<<<<<< HEAD
-      final querySnapshot = await firestore.collection("Users").get();//Users
-      for (var user in querySnapshot.docs) {
-=======
       final querySnapshot = await firestore.collection("Users").get();
       for (int i = 0; i < querySnapshot.docs.length; i++) {
         var user = querySnapshot.docs[i];
->>>>>>> origin/develop
         final userData = user.data();
         final userId = user.id;
         var userModel = UserModel.fromJson({...userData, 'id': userId});
@@ -139,21 +124,12 @@ class UserDaoFireStore extends UserDao {
     throw UnimplementedError();
   }
 
-<<<<<<< HEAD
-  Future<List<UserModel>> getUsersByPreferences() async {
-    try {
-      List<UserModel> users = [];
-      var x = UserFilter().toJson();
-      var y = x["likes_pet"];
-      final querySnapshot = await BackendService().postAll("users/filtered", UserFilter());
-=======
   Future<List<UserModel>> getUsersByPreferences(
       {int skip = 0, int limit = 5}) async {
     try {
       List<UserModel> users = [];
       final querySnapshot = await BackendService()
           .postAll("users/filtered", UserFilter(), skip: skip, limit: limit);
->>>>>>> origin/develop
       if (querySnapshot.isNotEmpty) {
         users = await compute(parseObjects, querySnapshot);
       }
@@ -165,30 +141,6 @@ class UserDaoFireStore extends UserDao {
       rethrow;
     }
   }
-<<<<<<< HEAD
-
-  Future<List<UserModel>> getDocumentsWithinRadius(double latitude, double longitude) async {
-    List<UserModel> users=[];
-
-    const double radiusInDegrees = 20;
-
-    final double minLat = latitude - radiusInDegrees;
-    final double maxLat = latitude + radiusInDegrees;
-    final double minLon = longitude - radiusInDegrees;
-    final double maxLon = longitude + radiusInDegrees;
-
-    final QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('Users')
-        .where('latitude', isGreaterThanOrEqualTo: minLat)
-        .where('latitude', isLessThanOrEqualTo: maxLat)
-        .get();
-    Map map = Map();
-    map['snapshot'] = snapshot.docs;
-    map['minLon'] = minLon;
-    map['maxLon'] = maxLon;
-    users = await compute(parseObjectsLocation, map);
-
-=======
 
   Future<List<UserModel>> getDocumentsWithinRadius(
       double latitude, double longitude) async {
@@ -197,7 +149,6 @@ class UserDaoFireStore extends UserDao {
     final querySnapshot =
         await BackendService().postAll("users/ubication", mapa);
     users = await compute(parseObjects, querySnapshot);
->>>>>>> origin/develop
     return users;
   }
 
@@ -254,10 +205,6 @@ class UserDaoFireStore extends UserDao {
   Future<UserModel?> validateEmailAndPassword(
       String email, String password) async {
     try {
-<<<<<<< HEAD
-      // Check if a user with the given email exists in Firestore
-=======
->>>>>>> origin/develop
       final querySnapshot = await firestore
           .collection("Users")
           .where("email", isEqualTo: email)
@@ -334,10 +281,6 @@ class UserDaoFireStore extends UserDao {
             'email': email
           };
 
-<<<<<<< HEAD
-      // Check if a user with the given email exists in Firestore
-=======
->>>>>>> origin/develop
       final querySnapshot = await firestore
           .collection("Users")
           .where("email", isEqualTo: email)
@@ -375,16 +318,6 @@ class UserDaoFireStore extends UserDao {
       rethrow;
     }
   }
-<<<<<<< HEAD
-  
-}
-
-Future<List<UserModel>> parseObjects(List<dynamic> querySnapshot) async {
-  List<UserModel> users=[];
-  for (var user in querySnapshot) {
-    //final userData = user.data() as Map<String, dynamic>;
-    UserModel nuevoUsuario=UserModel.fromJson({...user});
-=======
 
   getDocumentsWithinRadiusPagination(
       double latitude, double longitude) async {
@@ -401,31 +334,19 @@ Future<List<UserModel>> parseObjects(List<dynamic> querySnapshot) async {
   List<UserModel> users = [];
   for (int i = 0; i < querySnapshot.length; i++) {
     UserModel nuevoUsuario = UserModel.fromJson({...querySnapshot[i]});
->>>>>>> origin/develop
     users.add(nuevoUsuario);
   }
   return users;
 }
 
-<<<<<<< HEAD
-Future<List<UserModel>> parseObjectsLocation(Map<dynamic, dynamic> variables) async {
-  List<UserModel> users=[];
-  for (var user in variables['snapshot']) {
-    if (user["longitude"]>=variables['minLon']	&& user['maxLon']<=variables){
-=======
 Future<List<UserModel>> parseObjectsLocation(
     Map<dynamic, dynamic> variables) async {
   List<UserModel> users = [];
   for (var user in variables['snapshot']) {
     if (user["longitude"] >= variables['minLon'] &&
         user['maxLon'] <= variables["maxLon"]) {
->>>>>>> origin/develop
       users.add(UserModel.fromJson({...user}));
     }
   }
   return users;
 }
-<<<<<<< HEAD
-//--Init of isolate
-=======
->>>>>>> origin/develop

@@ -28,11 +28,7 @@ class ReviewRepository {
     }
   }
 
-<<<<<<< HEAD
-  Future<void> insertReview(String houseId, String userId, String comment, double rating) {
-=======
   Future<List<ReviewModel>> getAllReviewsUser(String userId, {int skip = 0, int limit = 5}) async {
->>>>>>> origin/develop
     try {
       if (connectivity) {
         return await reviewApi.getAllReviewsUser(userId, skip: skip, limit: limit);
@@ -44,11 +40,7 @@ class ReviewRepository {
     }
   }
 
-<<<<<<< HEAD
-  Future<double> updateRaiting(String houseId){
-=======
   Future<void> insertReview(String houseId, String userId, String comment, double rating) {
->>>>>>> origin/develop
     try {
       if(connectivity) {
         return reviewApi.insertReview(houseId, userId, comment, rating);

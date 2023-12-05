@@ -5,11 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:giusseppe_flut/app_navigator.dart';
 
 import 'package:giusseppe_flut/auth/auth_repository.dart';
-<<<<<<< HEAD
-import 'package:giusseppe_flut/screens/user_list.dart';
-=======
 import 'package:giusseppe_flut/screens/user_recomendation_ubication.dart';
->>>>>>> origin/develop
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:get/get.dart';
 
@@ -30,14 +26,11 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-<<<<<<< HEAD
-=======
 
   final now = DateTime.now();
   if (kDebugMode) {
     print(now);
   }
->>>>>>> origin/develop
   runApp(const MyApp());
   ConnectivityManagerService().initialize();
 }
@@ -78,33 +71,4 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-<<<<<<< HEAD
 }
-
-
-
-/*
-import 'package:flutter/material.dart';
-import 'package:giusseppe_flut/screens/review_list.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Review List',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const ReviewList(
-        houseId: 'bNqJqQetOhT9RmYUaV9S',
-      ),
-    );
-  }
-}*/
-=======
-}
->>>>>>> origin/develop

@@ -22,11 +22,7 @@ class UserListPresenter {
 
   UserListPresenter();
 
-<<<<<<< HEAD
-  void getAllUsers() async {
-=======
   void getAllUsers({int skip=0, int limit=5}) async {
->>>>>>> origin/develop
     try {
       var aaa= UserFilter().toJson();
       var aws=aaa["lies_pett"];
@@ -67,10 +63,6 @@ class UserListPresenter {
   }
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/develop
 double getAverage(List<UserModel>list){
   double suma = 0;
   for (var element in list){

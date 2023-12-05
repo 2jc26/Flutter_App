@@ -18,20 +18,6 @@ class FilterUsersOthers extends StatefulWidget {
   _FilterUsersOthersState createState() => _FilterUsersOthersState();
 }
 
-<<<<<<< HEAD
-class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationMixin {
-
-  RestorableTextEditingController petController = RestorableTextEditingController();
-  RestorableTextEditingController introvertedController = RestorableTextEditingController();
-  RestorableTextEditingController cleaningController = RestorableTextEditingController();
-  RestorableTextEditingController vapeController = RestorableTextEditingController();
-  RestorableTextEditingController smokeController = RestorableTextEditingController();
-  RestorableTextEditingController workFromHomeController = RestorableTextEditingController();
-  RestorableTextEditingController sleepTimeController = RestorableTextEditingController();
-  RestorableTextEditingController externalPeopleController = RestorableTextEditingController();
-
-@override
-=======
 class _FilterUsersOthersState extends State<FilterUsersOthers>
     with RestorationMixin {
   RestorableTextEditingController petController =
@@ -52,7 +38,6 @@ class _FilterUsersOthersState extends State<FilterUsersOthers>
       RestorableTextEditingController();
   final FeatureRepository featureRepository = FeatureRepository();
   @override
->>>>>>> origin/develop
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(),

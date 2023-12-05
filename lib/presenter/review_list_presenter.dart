@@ -38,10 +38,7 @@ class ReviewListPresenter {
     try {
       await reviewRepository.insertReview(houseId, userId, comment, rating);
       getAllReviews(houseId);
-<<<<<<< HEAD
-=======
       putReview(houseId);
->>>>>>> origin/develop
     } catch (error) {
       rethrow;
     }
@@ -51,11 +48,7 @@ class ReviewListPresenter {
     try {
       final responsRaiting = await reviewRepository.updateRaiting(houseId);
       if (responsRaiting != null) {
-<<<<<<< HEAD
-        _raiting = responsRaiting.toString();
-=======
         _raiting = responsRaiting.toStringAsFixed(2);
->>>>>>> origin/develop
         _view.refreshRaiting(_raiting);
       }
     } catch (error) {

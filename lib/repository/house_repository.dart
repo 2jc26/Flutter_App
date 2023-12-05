@@ -3,45 +3,27 @@ import 'dart:io';
 
 import 'package:giusseppe_flut/models/house/house_model_update.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
-<<<<<<< HEAD
-=======
 import 'package:giusseppe_flut/storage/storage_adapters/file_manager.dart';
->>>>>>> origin/develop
 import 'dart:async';
 
 import '../service_adapter/house/dao_house_entity.dart';
 
 class HouseRepository {
 
-<<<<<<< HEAD
-=======
   FileManager fileManager = FileManager();
 
->>>>>>> origin/develop
   final HouseDaoFireStore houseDao= HouseDaoFireStore();
 
   bool connectivity = ConnectivityManagerService().connectivity;
   late StreamSubscription<bool> connectionSubscription;
 
   HouseRepository() {
-<<<<<<< HEAD
-=======
     FileManager.initialFile();
->>>>>>> origin/develop
     connectionSubscription = ConnectivityManagerService().connectionStatus.listen((isConnected) {
       connectivity = isConnected;
     });
   }
 
-<<<<<<< HEAD
-  Future<List<HouseModelUpdate>> getAllHouses() async {
-    try {
-      if(connectivity) {
-        return await houseDao.getAllHouses();
-      } else {
-        return []; //TODO Search in Local
-      }
-=======
   Future<List<HouseModelUpdate>> getAllHouses({int skip = 0, int limit= 5}) async {
     try {
       if(connectivity) {
@@ -99,7 +81,6 @@ class HouseRepository {
         fileManager.saveImagesLocally(images);
       }
       return imagesUrl;
->>>>>>> origin/develop
     } catch (error) {
       rethrow;
     }
@@ -112,8 +93,6 @@ class HouseRepository {
       } else {
         return []; //TODO Search in Local
       }
-<<<<<<< HEAD
-=======
     } catch (error) {
       rethrow;
     }
@@ -177,7 +156,6 @@ class HouseRepository {
       } else {
         return [];
       }
->>>>>>> origin/develop
     } catch (error) {
       rethrow;
     }

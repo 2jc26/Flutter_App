@@ -8,12 +8,9 @@ import 'package:giusseppe_flut/screens/house_creation.dart';
 import 'package:giusseppe_flut/screens/house_detail.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:giusseppe_flut/screens/no_connectivity.dart';
-<<<<<<< HEAD
-=======
 import 'package:giusseppe_flut/widgets/bottom_nav_bar.dart';
 import 'package:giusseppe_flut/widgets/custom_app_bar.dart';
 import 'package:giusseppe_flut/widgets/info_card.dart';
->>>>>>> origin/develop
 import 'package:giusseppe_flut/widgets/search_field.dart';
 
 class HouseListView {
@@ -136,57 +133,6 @@ class _HouseListState extends State<HouseList> implements HouseListView {
   @override
   Widget build(BuildContext context) {
     
-<<<<<<< HEAD
-    if ((_housesList!.isNotEmpty && _houseFilters == null) || (_housesSearchingList!.isNotEmpty && _houseFilters != null)) {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF2E5EAA),
-          title: const Text(
-            'Senehouse',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          centerTitle: true,
-        ),
-        body: Column(
-          children: [
-            if (_houseFilters == null && _housesLikingList!.isNotEmpty)
-              const SizedBox(height: 10),
-            if (_houseFilters == null && _housesLikingList!.isNotEmpty)
-              HouseSection(
-                  userId: _userId,
-                  title: 'Liking Houses',
-                  housesList: _housesLikingList,
-                  flex: 1,
-                  filter: false,
-                  searchController: _searchController,
-                  houseListPresenter: houseListPresenter,
-              ),
-            const SizedBox(height: 10),
-            HouseSection(
-                userId: _userId,
-                title: 'All Houses',
-                housesList: _filteredHousesList,
-                flex: 2,
-                filter: true,
-                searchController: _searchController,
-                houseListPresenter: houseListPresenter,
-            ),
-            const SizedBox(height: 10),
-          ],
-        ),
-        drawer: CustomDrawer(customDrawerContext: context)
-      );
-    } else {
-      if(ConnectivityManagerService().connectivity) {
-        if(_housesList!.isEmpty && _houseFilters == null) {
-=======
     final Size screenSize = MediaQuery.of(context).size;
     int dotsCount = _housesLikingList!.length;
 
@@ -319,7 +265,6 @@ class _HouseListState extends State<HouseList> implements HouseListView {
     } else {
       if (ConnectivityManagerService().connectivity) {
         if (_housesList!.isEmpty && _houseFilters == null) {
->>>>>>> origin/develop
           return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
@@ -329,14 +274,10 @@ class _HouseListState extends State<HouseList> implements HouseListView {
           return const NoHousesSearch();
         }
       } else {
-<<<<<<< HEAD
-        return const NoConnectivity();
-=======
         return NoConnectivity(
             presenter: houseListPresenter,
             userId: _userId,
             houseFilters: _houseFilters);
->>>>>>> origin/develop
       }
     }
   }

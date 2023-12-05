@@ -33,15 +33,10 @@ class BackendService {
     }
   }
 
-<<<<<<< HEAD
-  Future<List<dynamic>> postAll(String endPoint, object) async {
-    var waos =object.toJson();
-=======
   Future<List<dynamic>> postAll(String endPoint, object, {int skip=0, int limit=5}) async {
     if (object is! Map<String, dynamic>) {
       object=object.toJson();
     }
->>>>>>> origin/develop
     final response = await http.post(Uri.parse(
       '$baseUrl/$endPoint?skip=$skip&limit=$limit'),
       headers: {
@@ -134,14 +129,6 @@ class BackendService {
     }
   }
 
-<<<<<<< HEAD
-  Future<dynamic> post(String endPoint, dynamic object) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/$endPoint'),
-      headers: {
-        "Content-Type": "application/json",
-      },
-=======
   Future<dynamic> postTot(String endPoint, object) async {
     if (object is! Map<String, dynamic>) {
       object=object.toJson();
@@ -175,7 +162,6 @@ class BackendService {
       headers: {
         "Content-Type": "application/json",
       },
->>>>>>> origin/develop
       body: object != null ? json.encode(object) : null,
     );
     if (response.statusCode == 200) {

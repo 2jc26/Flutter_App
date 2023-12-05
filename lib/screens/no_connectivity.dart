@@ -1,11 +1,4 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-import 'package:giusseppe_flut/widgets/drawer.dart';
-
-class NoConnectivity extends StatelessWidget {
-  const NoConnectivity({
-    super.key,
-=======
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_list_presenter.dart';
 import 'package:giusseppe_flut/widgets/custom_app_bar.dart';
@@ -21,31 +14,12 @@ class NoConnectivity extends StatelessWidget {
     required this.presenter,
     required this.userId,
     required this.houseFilters
->>>>>>> origin/develop
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF2E5EAA),
-          title: const Text(
-            'Senehouse',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          centerTitle: true,
-        ),
-=======
         appBar: CustomAppBar(),
->>>>>>> origin/develop
         drawer: CustomDrawer(customDrawerContext: context),
         body: Center(
           child: Column(
@@ -64,20 +38,12 @@ class NoConnectivity extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               ElevatedButton(
-<<<<<<< HEAD
-                onPressed: () => (),
-=======
                 onPressed: () => presenter.refreshData(userId, houseFilters),
->>>>>>> origin/develop
                 child: const Text("Retry"),
               ),
             ],
           ),
-<<<<<<< HEAD
-        ));
-=======
         )
       );
->>>>>>> origin/develop
   }
 }

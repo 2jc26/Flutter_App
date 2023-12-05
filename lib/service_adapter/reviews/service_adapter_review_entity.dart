@@ -17,19 +17,9 @@ class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
   @override
   Future<List<ReviewModel>> getAllReviews(String houseId, {int skip = 0, int limit = 5}) async {
     try {
-<<<<<<< HEAD
-      final dynamicReviews = await BackendService().getOneAll("reviews", houseId);
-      // FIX this performance issue
-      if (dynamicReviews != null && dynamicReviews is List) {
-        List<ReviewModel> reviews = dynamicReviews.map((review) {
-          return ReviewModel.fromJson(review);
-        }).toList();
-        return reviews;
-=======
       final dynamicReviews = await BackendService().getReviewsPaginated("reviews", houseId, skip, limit);
       if (dynamicReviews.isNotEmpty) {
         return await compute(parseObjects, dynamicReviews);
->>>>>>> origin/develop
       } else {
         return [];
       }
@@ -39,8 +29,6 @@ class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
   }
 
   @override
-<<<<<<< HEAD
-=======
   Future<List<ReviewModel>> getAllReviewsUser(String userId, {int skip = 0, int limit = 5}) async {
     try {
       final dynamicReviews = await BackendService().getReviewsPaginated("reviews/user", userId, skip, limit);
@@ -55,7 +43,6 @@ class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
   }
 
   @override
->>>>>>> origin/develop
   Future<void> insertReview(String houseId, String userId, String comment, double rating) async {
     try {
       final reviewSkeleton = {
@@ -78,17 +65,10 @@ class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
     try {
       final message = await BackendService().put("houses", {}, houseId);
       final decodeMessage = json.decode(message);
-<<<<<<< HEAD
-      if (decodeMessage['message'] != 'Rating updated successfully') {
-        throw decodeMessage['message'];
-      }
-      return decodeMessage['raiting'];
-=======
       if (decodeMessage['message'] != 'Rating updated successfully' && decodeMessage['message'] != 'No reviews for this house') {
         throw decodeMessage['message'];
       }
       return decodeMessage['raiting'].toDouble();
->>>>>>> origin/develop
     } catch (error) {
       if (kDebugMode) {
         print("Error updating house: $error");

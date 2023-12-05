@@ -15,15 +15,11 @@ class ReviewsListView {
 }
 
 class ReviewList extends StatefulWidget {
-<<<<<<< HEAD
-  const ReviewList({super.key, required this.houseId});
-=======
   const ReviewList({
     Key? key,
     required this.houseId,
     required this.userId,
   }) : super(key: key);
->>>>>>> origin/develop
 
   final String houseId;
   final String userId;
@@ -37,11 +33,8 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
 
   String? _raiting = '0';
   String? _manualRating = '0';
-<<<<<<< HEAD
-=======
   int _number = 0;
   bool actual = false;
->>>>>>> origin/develop
 
   final TextEditingController _commentController = TextEditingController();
 
@@ -89,15 +82,9 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
     if (_formKey.currentState?.validate() ?? false) {
       double rating = double.parse(_manualRating!);
       String comment = _commentController.text;
-<<<<<<< HEAD
-      reviewListPresenter.postReview(widget.houseId, 'Mpat7dK8qrOtuyl0cynM', comment, rating);
-      _commentController.clear();
-
-=======
       reviewListPresenter.postReview(
           widget.houseId, widget.userId, comment, rating);
       _commentController.clear();
->>>>>>> origin/develop
     }
   }
 
@@ -105,75 +92,6 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
-<<<<<<< HEAD
-      appBar: AppBar(
-        title: const Text('Comments'),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text('Rating: $_raiting'),
-          ),
-          Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Rating (0-5)',
-                    ),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,1}$')), // Acepta solo números y un punto decimal opcional
-                    ],
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a rating';
-                      }
-                      double rating = double.tryParse(value) ?? -1;
-                      if (rating < 0 || rating > 5) {
-                        return 'Please enter a valid rating between 0 and 5';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        _manualRating = value;
-                      });
-                    },
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Comment (max 2000 characters)',
-                    ),
-                    controller: _commentController,
-                    maxLines: 5,
-                    maxLength: 2000,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a comment';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _submitReview,
-                    child: const Text('Submit Review'),
-                  ),
-                  const SizedBox(height: 8),
-                  Text('Manual Rating: $_manualRating'),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: _reviewsList == null
-=======
       appBar: CustomAppBar(),
       body: SingleChildScrollView(
         child: Column(
@@ -239,7 +157,6 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
               ),
             ),
             _reviewsList == null
->>>>>>> origin/develop
                 ? const Center(child: CircularProgressIndicator())
                 : _reviewsList!.isEmpty
                     ? const Center(child: Text('No comments'))
@@ -255,16 +172,11 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-<<<<<<< HEAD
-                                  Text('Rating: ${_reviewsList![index].rating}'),
-                                  Text('Comment: ${_reviewsList![index].comment}'),
-=======
                                   Text(
                                       'Rating: ${_reviewsList![index].rating}'),
                                       
                                   Text(
                                       'Comment: ${_reviewsList![index].comment}'),
->>>>>>> origin/develop
                                 ],
                               ),
                             ),
