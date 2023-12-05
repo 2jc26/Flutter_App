@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
         child:
         BlocProvider(
           create: (context) => SessionCubit(authRepo: context.read<AuthRepository>()),
-          child: LocationPermissionView()//,AppNavigator()
+          child: AppNavigator()//,AppNavigator()
         ),
       ),
     );

@@ -45,7 +45,8 @@ class _profileState extends State<profile> {
       appBar: CustomAppBar(),
       bottomNavigationBar: const BottomNavBar(index: 1),
       // drawer: CustomDrawer(customDrawerContext: context),
-      body: Column(
+      body: SingleChildScrollView(
+      child: Column(
         children: [
           const SizedBox(height: 20),
           FractionallySizedBox(
@@ -75,7 +76,7 @@ class _profileState extends State<profile> {
           ),
           Row(
             children: [
-              const SizedBox(width: 100),
+              const SizedBox(width: 50),
               const Text("Rol",style:
               TextStyle(fontSize: 17,
                 fontWeight: FontWeight.bold,)),
@@ -83,19 +84,19 @@ class _profileState extends State<profile> {
               Text(user?.rol ?? '',style:
               const TextStyle(fontSize: 17,
               )),
-              const SizedBox(width: 100),
+              const SizedBox(width: 50),
             ],
           ),
           Row(
             children: [
-              const SizedBox(width: 100),
+              const SizedBox(width: 50),
               const Text("Rating",style:
               TextStyle(fontSize: 17,
                 fontWeight: FontWeight.bold,)),
               const Spacer(flex: 1),
               Text(user?.stars.toString() ?? '',style:
               const TextStyle(fontSize: 17,)),
-              const SizedBox(width: 100),
+              const SizedBox(width: 50),
             ],
           ),
           const SizedBox(height: 20),
@@ -124,97 +125,97 @@ class _profileState extends State<profile> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                           const Text("Email" ,style:
                           TextStyle(fontSize: 16,
                             fontWeight: FontWeight.bold,)),
                           const Spacer(flex: 1),
                           Text(user?.email ?? ''),
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                           const Text("Password",style:
                           TextStyle(fontSize: 16,
                             fontWeight: FontWeight.bold,)),
                           const Spacer(flex: 1),
                           Text(user?.password ?? ''),
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                           const Text("City",style:
                           const TextStyle(fontSize: 16,
                             fontWeight: FontWeight.bold,)),
                           const Spacer(flex: 2),
                           Text(user?.city ?? ''),
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                           const Text("Locality",style:
                           const TextStyle(fontSize: 16,
                             fontWeight: FontWeight.bold,)),
                           const Spacer(flex: 2),
                           Text(user?.locality ?? ''),
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                           const Text("Age",style:
                           const TextStyle(fontSize: 16,
                             fontWeight: FontWeight.bold,)),
                           const Spacer(flex: 2),
                           Text(user?.age.toString() ?? ''),
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                           const Text("Gender",style:
                           const TextStyle(fontSize: 16,
                             fontWeight: FontWeight.bold,)),
                           const Spacer(flex: 2),
                           Text(user?.gender ?? ''),
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                           const Text("Phone",style:
                           TextStyle(fontSize: 16,
                             fontWeight: FontWeight.bold,)),
                           const Spacer(flex: 2),
                           Text(user?.phone.toString() ?? ''),
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                           const Text("Personality",style:
                           TextStyle(fontSize: 16,
                             fontWeight: FontWeight.bold,)),
                           const Spacer(flex: 2),
                           Text(user?.personality ?? ''),
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                         ],
                       )
                     ],
@@ -249,74 +250,74 @@ class _profileState extends State<profile> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const SizedBox(width: 50),
+                            const SizedBox(width: 20),
                             const Text("Bring people",style:
                             TextStyle(fontSize: 16,
                               fontWeight: FontWeight.bold,)),
                             const Spacer(flex: 2),
                             Text(user?.bring_people ?? ''),
-                            const SizedBox(width: 50),
+                            const SizedBox(width: 20),
                           ],
                         ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                           const Text("Clean the room",style:
                           TextStyle(fontSize: 16,
                             fontWeight: FontWeight.bold,)),
                           const Spacer(flex: 2),
                           Text(user?.clean ?? ''),
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                           const Text("Sleep time",style:
                           TextStyle(fontSize: 16,
                             fontWeight: FontWeight.bold,)),
                           const Spacer(flex: 2),
                           Text(user?.sleep.toString() ?? ''),
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                           const Text("Likes pets",style:
                           TextStyle(fontSize: 16,
                             fontWeight: FontWeight.bold,)),
                           const Spacer(flex: 2),
                           Text(user?.likes_pets.toString() ?? ''),
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                           const Text("Smoke",style:
                           TextStyle(fontSize: 16,
                             fontWeight: FontWeight.bold,)),
                           const Spacer(flex: 2),
                           Text(user?.smoke.toString() ?? ''),
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                           const Text("Vape",style:
                           TextStyle(fontSize: 16,
                             fontWeight: FontWeight.bold,)),
                           const Spacer(flex: 2),
                           Text(user?.vape.toString() ?? ''),
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 20),
                         ],
                       ),
                     ],
@@ -326,6 +327,7 @@ class _profileState extends State<profile> {
             ),
           )
         ],
+      ),
       ),
     );
   }
