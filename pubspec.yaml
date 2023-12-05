@@ -62,6 +62,8 @@ dependencies:
   objectbox: ^2.3.1
   objectbox_flutter_libs: any
   image_picker: ^1.0.4
+  intl: ^0.18.1
+  dots_indicator: ^3.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,8 +25,13 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  ConnectivityManagerService().initialize();
+
+  final now = DateTime.now();
+  if (kDebugMode) {
+    print(now);
+  }
   runApp(const MyApp());
+  ConnectivityManagerService().initialize();
 }
 
 class MyApp extends StatelessWidget {

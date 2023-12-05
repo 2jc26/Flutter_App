@@ -335,7 +335,7 @@ class _SignUpState extends State<SignUp> {
             fillColor: const Color(0XffEBEDF0),
             hintText: 'Fullname',
           ),
-          maxLength: 50,
+          maxLength: 25,
           validator: (value) =>
               state.isValidFullName ? null : 'Fullname is invalid',
           onChanged: (value) {

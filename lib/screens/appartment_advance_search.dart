@@ -3,7 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:giusseppe_flut/models/houseSearch/house_searching_model_update.dart';
 import 'package:giusseppe_flut/presenter/house_search_presenter.dart';
 import 'package:giusseppe_flut/screens/house_list.dart';
+import 'package:giusseppe_flut/widgets/custom_app_bar.dart';
 import 'package:giusseppe_flut/widgets/drawer.dart';
+
+import '../enum/feature_enum.dart';
+import '../repository/features_repository.dart';
 
 class AppartmentAdvanceSearch extends StatefulWidget {
   const AppartmentAdvanceSearch({
@@ -32,14 +36,13 @@ enum PropertyType { House, Apartment }
 
 class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
   PropertyType _selectedPropertyType = PropertyType.House;
-  TextEditingController cityController = TextEditingController();
-  TextEditingController neighborhoodController = TextEditingController();
   TextEditingController stratumController = TextEditingController();
   TextEditingController areaController = TextEditingController();
   TextEditingController floorNumberController = TextEditingController();
   TextEditingController roomsNumberontroller = TextEditingController();
   TextEditingController roomAreaController = TextEditingController();
   TextEditingController bathroomAreaController = TextEditingController();
+  final FeatureRepository featureRepository= FeatureRepository();
 
   // Servicee
   bool _isLaundrySelected = false;
@@ -53,28 +56,40 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
   bool _isReceptionSelected = false;
   bool _isSupermarketSelected = false;
 
+  String citySelectedComboBoxValue = 'Bogota';
+  String neighborhoodSelectedComboBoxValue = 'Suba';
+
+  List<String> cityComboBoxOptions = ['Bogota'];
+  List<String> neighborhoodComboBoxOptions = [
+    "Usaquén",
+    "Chapinero",
+    "Santa Fe",
+    "San Cristóbal",
+    "Usme",
+    "Tunjuelito",
+    "Bosa",
+    "Kennedy",
+    "Fontibón",
+    "Engativá",
+    "Suba",
+    "Barrios Unidos",
+    "Teusaquillo",
+    "Los Mártires",
+    "Antonio Nariño",
+    "Puente Aranda",
+    "La Candelaria",
+    "Rafael Uribe Uribe",
+    "Ciudad Bolívar",
+    "Sumapaz"
+  ];
+
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       backgroundColor: const Color(0xffDAE3E5),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF2E5EAA),
-        title: Text(
-          widget.title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 24,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(),
       // drawer: CustomDrawer(customDrawerContext: context),
       body: SingleChildScrollView(
         child: Column(
@@ -87,9 +102,47 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 20),
-                    _inputField("City/Municipality", cityController, 50),
+                    Row(
+                      children: [
+                        const Text('City:'),
+                        const SizedBox(width: 20),
+                        DropdownButton<String>(
+                          value: citySelectedComboBoxValue,
+                          onChanged: (value) {
+                            setState(() {
+                              citySelectedComboBoxValue = value!;
+                            });
+                          },
+                          items: cityComboBoxOptions.map((option) {
+                            return DropdownMenuItem<String>(
+                              value: option,
+                              child: Text(option),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 20),
-                    _inputField("Neighborhood", neighborhoodController, 50),
+                    Row(
+                      children: [
+                        const Text('Neighborhood:'),
+                        const SizedBox(width: 20),
+                        DropdownButton<String>(
+                          value: neighborhoodSelectedComboBoxValue,
+                          onChanged: (value) {
+                            setState(() {
+                              neighborhoodSelectedComboBoxValue = value!;
+                            });
+                          },
+                          items: neighborhoodComboBoxOptions.map((option) {
+                            return DropdownMenuItem<String>(
+                              value: option,
+                              child: Text(option),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -98,7 +151,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: <Widget>[
-                  const Text("Type of House", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                  const Text("Type of House", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2e5eaa)),),
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -234,7 +287,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: Colors.blue,
+                  color: const Color(0xFF2c595b),
                   width: 2.0,
                 ),
               ),
@@ -243,7 +296,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Services", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                    const Text("Services", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2e5eaa)),),
                     createCustomCheckbox('Laundry Area', _isLaundrySelected, () {
                       setState(() {
                         _isLaundrySelected = !_isLaundrySelected;
@@ -273,7 +326,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: Colors.blue,
+                  color: const Color(0xFF2c595b),
                   width: 2.0,
                 ),
               ),
@@ -282,7 +335,7 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Others", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                    const Text("Others", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2e5eaa)),),
                     createCustomCheckbox('Elevator', _isElevatorSelected, () {
                       setState(() {
                         _isElevatorSelected = !_isElevatorSelected;
@@ -409,10 +462,10 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
   Widget _filterButton() {
     return ElevatedButton(
       onPressed: () {
-        
+        featureRepository.createFeature(Feature.filtroUsuario);
         HouseSearchingModelUpdate filter = HouseSearchingModelUpdate(
-          city: cityController.text,
-          neighborhood: neighborhoodController.text,
+          city: citySelectedComboBoxValue,
+          neighborhood: neighborhoodSelectedComboBoxValue,
           address: widget.direction,
           housingType: _selectedPropertyType.toString().replaceAll("PropertyType.", ""),
           rentPrice: widget.obPrice,
@@ -439,22 +492,15 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
           builder: (context) => HouseList(userId: widget.userId, houseFilters: filter),
         ));
       },
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        backgroundColor: const Color(0xFF2E5EAA),
-        foregroundColor: const Color(0xFFF2F4F6),
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        elevation: 10,
-        shadowColor: Colors.black,
-      ),
       child: const SizedBox(
         width: double.infinity,
         child: Text(
           "Search",
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(
+            fontSize: 20,
+            color: Color(0xFF2c595b)  
+          ),
         ),
       ),
     );

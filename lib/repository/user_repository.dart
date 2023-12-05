@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:giusseppe_flut/storage/storage_adapters/file_manager.dart';
 import '../models/user/user_model.dart';
 import '../service/connectivity_manager_service.dart';
@@ -43,11 +44,11 @@ class UserRepository {
       rethrow;
     }
   }
-  Future<List<UserModel>> getAllUsersByPreferences() async {
+  Future<List<UserModel>> getAllUsersByPreferences({int skip=0, int limit=5}) async {
     try {
       if (connectivity){
         userDao.updateUserPreferencesStats();
-        List<UserModel> lista= await userDao.getUsersByPreferences();
+        List<UserModel> lista= await userDao.getUsersByPreferences(skip: skip, limit: limit);
         for (var usuario in lista){
           bool condicion =instancia.verifyUserExist(usuario.id);
           if (!condicion){
@@ -62,6 +63,19 @@ class UserRepository {
       rethrow;
     }
   }
+
+  Future<int> getLenght(){
+    try {
+      if(connectivity) {
+        return userDao.getLenght();
+      } else {
+        return Future.value(0);
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<Uint8List?> getImage(String image) async {
     return userDao.getImage(image);
   }
@@ -87,7 +101,7 @@ class UserRepository {
     try {
       final user = await fileManager.read(File('${FileManager.directory.path}/user.json'));
       if (user != null) {
-        return UserModel.fromJson({...user, 'id': id, 'username': username, 'password': password});
+        return await compute(_parseUserModel, user);
       }
       return null;
     } catch (error) {
@@ -99,7 +113,7 @@ class UserRepository {
     try {
       final user = await fileManager.read(File('${FileManager.directory.path}/user.json'));
       if (user != null) {
-        return UserModel.fromJson({...user});
+        return await compute(_parseUserModel, user);
       }
       return null;
     } catch (error) {
@@ -157,4 +171,7 @@ class UserRepository {
 
 
 
+}
+UserModel _parseUserModel(dynamic user) {
+  return UserModel.fromJson({...user});
 }

@@ -3,6 +3,8 @@ import 'package:geolocator/geolocator.dart';
 
 import '../models/user/user_model.dart';
 import '../presenter/user_presenter_location.dart';
+import '../widgets/bottom_nav_bar.dart';
+import '../widgets/custom_app_bar.dart';
 import '../widgets/drawer.dart';
 import '../widgets/information_card.dart';
 import 'base_mvp/base_mvp_location.dart';
@@ -70,21 +72,8 @@ class _LocationPermissionViewState extends State<LocationPermissionView> impleme
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF2E5EAA),
-        title: const Text(
-          "Senehouse",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(),
+      bottomNavigationBar: const BottomNavBar(index: 2),
       // drawer: CustomDrawer(customDrawerContext: context),
       body: Center(
         child: Column(
