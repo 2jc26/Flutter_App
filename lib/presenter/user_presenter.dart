@@ -18,20 +18,26 @@ class UserListPresenter {
   List<UserModel>? usersList = [];
   late UserListView _backView= UserListView();
   double average=0.0;
+  int _number = 0;
 
   UserListPresenter();
 
-  void getAllUsers() async {
+  void getAllUsers({int skip=0, int limit=5}) async {
     try {
       List<UserModel> users = [];
-      users = await userRepository.getAllUsersByPreferences();
+      _number = await userRepository.getLenght();
+      _number = (_number/5).ceil();
+      users = await userRepository.getAllUsersByPreferences(skip: skip, limit: limit);
       usersList = users;
       if (users.isNotEmpty) {
         average= await compute(getAverage, users);
       } else {
         average=0.0;
       }
+
       _backView.refreshUserListView(usersList!, average);
+      _backView.refreshNumber(_number);
+      _backView.acutalized(false);
     } catch (error) {
       rethrow;
     }
@@ -49,8 +55,8 @@ class UserListPresenter {
     _backView.refreshUserListView(usersList!,average);
   }
 
-  void setUserPreferences() {
-    getAllUsers();
+  void setUserPreferences({int skip=0, int limit=5}) {
+    getAllUsers(skip: skip, limit: limit);
   }
 }
 

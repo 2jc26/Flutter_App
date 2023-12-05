@@ -21,13 +21,13 @@ class ReviewListPresenter {
   void getAllReviews(String houseId, {int skip = 0, int limit = 5}) async {
     try {
       _number = await reviewRepository.getLenght(houseId);
-      // haz que _number se divida en 5 y redondea hacia arriba
-      _number = ((_number / 5) + 0.5).toInt();
+      _number = (_number/5).ceil();
       final reviews = await reviewRepository.getAllReviews(houseId, skip: skip, limit: limit);
       if (reviews.isNotEmpty) {
         reviewsList = reviews;
         _view.refreshReviewListView(reviewsList);
         _view.refreshNumber(_number);
+        _view.acutalized(false);
       }
     } catch (error) {
       rethrow;

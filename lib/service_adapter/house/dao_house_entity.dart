@@ -1,4 +1,5 @@
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -49,10 +50,10 @@ class HouseDaoFireStore extends HouseDao {
   }
   
   @override
-  Future<List<HouseModelUpdate>> getAllHouses() async {
+  Future<List<HouseModelUpdate>> getAllHouses({int skip = 0, int limit= 5}) async {
     List<HouseModelUpdate> houses = [];
     try {
-      final querySnapshot = await BackendService().getAll("houses");
+      final querySnapshot = await BackendService().getAll("houses", skip: skip, limit: limit);
       if (querySnapshot.isEmpty) {
         return [];
       } else {
@@ -62,6 +63,22 @@ class HouseDaoFireStore extends HouseDao {
     } catch (error) {
       if (kDebugMode) {
         print("Error fetching houses: $error");
+      }
+      rethrow;
+    }
+  }
+
+  Future<int> getLenght() async {
+    try {
+      final message = await BackendService().getTot("total/houses");
+      final decodeMessage = json.decode(message);
+      if (decodeMessage['message'] != 'Total Houses') {
+        throw decodeMessage['message'];
+      }
+      return decodeMessage['count'];
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error searching for houses: $error");
       }
       rethrow;
     }
@@ -88,7 +105,7 @@ class HouseDaoFireStore extends HouseDao {
   }
 
   @override
-  Future<List<HouseModelUpdate>> getHousesByFilters(HouseSearchingModelUpdate? filters) async {
+  Future<List<HouseModelUpdate>> getHousesByFilters(HouseSearchingModelUpdate? filters, {int skip = 0, int limit= 5}) async {
     try {
       
       List<HouseModelUpdate> filteredHouses = [];
@@ -97,7 +114,7 @@ class HouseDaoFireStore extends HouseDao {
         return filteredHouses;
       }
 
-      final querySnapshot = await BackendService().postAll("houses/filtered", filters);
+      final querySnapshot = await BackendService().postAll("houses/filtered", filters, skip: skip, limit: limit);
       if (querySnapshot.isNotEmpty) {
         filteredHouses = await compute(parseObjects,querySnapshot);
       }
@@ -106,6 +123,26 @@ class HouseDaoFireStore extends HouseDao {
     } catch (error) {
       if (kDebugMode) {
         print("Error fetching houses by searching: $error");
+      }
+      rethrow;
+    }
+  }
+
+  Future<int> getLenghtFilters(HouseSearchingModelUpdate? houseFilters) async {
+    try {
+      int filteredHouses = 0;
+      if (houseFilters == null) {
+        return filteredHouses;
+      }
+      final message = await BackendService().postTot("total/houses/filters", houseFilters);
+      final decodeMessage = json.decode(message);
+      if (decodeMessage['message'] != 'Total Houses') {
+        throw decodeMessage['message'];
+      }
+      return decodeMessage['count'];
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error searching for houses: $error");
       }
       rethrow;
     }

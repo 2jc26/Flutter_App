@@ -24,12 +24,24 @@ class HouseRepository {
     });
   }
 
-  Future<List<HouseModelUpdate>> getAllHouses() async {
+  Future<List<HouseModelUpdate>> getAllHouses({int skip = 0, int limit= 5}) async {
     try {
       if(connectivity) {
-        return await houseDao.getAllHouses();
+        return await houseDao.getAllHouses(skip: skip, limit: limit);
       } else {
         return []; //TODO Search in Local
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<int> getLenght(){
+    try {
+      if(connectivity) {
+        return houseDao.getLenght();
+      } else {
+        return Future.value(0);
       }
     } catch (error) {
       rethrow;
