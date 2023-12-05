@@ -75,8 +75,6 @@ class HouseListPresenter {
     try {
       _number = await searchRepository.getLenght(houseFilters);
       _number = (_number/5).ceil();
-      print(_number);
-      print(houseFilters!.toJson());
       final houses = await searchRepository.getSimilarFilteredHouses(houseFilters!, skip: skip, limit: limit);
       housesSearchingList = houses;
       _backView.refreshHouseListView(housesList,housesLikingList,housesSearchingList);

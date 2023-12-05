@@ -231,7 +231,7 @@ class _HouseCreationState extends State<HouseCreation> implements HouseCreationV
                         ),
                       ),
                       const SizedBox(height: 20),
-                      _inputField("Housing Name", housingNameController, 30,
+                      _inputField("Housing Name", housingNameController, 25,
                           isNumber: false),
                       const SizedBox(height: 16),
                       const Text('Housing Type:'),
