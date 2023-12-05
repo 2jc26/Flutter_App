@@ -13,8 +13,8 @@ class BackendService {
 
   BackendService._internal();
 
-  Future<List<dynamic>> getAll(String endPoint) async {
-    final response = await http.get(Uri.parse('$baseUrl/$endPoint'));
+  Future<List<dynamic>> getAll(String endPoint, {int skip = 0, int limit= 5}) async {
+    final response = await http.get(Uri.parse('$baseUrl/$endPoint?skip=$skip&limit=$limit'));
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -33,12 +33,12 @@ class BackendService {
     }
   }
 
-  Future<List<dynamic>> postAll(String endPoint, object) async {
+  Future<List<dynamic>> postAll(String endPoint, object, {int skip=0, int limit=5}) async {
     if (object is! Map<String, dynamic>) {
       object=object.toJson();
     }
     final response = await http.post(Uri.parse(
-      '$baseUrl/$endPoint'),
+      '$baseUrl/$endPoint?skip=$skip&limit=$limit'),
       headers: {
         "Content-Type": "application/json",
       },
@@ -111,6 +111,34 @@ class BackendService {
 
   Future<dynamic> getNum(String endPoint, String id) async {
     final response = await http.get(Uri.parse('$baseUrl/$endPoint/$id'));
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      // Request failed
+      return null;
+    }
+  }
+
+  Future<dynamic> getTot(String endPoint) async {
+    final response = await http.get(Uri.parse('$baseUrl/$endPoint'));
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      // Request failed
+      return null;
+    }
+  }
+
+  Future<dynamic> postTot(String endPoint, object) async {
+    if (object is! Map<String, dynamic>) {
+      object=object.toJson();
+    }
+    final response = await http.post(Uri.parse('$baseUrl/$endPoint'),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: json.encode(object)
+    );
     if (response.statusCode == 200) {
       return response.body;
     } else {

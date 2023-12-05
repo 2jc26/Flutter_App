@@ -4,6 +4,8 @@ import '../../enum/feature_enum.dart';
 import '../../models/user/query_filter_user.dart';
 import '../../models/user/query_likes_user.dart';
 import '../../repository/features_repository.dart';
+import '../../widgets/bottom_nav_bar.dart';
+import '../../widgets/custom_app_bar.dart';
 import '../../widgets/drawer.dart';
 import '../user_list.dart';
 
@@ -38,22 +40,9 @@ class _FilterUsersOthersState extends State<FilterUsersOthers>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF2E5EAA),
-        title: const Text(
-          "Search Roommate",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(),
+      bottomNavigationBar: const BottomNavBar(index: 1),
+      // drawer: CustomDrawer(customDrawerContext: context),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

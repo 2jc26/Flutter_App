@@ -77,7 +77,6 @@ class ReviewServiceAdapterBackend implements ReviewServiceAdapter {
     }
   }
 
-  @override
   Future<int> getLenght(String houseId) async {
     try {
       final message = await BackendService().getNum("total/reviews", houseId);

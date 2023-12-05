@@ -13,6 +13,7 @@ class PrincipalViewAbs {
   void refreshUsersPrincipalView(List<UserModel> userList) {}
   void refreshReviewsPrincipalView(List<ReviewModel> reviewList) {}
   void refreshNumber(int number) {}
+  void acutalized(bool value) {}
 }
 
 class PrincipalView extends StatefulWidget {
@@ -30,7 +31,8 @@ class _PrincipalViewState extends State<PrincipalView> implements PrincipalViewA
   late PrincipalPresenter principalPresenter;
 
   String? _userId;
-  int _number = 0;
+  int _number = 0;  
+  bool actual = false;
 
   List<HouseModelUpdate>? _housesList;
   List<UserModel>? _userList;
@@ -61,6 +63,13 @@ class _PrincipalViewState extends State<PrincipalView> implements PrincipalViewA
   void refreshNumber(int number) {
     setState(() {
       _number = number;
+    });
+  }
+
+  @override
+  void acutalized(bool value) {
+    setState(() {
+      actual = value;
     });
   }
 
@@ -123,6 +132,7 @@ class _PrincipalViewState extends State<PrincipalView> implements PrincipalViewA
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
+                        principalPresenter.addVisitToHouse(_housesList![index].id);
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => HouseDetail(house: _housesList![index]),
                         ));
@@ -185,7 +195,7 @@ class _PrincipalViewState extends State<PrincipalView> implements PrincipalViewA
               ),
             ),
             const Text(
-              'Reviews del usuario:',
+              'Users reviews:',
               
               textAlign: TextAlign.start,
               style: TextStyle(
@@ -201,7 +211,7 @@ class _PrincipalViewState extends State<PrincipalView> implements PrincipalViewA
                     ? const Center(child: Text('No comments'))
                     : ListView.builder(
                         shrinkWrap: true, // Use shrinkWrap to avoid the error
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: _reviewList!.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Card(
@@ -235,7 +245,10 @@ class _PrincipalViewState extends State<PrincipalView> implements PrincipalViewA
                                 // Agrega un GestureDetector para permitir clics en cada elemento
                                 return GestureDetector(
                                   onTap: () {
-                                    principalPresenter.getAllReview(widget.userId, skip: index * 5, limit: 5);
+                                    if (actual == false) {
+                                      actual = true;
+                                      principalPresenter.getAllReview(widget.userId, skip: index * 5, limit: 5);
+                                    }
                                   },
                                   child: Container(
                                     width: 50, // Ajusta el ancho del contenedor según tus necesidades

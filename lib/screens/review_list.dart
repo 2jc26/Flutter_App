@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:giusseppe_flut/models/review/review_model.dart';
 import 'package:giusseppe_flut/presenter/review_list_presenter.dart';
+import 'package:giusseppe_flut/widgets/custom_app_bar.dart';
 
 class ReviewsListView {
   void refreshReviewListView(List<ReviewModel> reviewsList) {}
@@ -9,6 +10,8 @@ class ReviewsListView {
   void refreshRaiting(String raiting) {}
 
   void refreshNumber(int number) {}
+
+  void acutalized(bool value) {}
 }
 
 class ReviewList extends StatefulWidget {
@@ -31,6 +34,7 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
   String? _raiting = '0';
   String? _manualRating = '0';
   int _number = 0;
+  bool actual = false;
 
   final TextEditingController _commentController = TextEditingController();
 
@@ -60,6 +64,13 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
   }
 
   @override
+  void acutalized(bool value) {
+    setState(() {
+      actual = value;
+    });
+  }
+
+  @override
   void initState() {
     super.initState();
     reviewListPresenter = ReviewListPresenter(widget.houseId);
@@ -81,21 +92,7 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF2E5EAA),
-        title: const Text(
-          'Reviews',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,7 +162,7 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
                     ? const Center(child: Text('No comments'))
                     : ListView.builder(
                         shrinkWrap: true, // Use shrinkWrap to avoid the error
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: _reviewsList!.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Card(
@@ -199,7 +196,10 @@ class _ReviewListState extends State<ReviewList> implements ReviewsListView {
                                 // Agrega un GestureDetector para permitir clics en cada elemento
                                 return GestureDetector(
                                   onTap: () {
-                                    reviewListPresenter.getAllReviews(widget.houseId, skip: index * 5, limit: 5);
+                                    if (actual == false) {
+                                      actual = true;
+                                      reviewListPresenter.getAllReviews(widget.houseId, skip: index * 5, limit: 5);
+                                    }
                                   },
                                   child: Container(
                                     width: 50, // Ajusta el ancho del contenedor según tus necesidades
