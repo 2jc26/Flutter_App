@@ -64,6 +64,13 @@ class PrincipalPresenter {
     }
   }
 
+    void addVisitToHouse(String houseId) async {
+    try {
+      await principalRepository.addVisitToHouse(houseId);
+    } catch (error) {
+      rethrow;
+    }
+  }
 
   set backView(PrincipalViewAbs value) {
     _backView = value;
