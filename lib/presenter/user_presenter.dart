@@ -36,6 +36,7 @@ class UserListPresenter {
       rethrow;
     }
   }
+
   Stream<List<UserModel>> getUsersStreamByPreferences() {
     return ObjectBoxDao().getUsersStreamByPreferences();
   }

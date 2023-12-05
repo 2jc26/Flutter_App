@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:giusseppe_flut/app_navigator.dart';
 
 import 'package:giusseppe_flut/auth/auth_repository.dart';
+import 'package:giusseppe_flut/screens/user_recomendation_ubication.dart';
 import 'package:giusseppe_flut/service/connectivity_manager_service.dart';
 import 'package:get/get.dart';
 

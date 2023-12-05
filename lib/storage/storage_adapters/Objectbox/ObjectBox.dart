@@ -36,7 +36,11 @@ class ObjectBoxDao {
   }
 
   int addUser(UserModel user) {
-    return userBox.put(user);
+    try {
+      return userBox.put(user);
+    } catch (e) {
+      return 1;
+    }
   }
   void deleteAllUsers() {
     final users = userBox.getAll();
@@ -61,6 +65,32 @@ class ObjectBoxDao {
     List<UserModel> users = query.find();
     query.close();
     return users;
+  }
+  List<UserModel> getUsersByPreferencesPagination(int skip, int limit) {
+    final query = userBox.query(
+        userFilter.getSleepTime() != null ? UserModel_.sleep.equals(userFilter.getSleepTime()!) : UserModel_.id_int.notNull()
+            .and(userFilter.getSmokePreference() != null ? UserModel_.smoke.equals(userFilter.getSmokePreference()!) : UserModel_.id_int.notNull())
+            .and(userFilter.getVapePreference() != null ? UserModel_.vape.equals(userFilter.getVapePreference()!) : UserModel_.id_int.notNull())
+            .and(userFilter.getCleaningFrequency() != null ? UserModel_.clean.equals(userFilter.getCleaningFrequency()!) : UserModel_.id_int.notNull())
+            .and(userFilter.getIntrovertedPreference() != null ? UserModel_.personality.equals(userFilter.getIntrovertedPreference()!) : UserModel_.id_int.notNull())
+            .and(userFilter.getPetPreference() != null ? UserModel_.likes_pets.equals(userFilter.getPetPreference()!) : UserModel_.id_int.notNull())
+            .and(userFilter.getCity() != null ? UserModel_.city.equals(userFilter.getCity()!) : UserModel_.id_int.notNull())
+            .and(userFilter.getNeighborhood() != null ? UserModel_.locality.equals(userFilter.getNeighborhood()!) : UserModel_.id_int.notNull())
+    ) .build();
+    List<UserModel> users = query.find();
+    query.close();
+    if (skip < users.length){
+      if (limit+skip < users.length){
+        return users.sublist(skip, limit+skip);
+      }
+      else{
+        return users.sublist(skip, users.length);
+      }
+    }
+    else{
+      return [];
+    }
+
   }
 
   List<UserModel> getTop5() {

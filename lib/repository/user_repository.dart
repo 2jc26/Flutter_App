@@ -63,6 +63,26 @@ class UserRepository {
       rethrow;
     }
   }
+
+  Future<List<UserModel>> getAllUsersByPreferencesPagination(int skip, int limit) async {
+    try {
+      if (connectivity){
+        userDao.updateUserPreferencesStats();
+        List<UserModel> lista= await userDao.getUsersByPreferences();
+        for (var usuario in lista){
+          bool condicion =instancia.verifyUserExist(usuario.id);
+          if (!condicion){
+            instancia.addUser(usuario);
+          }
+        }
+        return lista;
+      }else{
+        return instancia.getUsersByPreferencesPagination(skip,limit);
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
   Future<Uint8List?> getImage(String image) async {
     return userDao.getImage(image);
   }
@@ -151,6 +171,14 @@ class UserRepository {
   Future<List<UserModel>> getDocumentsWithinRadius(double latitude, double longitude) async {
     try {
       return await userDao.getDocumentsWithinRadius(latitude,longitude);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<List<UserModel>> getDocumentsWithinRadiusPagination(double latitude, double longitude, int skip, int limit) async {
+    try {
+      return await userDao.getDocumentsWithinRadiusPagination(latitude,longitude, skip, limit);
     } catch (error) {
       rethrow;
     }
