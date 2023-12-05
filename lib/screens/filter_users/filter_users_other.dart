@@ -4,11 +4,12 @@ import '../../enum/feature_enum.dart';
 import '../../models/user/query_filter_user.dart';
 import '../../models/user/query_likes_user.dart';
 import '../../repository/features_repository.dart';
+import '../../widgets/bottom_nav_bar.dart';
+import '../../widgets/custom_app_bar.dart';
 import '../../widgets/drawer.dart';
 import '../user_list.dart';
 
 class FilterUsersOthers extends StatefulWidget {
-
   FilterUsersOthers({
     Key? key,
   }) : super(key: key);
@@ -17,36 +18,30 @@ class FilterUsersOthers extends StatefulWidget {
   _FilterUsersOthersState createState() => _FilterUsersOthersState();
 }
 
-class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationMixin {
-
-  RestorableTextEditingController petController = RestorableTextEditingController();
-  RestorableTextEditingController introvertedController = RestorableTextEditingController();
-  RestorableTextEditingController cleaningController = RestorableTextEditingController();
-  RestorableTextEditingController vapeController = RestorableTextEditingController();
-  RestorableTextEditingController smokeController = RestorableTextEditingController();
-  RestorableTextEditingController workFromHomeController = RestorableTextEditingController();
-  RestorableTextEditingController sleepTimeController = RestorableTextEditingController();
-  RestorableTextEditingController externalPeopleController = RestorableTextEditingController();
-  final FeatureRepository featureRepository= FeatureRepository();
-@override
+class _FilterUsersOthersState extends State<FilterUsersOthers>
+    with RestorationMixin {
+  RestorableTextEditingController petController =
+      RestorableTextEditingController();
+  RestorableTextEditingController introvertedController =
+      RestorableTextEditingController();
+  RestorableTextEditingController cleaningController =
+      RestorableTextEditingController();
+  RestorableTextEditingController vapeController =
+      RestorableTextEditingController();
+  RestorableTextEditingController smokeController =
+      RestorableTextEditingController();
+  RestorableTextEditingController workFromHomeController =
+      RestorableTextEditingController();
+  RestorableTextEditingController sleepTimeController =
+      RestorableTextEditingController();
+  RestorableTextEditingController externalPeopleController =
+      RestorableTextEditingController();
+  final FeatureRepository featureRepository = FeatureRepository();
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF2E5EAA),
-        title: const Text(
-          "Search Roommate",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(),
+      bottomNavigationBar: const BottomNavBar(index: 1),
       // drawer: CustomDrawer(customDrawerContext: context),
       body: SingleChildScrollView(
         child: Padding(
@@ -56,12 +51,12 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
             children: [
               //const SizedBox(height: 16),
               //Row(
-                //mainAxisAlignment: MainAxisAlignment.center,
-                //children: [
-                  //RoundedButton(text: 'Location', onPressed: () {}),
-                 // const SizedBox(width: 10),
-                  //RoundedButton(text: 'Information', onPressed: () {}),
-                //],
+              //mainAxisAlignment: MainAxisAlignment.center,
+              //children: [
+              //RoundedButton(text: 'Location', onPressed: () {}),
+              // const SizedBox(width: 10),
+              //RoundedButton(text: 'Information', onPressed: () {}),
+              //],
               //),
               const SizedBox(height: 16),
               const Text(
@@ -188,26 +183,26 @@ class _FilterUsersOthersState extends State<FilterUsersOthers> with RestorationM
                   featureRepository.createFeature(Feature.filtroUsuario);
                   String pet = petController.value.text;
                   UserFilter().setPetPreference(pet);
-                  bool? pet_did=UserFilter().getPetPreference();
-                  String introverted=  introvertedController.value.text;
+                  bool? pet_did = UserFilter().getPetPreference();
+                  String introverted = introvertedController.value.text;
                   UserFilter().setIntrovertedPreference(introverted);
-                  String? intro=UserFilter().getIntrovertedPreference();
-                  String cleaning= cleaningController.value.text;
+                  String? intro = UserFilter().getIntrovertedPreference();
+                  String cleaning = cleaningController.value.text;
                   UserFilter().setCleaningFrequency(cleaning);
-                  String? cle=UserFilter().getCleaningFrequency();
-                  String vape=  vapeController.value.text;
+                  String? cle = UserFilter().getCleaningFrequency();
+                  String vape = vapeController.value.text;
                   UserFilter().setVapePreference(vape);
-                  bool? vapee=UserFilter().getVapePreference();
-                  String smoke= smokeController.value.text;
+                  bool? vapee = UserFilter().getVapePreference();
+                  String smoke = smokeController.value.text;
                   UserFilter().setSmokePreference(smoke);
-                  bool? smokee=UserFilter().getSmokePreference();
-                  String work=  workFromHomeController.value.text;
+                  bool? smokee = UserFilter().getSmokePreference();
+                  String work = workFromHomeController.value.text;
                   UserFilter().setWorkFromHomePreference(work);
-                  bool? worrkk= UserFilter().getWorkFromHomePreference();
-                  String sleep=  sleepTimeController.value.text;
+                  bool? worrkk = UserFilter().getWorkFromHomePreference();
+                  String sleep = sleepTimeController.value.text;
                   UserFilter().setSleepTime(sleep);
-                  int? sleeep=UserFilter().getSleepTime();
-                  String external=  externalPeopleController.value.text;
+                  int? sleeep = UserFilter().getSleepTime();
+                  String external = externalPeopleController.value.text;
                   UserFilter().setExternalPeopleFrequency(external);
                   Navigator.push(
                     context,
@@ -257,8 +252,7 @@ class CheckboxGroup extends StatefulWidget {
   });
 
   @override
-  _CheckboxGroupState createState() =>
-      _CheckboxGroupState();
+  _CheckboxGroupState createState() => _CheckboxGroupState();
 }
 
 class _CheckboxGroupState extends State<CheckboxGroup> {
@@ -272,21 +266,21 @@ class _CheckboxGroupState extends State<CheckboxGroup> {
           children: widget.labels
               .map(
                 (label) => ExclusiveCheckbox(
-              label: label,
-              isSelected: label == _selectedLabel,
-              onSelect: () {
-                setState(() {
-                  if (label == _selectedLabel) {
-                    _selectedLabel = null;
-                    widget.controller.text = '';
-                  } else {
-                    _selectedLabel = label;
-                    widget.controller.text = label;
-                  }
-                });
-              },
-            ),
-          )
+                  label: label,
+                  isSelected: label == _selectedLabel,
+                  onSelect: () {
+                    setState(() {
+                      if (label == _selectedLabel) {
+                        _selectedLabel = null;
+                        widget.controller.text = '';
+                      } else {
+                        _selectedLabel = label;
+                        widget.controller.text = label;
+                      }
+                    });
+                  },
+                ),
+              )
               .toList(),
         ),
       ],
@@ -366,7 +360,12 @@ class CleaningFrequencySlider extends StatefulWidget {
 class _CleaningFrequencySliderState extends State<CleaningFrequencySlider> {
   int _value = 0;
 
-  List<String> frequencyTitles = ['No aplica','Once a week', 'Twice a week', 'Three times a week'];
+  List<String> frequencyTitles = [
+    'No aplica',
+    'Once a week',
+    'Twice a week',
+    'Three times a week'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -477,21 +476,22 @@ class _FrequencyOfExternalPeople extends State<FrequencyOfExternalPeople> {
               widget.controller.text = _value == 1
                   ? 'Once a week'
                   : _value == 2
-                  ? 'Twice a week'
-                  : 'Three times a week';
+                      ? 'Twice a week'
+                      : 'Three times a week';
             }
           });
         },
         min: 0,
         max: 3,
         divisions: 3,
-        label: _value == 0 ? 'No aplica' : _value == 1
-            ? 'Once a week'
-            : _value == 2
-            ? 'Twice a week'
-            : 'Three times a week',
+        label: _value == 0
+            ? 'No aplica'
+            : _value == 1
+                ? 'Once a week'
+                : _value == 2
+                    ? 'Twice a week'
+                    : 'Three times a week',
       ),
     );
   }
 }
-
