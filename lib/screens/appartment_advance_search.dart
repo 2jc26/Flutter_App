@@ -36,8 +36,6 @@ enum PropertyType { House, Apartment }
 
 class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
   PropertyType _selectedPropertyType = PropertyType.House;
-  TextEditingController cityController = TextEditingController();
-  TextEditingController neighborhoodController = TextEditingController();
   TextEditingController stratumController = TextEditingController();
   TextEditingController areaController = TextEditingController();
   TextEditingController floorNumberController = TextEditingController();
@@ -58,6 +56,33 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
   bool _isReceptionSelected = false;
   bool _isSupermarketSelected = false;
 
+  String citySelectedComboBoxValue = 'Bogota';
+  String neighborhoodSelectedComboBoxValue = 'Suba';
+
+  List<String> cityComboBoxOptions = ['Bogota'];
+  List<String> neighborhoodComboBoxOptions = [
+    "Usaquén",
+    "Chapinero",
+    "Santa Fe",
+    "San Cristóbal",
+    "Usme",
+    "Tunjuelito",
+    "Bosa",
+    "Kennedy",
+    "Fontibón",
+    "Engativá",
+    "Suba",
+    "Barrios Unidos",
+    "Teusaquillo",
+    "Los Mártires",
+    "Antonio Nariño",
+    "Puente Aranda",
+    "La Candelaria",
+    "Rafael Uribe Uribe",
+    "Ciudad Bolívar",
+    "Sumapaz"
+  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +102,47 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 20),
-                    _inputField("City/Municipality", cityController, 50),
+                    Row(
+                      children: [
+                        const Text('City:'),
+                        const SizedBox(width: 20),
+                        DropdownButton<String>(
+                          value: citySelectedComboBoxValue,
+                          onChanged: (value) {
+                            setState(() {
+                              citySelectedComboBoxValue = value!;
+                            });
+                          },
+                          items: cityComboBoxOptions.map((option) {
+                            return DropdownMenuItem<String>(
+                              value: option,
+                              child: Text(option),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 20),
-                    _inputField("Neighborhood", neighborhoodController, 50),
+                    Row(
+                      children: [
+                        const Text('Neighborhood:'),
+                        const SizedBox(width: 20),
+                        DropdownButton<String>(
+                          value: neighborhoodSelectedComboBoxValue,
+                          onChanged: (value) {
+                            setState(() {
+                              neighborhoodSelectedComboBoxValue = value!;
+                            });
+                          },
+                          items: neighborhoodComboBoxOptions.map((option) {
+                            return DropdownMenuItem<String>(
+                              value: option,
+                              child: Text(option),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -401,8 +464,8 @@ class _AppartmentAdvanceSearchState extends State<AppartmentAdvanceSearch> {
       onPressed: () {
         featureRepository.createFeature(Feature.filtroUsuario);
         HouseSearchingModelUpdate filter = HouseSearchingModelUpdate(
-          city: cityController.text,
-          neighborhood: neighborhoodController.text,
+          city: citySelectedComboBoxValue,
+          neighborhood: neighborhoodSelectedComboBoxValue,
           address: widget.direction,
           housingType: _selectedPropertyType.toString().replaceAll("PropertyType.", ""),
           rentPrice: widget.obPrice,
