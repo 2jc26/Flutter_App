@@ -134,6 +134,19 @@ class _HouseDetailState extends State<HouseDetail> implements HouseDetailView {
                   ),
                 ),
               ),
+              Visibility(
+                visible: ConnectivityManagerService().connectivity == false,
+                child: const Center(
+                  child: Text(
+                    "No map - No internet connection",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
               Center(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),

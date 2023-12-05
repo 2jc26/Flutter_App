@@ -3,6 +3,7 @@ import "package:flutter/services.dart";
 import "package:giusseppe_flut/screens/appartment_advance_search.dart";
 import "package:giusseppe_flut/screens/roomie_detail.dart";
 import "package:flutter_rating_bar/flutter_rating_bar.dart";
+import "package:giusseppe_flut/service/connectivity_manager_service.dart";
 import "package:giusseppe_flut/widgets/custom_app_bar.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 
@@ -84,14 +85,28 @@ class _AppartmentFilterState extends State<AppartmentFilter> {
                     const SizedBox(height: 5.0),
                     _inputField("Enter the temptative adress", directionController, 50),
                     const SizedBox(height: 5.0),
-                    const SizedBox(
-                      height: 300,
-                      width: 300,// Ajusta el tamaño del mapa según tus necesidades
-                      child: GoogleMap(
-                        mapType: MapType.hybrid,
-                        initialCameraPosition: CameraPosition(
-                          target: LatLng(4.6097, -74.0817), // Cambia esto a las coordenadas deseadas
-                          zoom: 3,
+                    Visibility(
+                      visible: ConnectivityManagerService().connectivity == true,
+                      child: const SizedBox(
+                        height: 300,
+                        width: 300,// Ajusta el tamaño del mapa según tus necesidades
+                        child: GoogleMap(
+                          mapType: MapType.hybrid,
+                          initialCameraPosition: CameraPosition(
+                            target: LatLng(4.6097, -74.0817), // Cambia esto a las coordenadas deseadas
+                            zoom: 3,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: ConnectivityManagerService().connectivity == false,
+                      child: const Text(
+                        "No map - No internet connection",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
