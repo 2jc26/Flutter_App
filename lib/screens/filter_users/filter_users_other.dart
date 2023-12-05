@@ -49,15 +49,6 @@ class _FilterUsersOthersState extends State<FilterUsersOthers>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              //const SizedBox(height: 16),
-              //Row(
-              //mainAxisAlignment: MainAxisAlignment.center,
-              //children: [
-              //RoundedButton(text: 'Location', onPressed: () {}),
-              // const SizedBox(width: 10),
-              //RoundedButton(text: 'Information', onPressed: () {}),
-              //],
-              //),
               const SizedBox(height: 16),
               const Text(
                 'You have any problem having pets at the house?',

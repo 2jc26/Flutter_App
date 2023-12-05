@@ -92,13 +92,26 @@ class _BottomNavBarState extends State<BottomNavBar> implements CustomDrawerView
         );
         break;
       case 2:
-        drawerPresenter.addUse(Feature.localizacionUsuario);
-        Navigator.push(
-          context, // Usar el contexto personalizado
-          MaterialPageRoute(builder: (context) => LocationPermissionView()),
-        );
+        if (drawerPresenter.getConnectivity()){
+          drawerPresenter.addUse(Feature.localizacionUsuario);
+          Navigator.push(
+            context, // Usar el contexto personalizado
+            MaterialPageRoute(builder: (context) => LocationPermissionView()),
+          );
+        } else{
+          WidgetsBinding.instance?.addPostFrameCallback((_) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                    'No puedes utilizar está funcionalidad sin internet.'),
+              ),
+            );
+          });
+        }
+
         break;
       case 3:
+        drawerPresenter.addUse(Feature.filtroHabitaciones);
         giveId().then((userId) {
           Navigator.push(
             context,
