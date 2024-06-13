@@ -1,5 +1,7 @@
 
-# giusseppe_flut
+# Mobile Flutter App for a undergradueted course
+
+Developed jointly by 3 people for the mobile applications course.
 
 A new Flutter project.
 
