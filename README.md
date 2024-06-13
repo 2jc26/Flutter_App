@@ -3,7 +3,7 @@
 
 Developed jointly by 3 people for the mobile applications course.
 
-A new Flutter project.
+Link to Wiki and work done with all the group: https://gitlab.com/isis3510_202320_team33/wiki/-/wikis/home
 
 ## Getting Started
 
